@@ -1,0 +1,15 @@
+<%= @entries.size %>
+<%= @entries.map { |e| e[:entry] }.uniq.size %>
+
+
+<% @entries.each do |data| %>
+  <% count = @entries.find_all { |e| e[:entry] == data[:entry] }.size %>
+  <% if count > 1 %>
+    <p style="font-weight: bold; color: red;"><%= "#{data[:entry]} / #{data[:def]} / #{data[:synset]}" %></p>
+  <% else %>
+    <p><%= "#{data[:entry]} / #{data[:def]} / #{data[:synset]}" %></p>
+  <% end %>
+<% end %>
+
+
+
