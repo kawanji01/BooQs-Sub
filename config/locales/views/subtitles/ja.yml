@@ -1,0 +1,14 @@
+ja:
+  subtitles:
+    download_subtitles_on_youtube: 'Youtubeの字幕をダウンロードする'
+    description: "Youtubeの動画の字幕をダウンロードできます。対応フォーマット：SRT, TXT, CSV"
+    placeholder: "字幕をダウンロードしたい動画のURLを入力してください。"
+    select_download_caption: 'ダウンロードする字幕を選択してください。'
+    caption_type: '字幕の種類'
+    file_type: 'ファイルの種類'
+    auto_sub: '自動字幕'
+    download: 'ダウンロード'
+    there_are_no_subtitles: "ダウンロードできる字幕がありません."
+    error_message_not_youtube: 'Youtubeの動画のURLではありません。'
+    downloading_now: "ダウンロード中..."
+    download_completed: "ダウンロードが完了しました。"

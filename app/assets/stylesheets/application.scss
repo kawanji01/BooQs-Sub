@@ -1,0 +1,197 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+@import "bootstrap";
+
+// 色 //
+$brand-black: #273132;
+$bg-color: #f6f7f9;
+$brand-green: #27ae60;
+$bright-green: #48c78e;
+
+
+body {
+  background-color: $bg-color;
+  min-height: 100vh;
+}
+
+.header {
+  background-color: $brand-black;
+  height: 60px;
+  img {
+    height: 32px;
+  }
+  .logo {
+    font-size: 18px;
+    letter-spacing: 0;
+    a {
+      color: white;
+      text-decoration: none;
+      &:hover {
+        color: white;
+      }
+    }
+  }
+}
+
+/* ボタンデザインの書き換え */
+.btn-info {
+  background-color: #48c78e;
+  border-color: #48c78e;
+}
+
+// ローディング画面
+.is-hide {
+  display: none;
+}
+
+.loading {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, .5);
+}
+
+.loading::before {
+  content: "";
+  display: block;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  margin-top: -18px;
+  margin-left: -18px;
+  background: white;
+}
+
+.loading::after {
+  content: "";
+  display: block;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border: 4px solid $brand-green;
+  border-right: 4px solid white;
+  animation: rotate 1s infinite linear;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+
+/* モーダル */
+%modal-wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+
+
+  .overlay {
+    @extend %overlay;
+  }
+}
+
+
+%overlay {
+  z-index: 1032;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  background-color: rgba(0, 0, 0, 0.75);
+  cursor: pointer;
+
+  .close-btn {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: right;
+
+    .fal.fa-times {
+      cursor: pointer;
+      margin-right: 8px;
+      margin-top: 12px;
+      color: $bright-green;
+      font-size: 2em;
+    }
+  }
+}
+
+
+.modal-wrapper {
+  display: none;
+  @extend %modal-wrapper;
+}
+
+
+/* badgeモーダル */
+/* .modal-wrapperとbadge-modal-wrapperの違いは、前者がdisplay:none;がついている一方、後者にはついてないこと */
+.badge-modal-wrapper {
+  @extend %modal-wrapper;
+
+  h4.cracker {
+    font-size: 40px;
+    color: $brand-green;
+  }
+}
+
+
+
+.modal-booqs {
+  margin: 0 auto;
+  display: inherit;
+  position: absolute;
+  top: 64px;
+  left: 0;
+  background-color: #e6ecf0;
+  padding: 20px 5% 40px 5%;
+  border-radius: 4px;
+  max-width: 640px;
+  max-height: 680px;
+  @media(max-width: 544px) {
+    max-height: 440px;
+  }
+  overflow-y: scroll;
+
+  right: 0;
+  bottom: 0;
+  z-index: 1050;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+}
+
+
+
