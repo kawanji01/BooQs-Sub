@@ -1,2 +1,26 @@
+<div class="container bg-white pt-5 pb-5 my-5">
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-10">
+      <h1 class="font-weight-bold mb-4"><%= t 'subtitles.download_subtitles_on_youtube' %></h1>
 
-<%= @data %>
+
+      <p><%= t 'subtitles.description' %></p>
+
+      <%= form_with url: select_captions_subtitles_url, method: :get do |f| %>
+
+        <div class="input-group my-5">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroupPrepend">URL</span>
+          </div>
+          <%= f.text_field :url, class: 'form-control', placeholder: "#{t 'subtitles.placeholder'}" %>
+        </div>
+
+        <div class="invalid-feedback" id="invalid-feedback"></div>
+
+        <%= f.submit 'OK', class: 'btn btn-lg btn-info w-100 mb-4 font-weight-bold main-loading-show-btn' %>
+
+      <% end %>
+
+    </div>
+  </div>
+</div>

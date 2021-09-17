@@ -1,0 +1,14 @@
+en:
+  subtitles:
+    download_subtitles_on_youtube: 'Download subtitles on YouTube'
+    description: "You can download subtitles of a video on YouTube. Formats: SRT, TXT, CSV"
+    placeholder: "Please input a URL of the video to download a subtitle"
+    select_download_caption: 'Please select a caption to download'
+    caption_type: 'Caption Type'
+    file_type: 'File Type'
+    auto_sub: 'Auto-Sub'
+    download: 'Download'
+    there_are_no_subtitles: "There are no subtitles available for download."
+    error_message_not_youtube: "It is not Youtube's URL"
+    downloading_now: "Downloading now..."
+    download_completed: "Download completed"

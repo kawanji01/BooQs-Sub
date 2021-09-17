@@ -1,0 +1,18 @@
+// loading画面を消す
+var loading = document.querySelector('#loading');
+loading.classList.add("is-hide");
+
+<% if @valid %>
+var main = document.querySelector('#main');
+main.insertAdjacentHTML('beforeend', "<%= j(render 'subtitles/captions_modal') %>");
+var captionModalWrapper = document.querySelector('#captions-modal');
+var closeBtns = document.querySelectorAll('.close-captions-modal')
+closeBtns.forEach(function(item) {
+    item.addEventListener('click', function() {
+        captionModalWrapper.remove();
+    });
+})
+<% else %>
+var invalidFeedback = document.querySelector('#invalid-feedback');
+invalidFeedback.textContent = "<%= @error_message %>";
+<% end %>

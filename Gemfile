@@ -10,6 +10,30 @@ gem 'turbolinks', '5.2.0'
 gem 'jbuilder',   '2.9.1'
 gem 'bootsnap',   '1.4.5', require: false
 
+# boostrapの導入：https://qiita.com/amatsukix/items/6ec083428df48b166357
+gem 'bootstrap', '~> 4.1.1'
+gem 'jquery-rails'
+
+
+# metaタグに特化したパーサ/ https://github.com/metainspector/metainspector
+# mechanizeを導入したので削除予定。→ Too Many Requests とかエラーが頻出したのでtitleとogpの取得には引き続きmetainspectorも利用する。
+gem 'metainspector'
+# youtubeの字幕をXMLからスクレイピングするために導入
+gem 'mechanize'
+
+# 非同期処理のために導入
+gem 'redis-namespace', '~> 1.8.0'
+gem 'sidekiq', '~> 6.1.2'
+gem 'sinatra', require: false
+# 失敗したキューを補足する
+gem 'sidekiq-failures'
+
+# CSV以外のフォーマットへの対応
+gem 'roo', '~> 2.8.0'
+
+# スクレイピングしてきたテキストの整形
+gem 'sanitize', '~> 5.2.1'
+
 group :development, :test do
   gem 'sqlite3', '1.4.1'
   gem 'byebug',  '11.0.1', platforms: [:mri, :mingw, :x64_mingw]

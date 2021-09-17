@@ -15,3 +15,28 @@ require("channels")
 //
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
+//= require jquery3
+//= require popper
+//= require bootstrap
+
+
+
+document.addEventListener("turbolinks:load", function(){
+
+    // ローディング画面を表示する。
+    //$(document).on("click", ".loading-show-btn", function () {
+    //    $(this).next('.loading').removeClass('is-hide');
+        // スマホのキーボードを閉じる
+    //    $(".text-input-form").blur();
+    //});
+
+    // layouts/application.html.erbに設置したローディング画面を表示する。
+    var mainLoadingShowBtns = document.querySelectorAll('.main-loading-show-btn');
+    mainLoadingShowBtns.forEach(function (item) {
+        item.addEventListener('click', function() {
+            var loading = document.querySelector('#loading');
+            loading.classList.remove("is-hide");
+        });
+    });
+
+});
