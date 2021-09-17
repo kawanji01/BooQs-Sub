@@ -34,6 +34,9 @@ gem 'roo', '~> 2.8.0'
 # スクレイピングしてきたテキストの整形
 gem 'sanitize', '~> 5.2.1'
 
+# SEO対策のためのmetaタグ設定
+gem 'meta-tags'
+
 group :development, :test do
   gem 'sqlite3', '1.4.1'
   gem 'byebug',  '11.0.1', platforms: [:mri, :mingw, :x64_mingw]
