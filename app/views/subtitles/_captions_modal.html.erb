@@ -38,8 +38,8 @@
             </div>
           <% else %>
             <div class="form-check form-check-inline">
-              <%= radio_button_tag :transcript, code, class: 'form-check-input mr-2', id: "transcript-of-#{code}" %>
-              <label class="form-check-label ml-2" for="transcript-of-<%= code %>"><%= lang_code_to_lang_name(code) %></label>
+              <%= radio_button_tag :transcript, code, class: 'form-check-input mr-2' %>
+              <label class="form-check-label ml-2" for="transcript_<%= code %>"><%= lang_code_to_lang_name(code) %></label>
             </div>
           <% end %>
         <% end %>

@@ -1,5 +1,39 @@
 module ApplicationHelper
 
+  def default_meta_tags
+    {
+      site: 'BooQs Sub',
+      title: 'Youtubeの字幕をダウンロード',
+      reverse: true,
+      charset: 'utf-8',
+      description: 'Youtubeの字幕をダウンロードできます！',
+      keywords: 'Youtube, 字幕, Subtitle, Caption',
+      canonical: request.original_url,
+      separator: '|',
+      #icon: [
+      #  { href: image_url('favicon/favicon-32x32.png') },
+      #  { href: image_url('BooQs_icon.png'), rel: 'apple-touch-icon', sizes: '180x180', type: 'image/jpg' },
+      #],
+      og: {
+        site_name: :site, # もしくは site_name: :site
+        title: :title, # もしくは title: :title
+        description: :description, # もしくは description: :description
+        type: 'website',
+        url: request.original_url,
+        image: image_url('OGP_BooQs.png'),
+        locale: 'ja_JP',
+      },
+      twitter: {
+        card: 'summary',
+        site: '@BooQs_net'
+      }
+    }
+  end
+
+
+
+
+
   # Youtubeの動画のidを返す / Return Youtube's movie ID
   def return_youtube_id(url)
     Youtube.get_video_id(url)

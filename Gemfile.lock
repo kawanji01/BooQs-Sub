@@ -134,6 +134,8 @@ GEM
       rubyntlm (~> 0.6, >= 0.6.3)
       webrick (~> 1.7)
       webrobots (~> 0.1.2)
+    meta-tags (2.15.0)
+      actionpack (>= 3.2.0, < 6.2)
     metainspector (5.11.1)
       addressable (~> 2.7.0)
       faraday (~> 1.1.0)
@@ -308,6 +310,7 @@ DEPENDENCIES
   jquery-rails
   listen (= 3.1.5)
   mechanize
+  meta-tags
   metainspector
   pg (= 0.20.0)
   puma (= 4.3.6)
