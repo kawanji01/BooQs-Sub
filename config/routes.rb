@@ -12,11 +12,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :wordnet do
-      collection do
-        get :home, :en_en_dict, :ja_ja_dict
-      end
-    end
+    #resources :wordnet do
+    #  collection do
+    #    get :home, :en_en_dict, :ja_ja_dict
+    #  end
+    #end
 
   end
 end
