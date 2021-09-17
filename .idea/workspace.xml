@@ -20,6 +20,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="yarn" />
   </component>
   <component name="RunManager" selected="Rails.Development: booqs_sub">
     <configuration name="Development: booqs_sub" type="RailsRunConfigurationType" factoryName="Rails">
@@ -134,6 +135,7 @@
       <option name="presentableId" value="Default" />
       <updated>1631867864261</updated>
       <workItem from="1631867868784" duration="32000" />
+      <workItem from="1631868050177" duration="345000" />
     </task>
     <servers />
   </component>
