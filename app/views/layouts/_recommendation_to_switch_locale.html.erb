@@ -1,0 +1,23 @@
+<% if @user_language.present? && @locale != @user_language %>
+
+  <% case @user_language when 'ja' %>
+    <div class="alert alert-info my-4 container text-center" role="alert">
+      日本語バージョンがご利用いただけます。
+      <%= link_to '/ja' do %>
+        <div class="ml-3 btn btn btn-info font-weight-bold">日本語に切り替える</div>
+      <% end %>
+    </div>
+
+  <% when 'en' %>
+    <div class="ml-3 alert alert-info my-4 container text-center" role="alert">
+      English version is available.
+      <%= link_to '/en' do %>
+        <div class="btn btn btn-info font-weight-bold">Switch to English</div>
+      <% end %>
+    </div>
+
+  <% end %>
+
+
+
+<% end %>
