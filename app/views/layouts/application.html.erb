@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <%= render 'layouts/google' %>
   <!-- http://vdeep.net/rubyonrails-meta-tags-seo -->
   <%= display_meta_tags(default_meta_tags) %>
 
@@ -9,8 +10,6 @@
 
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-
-  <%= render 'layouts/google' %>
 </head>
 
 <body>
