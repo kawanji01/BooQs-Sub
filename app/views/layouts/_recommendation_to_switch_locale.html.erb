@@ -1,4 +1,4 @@
-<% if @user_language.present? && @locale != @user_language %>
+<% if @user_language.present? && @locale.to_s != @user_language %>
 
   <% case @user_language when 'ja' %>
     <div class="alert alert-info my-4 container text-center" role="alert">
