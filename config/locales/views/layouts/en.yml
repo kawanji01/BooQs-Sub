@@ -1,0 +1,14 @@
+en:
+  layouts:
+    premium_plan: 'Premium Plan'
+    community: 'Community'
+    update: 'Update'
+    contact: 'Contact'
+    company: 'Company'
+    commercial_transaction_act: 'Specified Commercial Transaction Act'
+    term_of_service: 'Term of service'
+    privacy_policy: 'Privacy policy'
+    my_page: 'MyPage'
+    review: 'Review'
+    notification: 'Notification'
+

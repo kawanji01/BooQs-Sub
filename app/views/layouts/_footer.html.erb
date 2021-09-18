@@ -1,0 +1,24 @@
+<footer class="footer" style="margin-top: 200px;">
+
+  <div class="container">
+    <div class="wrapper row">
+
+
+      <div class="col-xl-6 pl-3">
+        <div class="my-3"><%= link_to 'BooQs', "https://www.booqs.net/#{@locale}",  target: '_blank', rel: 'noopener' %></div>
+        <div class="my-3"><%= link_to 'BooQs Dictionary', "https://chrome.google.com/webstore/detail/booqs-dictionary/khgjdchimekphdebkmcknjkphkbpbpkj?hl=#{@locale}",  target: '_blank', rel: 'noopener' %></div>
+        <div class="my-3"><%= link_to t('layouts.company'), "https://www.booqs.net/#{@locale}/about",  target: '_blank', rel: 'noopener' %></div>
+        <div class="my-3"><%= link_to  t('layouts.contact'), "https://www.booqs.net/#{@locale}/contact", target: '_blank', rel: 'noopener' %></div>
+      </div>
+
+      <div class="col-xl-6 pl-3">
+        <div class="my-3"><%= link_to t('layouts.commercial_transaction_act'), "https://www.booqs.net/#{@locale}/legal" %></div>
+        <div class="my-3"><%= link_to t('layouts.term_of_service'), "https://www.booqs.net/#{@locale}/terms_of_service" %></div>
+        <div class="my-3"><%= link_to t('layouts.privacy_policy'), "https://www.booqs.net/#{@locale}/privacy_policy" %></div>
+      </div>
+
+
+    </div>
+
+  </div>
+</footer>
