@@ -104,6 +104,7 @@ GEM
       activesupport (>= 4.2.0)
     http-cookie (1.0.4)
       domain_name (~> 0.5)
+    http_accept_language (2.1.1)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
     jbuilder (2.9.1)
@@ -306,6 +307,7 @@ DEPENDENCIES
   bootstrap (~> 4.1.1)
   byebug (= 11.0.1)
   capybara (= 3.28.0)
+  http_accept_language
   jbuilder (= 2.9.1)
   jquery-rails
   listen (= 3.1.5)

@@ -1,13 +1,10 @@
 ja:
   layouts:
-    premium_plan: 'プレミアムプラン'
-    community: 'コミュニティ'
-    update: '更新情報'
     contact: 'お問い合わせ'
     company: '運営会社'
     commercial_transaction_act: '特定商取引法に基づく表記'
     term_of_service: '利用規約'
     privacy_policy: 'プライバシーポリシー'
-    my_page: 'マイページ'
-    review: '復習'
-    notification: '通知'
+    title: "Youtubeの字幕をダウンロードする"
+    description: "無料でYouTubeの動画の字幕をダウンロードできます。"
+    keywords: "YouTube, ユーチューブ, 字幕, ダウンロード"

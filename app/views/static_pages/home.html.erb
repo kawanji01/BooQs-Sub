@@ -2,6 +2,14 @@
 <% set_meta_tags canonical: root_url(locale: @locale),
                  twitter: { card: 'summary_large_image' } %>
 
+<!-- localize: https://developers.google.com/search/docs/advanced/crawling/localized-versions?hl=ja -->
+<% content_for :links do %>
+  <link rel="alternate" hreflang="<%= @locale %>" href="<%= request.url %>"/>
+<% end %>
+
+
+<%= render 'layouts/recommendation_to_switch_locale' %>
+
 <div class="container bg-white pt-5 pb-5 my-5">
   <div class="row justify-content-md-center">
     <div class="col col-lg-10">
