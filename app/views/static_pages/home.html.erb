@@ -1,11 +1,11 @@
 <!-- ?ref=starsaas によるホームページが重複してindexされてる問題の解決　-->
-<% set_meta_tags canonical: root_url(locale: @locale),
-                 twitter: { card: 'summary_large_image' } %>
-
 <!-- localize: https://developers.google.com/search/docs/advanced/crawling/localized-versions?hl=ja -->
-<% content_for :links do %>
-  <link rel="alternate" hreflang="<%= @locale %>" href="<%= request.url %>"/>
-<% end %>
+<% set_meta_tags canonical: root_url(locale: @locale),
+                 twitter: { card: 'summary_large_image' },
+                 alternate: { "en" => root_url(locale: 'en'),
+                              "ja" => root_url(locale: 'ja')} %>
+
+
 
 
 <%= render 'layouts/recommendation_to_switch_locale' %>
