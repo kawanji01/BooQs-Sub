@@ -10,10 +10,10 @@ module ApplicationHelper
       keywords: 'Youtube, 字幕, Subtitle, Caption',
       canonical: request.original_url,
       separator: '|',
-      #icon: [
-      #  { href: image_url('favicon/favicon-32x32.png') },
-      #  { href: image_url('BooQs_icon.png'), rel: 'apple-touch-icon', sizes: '180x180', type: 'image/jpg' },
-      #],
+      icon: [
+        { href: image_url('favicon/favicon-32x32.png') },
+        { href: image_url('BooQs_icon.png'), rel: 'apple-touch-icon', sizes: '180x180', type: 'image/jpg' },
+      ],
       og: {
         site_name: :site, # もしくは site_name: :site
         title: :title, # もしくは title: :title
