@@ -3,25 +3,25 @@ module ApplicationHelper
   def default_meta_tags
     {
       site: 'BooQs Sub',
-      title: 'Youtubeの字幕をダウンロード',
+      title: t('layouts.title'),
       reverse: true,
       charset: 'utf-8',
-      description: 'Youtubeの字幕をダウンロードできます！',
-      keywords: 'Youtube, 字幕, Subtitle, Caption',
+      description: t('layouts.description'),
+      keywords: t('layouts.keywords'),
       canonical: request.original_url,
       separator: '|',
       icon: [
         { href: image_url('favicon/favicon-32x32.png') },
-        { href: image_url('BooQs_icon.png'), rel: 'apple-touch-icon', sizes: '180x180', type: 'image/jpg' },
+        { href: image_url('BooQs_icon.png'), rel: 'apple-touch-icon', sizes: '180x180', type: 'image/jpg' }
       ],
       og: {
-        site_name: :site, # もしくは site_name: :site
-        title: :title, # もしくは title: :title
-        description: :description, # もしくは description: :description
+        site_name: :site,
+        title: :title,
+        description: :description,
         type: 'website',
         url: request.original_url,
         image: image_url('OGP_BooQs.png'),
-        locale: 'ja_JP',
+        locale: @locale
       },
       twitter: {
         card: 'summary',
