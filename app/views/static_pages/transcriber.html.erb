@@ -1,6 +1,7 @@
 <!-- ?ref=starsaas によるホームページが重複してindexされてる問題の解決　-->
 <!-- localize: https://developers.google.com/search/docs/advanced/crawling/localized-versions?hl=ja -->
 <% set_meta_tags title: t('subtitles.transcribe_videos_on_youtube'),
+                 description: t('subtitles.description_about_transcriber'),
                  canonical: transcriber_url(locale: @locale),
                  twitter: { card: 'summary_large_image' },
                  alternate: { "en" => transcriber_url(locale: 'en'),
