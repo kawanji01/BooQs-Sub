@@ -25,19 +25,18 @@ class SubtitlesController < ApplicationController
   def download_caption
     url = params[:url]
     @token = params[:token]
-    file_type = params[:file_type]
     # 自動字幕読み込み
     if params[:transcript] == 'auto-generated'
       # 自動字幕の言語コード
       lang_code = params[:auto_sub_lang_code]
       return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
 
-      DownloadAutoSubWorker.perform_async(url, lang_code, @token, file_type, @locale)
+      DownloadAutoSubWorker.perform_async(url, lang_code, @token, @locale)
     elsif params[:transcript].present?
       lang_code = params[:transcript]
       return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
 
-      DownloadSubtitleWorker.perform_async(url, lang_code, @token, file_type, @locale)
+      DownloadSubtitleWorker.perform_async(url, lang_code, @token, @locale)
     end
 
     respond_to do |format|

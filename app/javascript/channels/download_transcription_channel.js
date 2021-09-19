@@ -12,17 +12,16 @@ consumer.subscriptions.create("DownloadTranscriptionChannel", {
     received(data) {
         // Called when there's incoming data on the websocket for this channel
         var speechToTextModalWrapper = document.querySelector('#speech-to-text-' + data['token']);
-        console.log('speech-to-text');
         if (!speechToTextModalWrapper) {
             return;
         }
-        document.querySelector('#all-count').textContent = '100';
+        speechToTextModalWrapper.querySelector('#all-count').textContent = '100';
         var processCount = Number(data['process_count']);
         // var progress = (processCount.toFixed(2) / processCount.toFixed(2)) * 100;
         //$("#process-count").text(process_count);
-        document.querySelector('#process-count').textContent = data['process_count'];
+        speechToTextModalWrapper.querySelector('#process-count').textContent = data['process_count'];
         //$('#processing-progress-bar').css('width', processCount + '%');
-        document.querySelector('#processing-progress-bar').style.width = `${processCount}%`;
+        speechToTextModalWrapper.querySelector('#processing-progress-bar').style.width = `${processCount}%`;
 
         if (processCount !== 100) {
             return;
@@ -36,9 +35,7 @@ consumer.subscriptions.create("DownloadTranscriptionChannel", {
         function completeDownload(modal, message) {
             const title = modal.querySelector('#modal-title');
             title.textContent = message;
-            const progressBar = document.querySelector('#download-progress-bar');
-            progressBar.innerHTML = ``
-            document.querySelector('#contents-form').innerHTML = `
+            modal.querySelector('#contents-form').innerHTML = `
 <a id="download-srt-btn"><div class="btn btn-lg btn-info w-100 mb-3 mt-5 font-weight-bold">Download SRT</div></a>
 <a id="download-txt-btn"><div class="btn btn-lg btn-info w-100 my-3 font-weight-bold">Download TXT</div></a>
 <a id="download-csv-btn"><div class="btn btn-lg btn-info w-100 my-3 font-weight-bold">Download CSV</div></a>`;

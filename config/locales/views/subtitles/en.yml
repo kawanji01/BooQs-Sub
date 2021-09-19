@@ -4,8 +4,6 @@ en:
     description: "You can download captions of a video on YouTube. Formats to download: SRT, TXT, CSV"
     placeholder: "Please input the URL of a video to download a caption"
     select_download_caption: 'Please select a caption to download'
-    caption_type: 'Caption Type'
-    file_type: 'File Type'
     auto_sub: 'Auto-generated'
     download: 'Download'
     there_are_no_subtitles: "There are no captions available for download."
@@ -17,6 +15,6 @@ en:
     placeholder_on_transcriber: 'Please input the URL of a video to transcribe'
     setting_to_transcribe: 'Setting to transcribe'
     transcribe: 'Transcribe'
-    processing: 'Processing...'
-    done: 'Done'
+    processing: 'Processing. Please wait for a while at this screen.'
+    done: 'done'
     transcription_completed: "Transcription Completed"

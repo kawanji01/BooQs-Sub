@@ -10,69 +10,56 @@
 
     <h3 class="my-4 font-weight-bold" id="modal-title"><%= t 'subtitles.select_download_caption' %></h3>
 
-    <%= form_with url: download_caption_subtitles_path, remote: true, method: :post do |f| %>
-      <%= f.hidden_field :url, value: @url %>
-      <%= f.hidden_field :token, value: @token %>
-      <div id="scraping-error-massages"></div>
-      <h5 class="text-secondary font-weight-normal"><%= @title %></h5>
-      <div class="d-block mt-2 mb-4">
-        <%= image_tag @image, class: 'img-fluid w-25 mb-2' %>
-      </div>
+    <div id="contents-form">
+      <%= form_with url: download_caption_subtitles_path, remote: true, method: :post do |f| %>
+        <%= f.hidden_field :url, value: @url %>
+        <%= f.hidden_field :token, value: @token %>
+        <div id="scraping-error-massages"></div>
+        <h5 class="text-secondary font-weight-normal"><%= @title %></h5>
+        <div class="d-block mt-2 mb-4">
+          <%= image_tag @image, class: 'img-fluid w-25 mb-2' %>
+        </div>
 
-      <h4 class="my-3 font-weight-bold"><%= t 'subtitles.caption_type' %></h4>
-      <% if @lang_code.present? %>
+        <% if @lang_code.present? %>
 
-        <% @lang_code.each do |code| %>
-          <% next if Lang.lang_code_unsupported?(code) && code != 'auto-generated' && code != 'none' %>
+          <% @lang_code.each do |code| %>
+            <% next if Lang.lang_code_unsupported?(code) && code != 'auto-generated' && code != 'none' %>
 
-          <% if code == 'auto-generated' %>
-            <div class="form-check form-check-inline">
-              <!-- caption一覧に、記事の言語と一致するものがなかった場合、自動文字起こしにチェックを入れる。 -->
-              <%= radio_button_tag :transcript, code, class: 'form-check-input mr-2', id: "transcript-of-#{code}" %>
-              <label class="form-check-label mr-2" for="transcript-of-<%= code %>"> </label>
+            <% if code == 'auto-generated' %>
+              <div class="form-check form-check-inline">
+                <!-- caption一覧に、記事の言語と一致するものがなかった場合、自動文字起こしにチェックを入れる。 -->
+                <%= radio_button_tag :transcript, code, class: 'form-check-input mr-2', id: "transcript-of-#{code}" %>
+                <label class="form-check-label mr-2" for="transcript-of-<%= code %>"> </label>
 
-              <%= f.select :auto_sub_lang_code, @auto_sub_codes.map { |code| ["#{t("subtitles.auto_sub")}：#{t("lang.#{code}")}", code] },
-                           {},
-                           { class: 'form-control form-control-sm my-3' } %>
+                <%= f.select :auto_sub_lang_code, options_for_select(@auto_sub_codes.map { |code| ["#{t("subtitles.auto_sub")}：#{t("lang.#{code}")}", code] }, @locale.to_s),
+                             {},
+                             { class: 'form-control form-control-sm my-3' } %>
 
-            </div>
-          <% else %>
-            <div class="form-check form-check-inline">
-              <%= radio_button_tag :transcript, code, class: 'form-check-input mr-2' %>
-              <label class="form-check-label ml-2" for="transcript_<%= code %>"><%= lang_code_to_lang_name(code) %></label>
-            </div>
+              </div>
+            <% else %>
+              <div class="form-check form-check-inline">
+                <%= radio_button_tag :transcript, code, class: 'form-check-input mr-2' %>
+                <label class="form-check-label ml-2" for="transcript_<%= code %>"><%= lang_code_to_lang_name(code) %></label>
+              </div>
+            <% end %>
           <% end %>
+
+          <%= button_tag type: 'submit', class: "btn btn-lg btn-info loading-show-btn mt-5 w-100 font-weight-bold" do %>
+            <%= t 'subtitles.download' %>
+          <% end %>
+          <div class="loading is-hide">
+            <div class="loading_icon"></div>
+          </div>
+
+        <% else %>
+
+          <p class="text-danger"><%= t 'subtitles.there_are_no_subtitles' %></p>
+
         <% end %>
-
-
-        <h4 class="mt-4 mb-3 font-weight-bold"><%= t 'subtitles.file_type' %></h4>
-        <div class="form-check form-check-inline mr-3">
-          <%= radio_button_tag :file_type, 'srt', true, class: 'form-check-input', id: "file-type-srt" %>
-          <label class="form-check-label ml-2" for="file-type-srt">SRT</label>
-        </div>
-        <div class="form-check form-check-inline mr-3">
-          <%= radio_button_tag :file_type, 'txt', false, class: 'form-check-input', id: "file-type-txt" %>
-          <label class="form-check-label ml-2" for="file-type-txt">TXT</label>
-        </div>
-        <div class="form-check form-check-inline mr-3">
-          <%= radio_button_tag :file_type, 'csv', false, class: 'form-check-input', id: "file-type-csv" %>
-          <label class="form-check-label ml-2" for="file-type-csv">CSV</label>
-        </div>
-
-        <%= button_tag type: 'submit', class: "btn btn-lg btn-info loading-show-btn mt-5 w-100 font-weight-bold" do %>
-          <%= t 'subtitles.download' %>
-        <% end %>
-        <div class="loading is-hide">
-          <div class="loading_icon"></div>
-        </div>
-
-      <% else %>
-
-        <p class="text-danger"><%= t 'subtitles.there_are_no_subtitles' %></p>
 
       <% end %>
+    </div>
 
-    <% end %>
 
   </div>
 </div>
