@@ -2,13 +2,21 @@ en:
   subtitles:
     download_subtitles_on_youtube: 'Download captions on YouTube'
     description: "You can download captions of a video on YouTube. Formats to download: SRT, TXT, CSV"
-    placeholder: "Please input a URL of the video to download a caption"
+    placeholder: "Please input the URL of a video to download a caption"
     select_download_caption: 'Please select a caption to download'
     caption_type: 'Caption Type'
     file_type: 'File Type'
     auto_sub: 'Auto-generated'
     download: 'Download'
     there_are_no_subtitles: "There are no captions available for download."
-    error_message_not_youtube: "It is not Youtube's URL"
+    error_message_not_youtube: "Invalid URL: Please input the URL of a video on YouTube."
     downloading_now: "Downloading now..."
     download_completed: "Download completed"
+    transcribe_videos_on_youtube: 'Transcribe videos on YouTube'
+    description_about_transcriber: 'You can transcribe videos on Youtube. Formats to download: SRT, TXT, CSV'
+    placeholder_on_transcriber: 'Please input the URL of a video to transcribe'
+    setting_to_transcribe: 'Setting to transcribe'
+    transcribe: 'Transcribe'
+    processing: 'Processing...'
+    done: 'Done'
+    transcription_completed: "Transcription Completed"

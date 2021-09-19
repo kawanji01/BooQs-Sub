@@ -1,6 +1,9 @@
 class Youtube < ApplicationRecord
   require "open-uri"
   require "csv"
+  require 'google/apis/youtube_v3'
+  # require 'rest-client'
+  require 'google/cloud/speech'
 
   # youtubeのURLかどうかを判別する
   def self.youtube_url?(url)
@@ -285,16 +288,18 @@ class Youtube < ApplicationRecord
     file_name = "./tmp/downloaded_flac_#{id}"
     # メモ： --extract-audioと--outputを同時に使う場合は、-xや-oのように省略して記述してはいけない。
     # また拡張子は.flacではなく%(ext)sの形で指定しないとダウンロードしたファイルが壊れる。
-    Open3.capture3("youtube-dl --extract-audio --audio-format flac --output '#{file_name}.%(ext)s' #{url}")
+    stdout, stderr, status = Open3.capture3("youtube-dl --extract-audio --audio-format flac --output '#{file_name}.%(ext)s' #{url}")
+    p "1:#{stdout}:#{stderr}:#{status}"
     # yotuubeの音声はステレオなので、文字起こしの精度を上げるためにモノラルに分割する / 参考： https://cloud.google.com/solutions/media-entertainment/optimizing-audio-files-for-speech-to-text?hl=ja
-    Open3.capture3("ffmpeg -i #{file_name}.flac -filter_complex '[0:a]channelsplit=channel_layout=stereo[left][right]' -map '[left]' #{file_name}_FL.flac -map '[right]' #{file_name}_FR.flac")
+    stdout, stderr, status =  Open3.capture3("ffmpeg -i #{file_name}.flac -filter_complex '[0:a]channelsplit=channel_layout=stereo[left][right]' -map '[left]' #{file_name}_FL.flac -map '[right]' #{file_name}_FR.flac")
+    p "2:#{stdout}:#{stderr}:#{status}"
     file_name + '_FL.flac'
   end
 
 
   # youtubeから音声をダウンロードして、文字起こしに最適化されたモノラルファイルに変換してからGCSにアップロードする。
-  def self.upload_mono_audio_to_gcs(url, file_name, article_uid, user_uid, bucket)
-    uid = "#{article_uid}_#{user_uid}"
+  def self.upload_mono_audio_to_gcs(url, file_name, token, bucket)
+    uid = token
     monaural_file_path = Youtube.download_flac_and_convert_mono(url, uid)
     # bucket = FileUtility.get_gcs_bucket(ENV['GOOGLE_PROJECT_ID'], ENV['GOOGLE_BUCKET_NAME'])
     bucket&.create_file(monaural_file_path, file_name)
