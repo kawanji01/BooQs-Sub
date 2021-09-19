@@ -40,6 +40,14 @@ gem 'meta-tags'
 # ---Accept-Language HTTPnヘッダーからユーザーの言語設定を読み込むためのgem
 gem 'http_accept_language'
 
+# 用途は、1,文字起こしの料金を計算するためのyoutubeの動画の長さの取得, 2,タイトルの翻訳の取得
+gem 'google-api-client', '~> 0.11'
+# 文字起こし
+gem 'google-cloud-speech'
+# 文字起こしするための音声ファイルのアップロード先
+gem 'google-cloud-storage'
+
+
 group :development, :test do
   gem 'sqlite3', '1.4.1'
   gem 'byebug',  '11.0.1', platforms: [:mri, :mingw, :x64_mingw]
@@ -50,6 +58,8 @@ group :development do
   gem 'listen',                '3.1.5'
   gem 'spring',                '2.1.0'
   gem 'spring-watcher-listen', '2.0.1'
+  # .envにローカルの環境変数を設定するためのgem
+  gem 'dotenv-rails'
 end
 
 group :test do

@@ -5,10 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8dd6c8cc-9f46-44d5-ae18-1d87afde6c76" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/booqs_sub.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/booqs_sub.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/layouts/_recommendation_to_switch_locale.html.erb" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/layouts/_recommendation_to_switch_locale.html.erb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/layouts/application.html.erb" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/layouts/application.html.erb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gemfile" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gemfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/static_pages_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/static_pages_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/subtitles_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/subtitles_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/youtube.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/youtube.rb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/views/static_pages/home.html.erb" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/static_pages/home.html.erb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/subtitles/download_caption.js.erb" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/subtitles/download_caption.js.erb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/subtitles/select_captions.js.erb" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/subtitles/select_captions.js.erb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/locales/views/layouts/en.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/locales/views/layouts/en.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/locales/views/subtitles/en.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/locales/views/subtitles/en.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/locales/views/subtitles/ja.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/locales/views/subtitles/ja.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/routes.rb" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.rb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,6 +28,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="1yGB55JlX0SZZL0McudrcghiPWq" />
   <component name="ProjectViewState">
@@ -27,7 +46,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/assets/images" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -36,8 +55,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app/assets/images" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/app/assets/images" />
     </key>
   </component>
   <component name="RubyModuleManagerSettings">

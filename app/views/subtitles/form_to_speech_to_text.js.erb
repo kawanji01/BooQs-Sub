@@ -3,18 +3,19 @@ document.querySelector('#loading').classList.add("is-hide");
 
 <% if @valid %>
 
-displayCaptionsModal();
-function displayCaptionsModal() {
+displaySpeechToTextModal();
+function displaySpeechToTextModal() {
     const main = document.querySelector('#main');
-    main.insertAdjacentHTML('beforeend', "<%= j(render 'subtitles/captions_modal') %>");
-    const captionModalWrapper = document.querySelector('#captions-modal');
-    const closeBtns = document.querySelectorAll('.close-captions-modal')
+    main.insertAdjacentHTML('beforeend', "<%= j(render 'subtitles/speech_to_text_modal') %>");
+    const speechToTextModalWrapper = document.querySelector('#speech-to-text-modal');
+    const closeBtns = document.querySelectorAll('.close-speech-to-text-modal')
     closeBtns.forEach(function(item) {
         item.addEventListener('click', function() {
-            captionModalWrapper.remove();
+            speechToTextModalWrapper.remove();
         });
     });
 }
+
 
 <% else %>
 
@@ -24,7 +25,6 @@ function displayErrorMessage() {
     invalidFeedback.textContent = "<%= @error_message %>";
     invalidFeedback.style.display = 'block';
 }
+
 <% end %>
-
-
 

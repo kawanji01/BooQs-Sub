@@ -9,6 +9,14 @@ ja:
     auto_sub: '自動字幕'
     download: 'ダウンロード'
     there_are_no_subtitles: "ダウンロードできる字幕がありません."
-    error_message_not_youtube: 'Youtubeの動画のURLではありません。'
+    error_message_not_youtube: '無効なURLです。Youtubeの動画のURLを入力してください。'
     downloading_now: "ダウンロード中..."
     download_completed: "ダウンロードが完了しました。"
+    transcribe_videos_on_youtube: 'YouTubeの動画を文字起こしする'
+    description_about_transcriber: 'YouTubeの動画を文字起こしできます。'
+    placeholder_on_transcriber: '文字起こししたい動画のURLを入力してください。'
+    setting_to_transcribe: '文字起こし設定'
+    transcribe: '文字起こしする'
+    processing: '処理中...'
+    done: '完了'
+    transcription_completed: "文字起こしが完了しました。"
