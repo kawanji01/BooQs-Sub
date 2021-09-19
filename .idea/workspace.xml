@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8dd6c8cc-9f46-44d5-ae18-1d87afde6c76" name="Changes" comment="" />
+    <list default="true" id="8dd6c8cc-9f46-44d5-ae18-1d87afde6c76" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/subtitles_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/subtitles_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/javascript/channels/download_file_channel.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/javascript/channels/download_file_channel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/javascript/channels/download_transcription_channel.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/javascript/channels/download_transcription_channel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/subtitles/_captions_modal.html.erb" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/subtitles/_captions_modal.html.erb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/subtitles/download_caption.js.erb" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/subtitles/download_caption.js.erb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/workers/download_auto_sub_worker.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/workers/download_auto_sub_worker.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/workers/download_subtitle_worker.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/workers/download_subtitle_worker.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/locales/views/subtitles/en.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/locales/views/subtitles/en.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/locales/views/subtitles/ja.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/locales/views/subtitles/ja.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
