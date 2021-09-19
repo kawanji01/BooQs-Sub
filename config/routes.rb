@@ -6,6 +6,9 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
     mount ActionCable.server => '/cable'
 
+    # APIとサービスの「認証情報」の設定
+    get '/auth/google_oauth2/callback', to: 'static_pages#home'
+
     resources :subtitles do
       collection do
         get :select_captions
