@@ -27,6 +27,12 @@ body {
   min-height: 100vh;
 }
 
+p {
+  line-height: 1.8em;
+  font-size: 17px;
+  letter-spacing: 0.05em;
+}
+
 .header {
   background-color: $brand-black;
   height: 60px;
