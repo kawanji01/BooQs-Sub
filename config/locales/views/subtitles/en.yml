@@ -12,7 +12,7 @@ en:
     downloading_now: "Downloading now..."
     download_completed: "Download completed"
     transcribe_videos_on_youtube: 'Transcribe videos on YouTube'
-    description_about_transcriber: 'You can transcribe videos on Youtube. Transcription is free of charge for up to 5 minutes (200 seconds), after which there is a charge of $0.5 per 5 minutes. Formats to download: SRT, TXT, CSV'
+    description_about_transcriber: 'You can transcribe videos on Youtube. Transcription is free of charge for up to 5 minutes (300 seconds), after which there is a charge of $0.5 per 5 minutes. Formats to download: SRT, TXT, CSV'
     placeholder_on_transcriber: 'Please input the URL of a video to transcribe'
     setting_to_transcribe: 'Setting to transcribe'
     video_duration: 'Duration'
