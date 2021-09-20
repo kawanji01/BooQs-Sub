@@ -46,7 +46,7 @@ consumer.subscriptions.create("DownloadTranscriptionChannel", {
             // 参照： https://chaika.hatenablog.com/entry/2018/12/23/090000
             const blob = new Blob([ content ], { "type" : "text/plain" });
             const a = document.querySelector('#download-srt-btn');
-            a.download = 'transcription.srt';
+            a.download = 'transcription.srt.txt';
             a.href = window.URL.createObjectURL(blob);
             //a.click();
         }
