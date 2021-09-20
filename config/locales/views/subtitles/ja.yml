@@ -1,7 +1,7 @@
 ja:
   subtitles:
     download_subtitles_on_youtube: 'Youtubeの字幕をダウンロードする'
-    description: "Youtubeの動画の字幕をダウンロードできます。対応フォーマット：SRT, TXT, CSV"
+    description: "Youtubeの動画の字幕を無料でダウンロードできます。対応フォーマット：SRT, TXT, CSV"
     placeholder: "字幕をダウンロードしたい動画のURLを入力してください。"
     select_download_caption: 'ダウンロードする字幕を選択してください。'
     auto_sub: '自動字幕'
@@ -12,7 +12,7 @@ ja:
     downloading_now: "ダウンロード中..."
     download_completed: "字幕のダウンロードが完了しました。"
     transcribe_videos_on_youtube: 'YouTubeの動画を文字起こしする'
-    description_about_transcriber: 'YouTubeの動画を文字起こしできます。文字起こしは、5分（200秒）まで無料、その後は5分ごとに50円の料金がかかります。対応フォーマット：SRT, TXT, CSV'
+    description_about_transcriber: 'YouTubeの動画を文字起こしできます。文字起こしは、5分（300秒）まで無料、その後は5分ごとに50円の料金がかかります。対応フォーマット：SRT, TXT, CSV'
     placeholder_on_transcriber: '文字起こししたい動画のURLを入力してください。'
     setting_to_transcribe: '文字起こし設定'
     video_duration: 'Duration'
