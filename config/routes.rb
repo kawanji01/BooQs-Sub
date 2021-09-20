@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   scope '(:locale)', locale: /#{I18n.available_locales.map(&:to_s).join('|')}/ do
     root to: 'static_pages#home'
     get 'transcriber', to: 'static_pages#transcriber'
+    post '/create-checkout-session', to: 'static_pages#create-checkout-session'
     mount Sidekiq::Web => '/sidekiq'
     mount ActionCable.server => '/cable'
 
@@ -13,8 +14,9 @@ Rails.application.routes.draw do
       collection do
         get :select_captions
         post :download_caption
-        get :form_to_speech_to_text
-        post :speech_to_text
+        get :form_to_transcribe
+        get :checkout
+        get :transcribe
       end
     end
 

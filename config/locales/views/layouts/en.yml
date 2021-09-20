@@ -8,4 +8,6 @@ en:
     title: "Download captions from YouTube"
     description: "You can download captions from videos on YouTube for free."
     keywords: "YouTube, Caption, Subtitle, Download"
+    download_caption: 'Download Caption'
+    transcribe_video: 'Transcribe Video'
 

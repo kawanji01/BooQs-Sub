@@ -7,14 +7,20 @@ en:
     auto_sub: 'Auto-generated'
     download: 'Download'
     there_are_no_subtitles: "There are no captions available for download."
+    recommend_transcription: "However, by using the transcription function, you can download the captions."
     error_message_not_youtube: "Invalid URL: Please input the URL of a video on YouTube."
     downloading_now: "Downloading now..."
     download_completed: "Download completed"
     transcribe_videos_on_youtube: 'Transcribe videos on YouTube'
-    description_about_transcriber: 'You can transcribe videos on Youtube. Formats to download: SRT, TXT, CSV'
+    description_about_transcriber: 'You can transcribe videos on Youtube. Transcription is free of charge for up to 5 minutes (200 seconds), after which there is a charge of $0.5 per 5 minutes. Formats to download: SRT, TXT, CSV'
     placeholder_on_transcriber: 'Please input the URL of a video to transcribe'
     setting_to_transcribe: 'Setting to transcribe'
+    video_duration: 'Duration'
+    seconds: 'seconds'
+    price: 'Price'
+    total: "$%{price} ($0.5 × %{amount})"
     transcribe: 'Transcribe'
     processing: 'Processing. Please wait for a while at this screen.'
     done: 'done'
     transcription_completed: "Transcription Completed"
+

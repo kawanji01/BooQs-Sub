@@ -54,6 +54,13 @@
         <% else %>
 
           <p class="text-danger"><%= t 'subtitles.there_are_no_subtitles' %></p>
+          <p class="text-danger"><%= t('subtitles.recommend_transcription') %></p>
+
+          <%= link_to transcriber_path do %>
+            <div class="btn btn-lg btn-info loading-show-btn my-3 w-100 font-weight-bold">
+              <%= t('subtitles.transcribe') %>
+            </div>
+          <% end %>
 
         <% end %>
 

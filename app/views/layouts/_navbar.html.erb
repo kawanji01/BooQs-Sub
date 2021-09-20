@@ -1,0 +1,15 @@
+<nav id="nav-menu" class="mb-5">
+  <ul class="nav-menu-inner">
+    <li class="<%= "active" if request.path == root_path %>">
+      <a href="<%= root_path %>">
+        <%= t('layouts.download_caption') %>
+      </a>
+    </li>
+
+    <li class="<%= "active" if request.path == transcriber_path %>">
+      <a href="<%= transcriber_path %>">
+        <%= t('layouts.transcribe_video') %>
+      </a>
+    </li>
+  </ul>
+</nav>

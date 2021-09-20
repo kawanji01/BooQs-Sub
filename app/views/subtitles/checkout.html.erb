@@ -1,0 +1,9 @@
+<script src="https://js.stripe.com/v3"></script>
+
+<script>
+    var stripe = Stripe('<%= Rails.configuration.stripe[:publishable_key] %>'); // ()内には公開可能キーを記述
+    stripe.redirectToCheckout({
+        sessionId: '<%= @session.id %>'
+    }).then(function (result) {
+    });
+</script>

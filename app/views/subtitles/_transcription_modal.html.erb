@@ -1,51 +1,47 @@
-<div class="badge-modal-wrapper" id="speech-to-text-modal">
-  <div class="overlay close-speech-to-text-modal">
+<div class="badge-modal-wrapper" id="transcription-modal">
+  <div class="overlay close-transcription-modal">
 
     <div class="close-btn">
       <i class="fal fa-times"></i>
     </div>
 
   </div>
-  <div class="modal-booqs" id="speech-to-text-<%= @token %>">
+  <div class="modal-booqs" id="transcription-<%= @token %>">
 
     <h3 class="green my-3 font-weight-bold" id="modal-title"><%= t('subtitles.transcribe_videos_on_youtube') %></h3>
-
-    <!--
-    <p class="text-secondary text-left">文字起こしには、10分（600秒）まで100円、その後は10分ごとに100円の追加料金がかかります。</p>
-    -->
 
 
     <div id="contents-form">
 
-
-    <%= form_with url: speech_to_text_subtitles_path, method: :post do |f| %>
-      <%= f.hidden_field :url, value: @url %>
-      <%= f.hidden_field :token, value: @token %>
-      <div id="scraping-error-massages"></div>
-      <h5 class="text-secondary font-weight-normal"><%= @title %></h5>
-      <div class="d-block mt-2 mb-4">
-        <%= image_tag @image, class: 'img-fluid w-25 mb-2' %>
-      </div>
-
-      <h4 class="my-3 font-weight-bold"><%= t 'subtitles.setting_to_transcribe' %></h4>
-
-      <%= f.select :bcp47, @bcp47.map { |code| [t("lang.#{code}"), code] },
-                   {},
-                   { class: 'form-control form-control my-3' } %>
-
-      <!--
-      <div class="card">
-        <div class="card-body">
-          <p class="text-secondary">動画の秒数：<#%= @article.video_duration %></p>
-          <p class="text-secondary mb-1">料金：<b>無料！</b></p>
+      <%= form_with url: checkout_subtitles_path, method: :get, local: true do |f| %>
+        <%= f.hidden_field :url, value: @url %>
+        <%= f.hidden_field :token, value: @token %>
+        <div id="scraping-error-massages"></div>
+        <h5 class="text-secondary font-weight-normal"><%= @title %></h5>
+        <div class="d-block mt-2 mb-4">
+          <%= image_tag @image, class: 'img-fluid w-25 mb-2' %>
         </div>
-      </div>
-      -->
+
+        <h4 class="my-3 font-weight-bold"><%= t 'subtitles.setting_to_transcribe' %></h4>
+
+        <%= f.select :bcp47, @bcp47.map { |code| [t("lang.#{code}"), code] },
+                     {},
+                     { class: 'form-control form-control my-3' } %>
 
 
-      <%= f.submit t('subtitles.setting_to_transcribe'), class: 'btn btn-lg btn-info mt-5 w-100 font-weight-bold' %>
+        <div class="card">
+          <div class="card-body">
+            <p class="text-secondary"><%= t('subtitles.video_duration') %>： <%= "#{@duration}#{t('subtitles.seconds')}" %></p>
+            <p class="text-secondary mb-1"><%= t('subtitles.price') %>： <b><%= t('subtitles.total', price: @price, amount: @amount) %></b></p>
+          </div>
+        </div>
 
-    <% end %>
+        <%= f.submit t('subtitles.transcribe'), class: 'btn btn-lg btn-info mt-5 w-100 font-weight-bold loading-show-btn' %>
+        <div class="loading is-hide">
+          <div class="loading_icon"></div>
+        </div>
+
+      <% end %>
 
     </div>
 

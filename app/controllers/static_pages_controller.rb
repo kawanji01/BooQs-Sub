@@ -3,8 +3,12 @@ class StaticPagesController < ApplicationController
 
   def home; end
   
-  def transcriber; end
-  
+  def transcriber
+    @breadcrumb_hash = { t('subtitles.download_subtitles_on_youtube') => root_path,
+                         t('subtitles.transcribe_videos_on_youtube') => '' }
+  end
+
+
   private
   
   def extract_user_language

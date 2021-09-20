@@ -6,16 +6,22 @@ document.querySelector('#loading').classList.add("is-hide");
 displaySpeechToTextModal();
 function displaySpeechToTextModal() {
     const main = document.querySelector('#main');
-    main.insertAdjacentHTML('beforeend', "<%= j(render 'subtitles/speech_to_text_modal') %>");
-    const speechToTextModalWrapper = document.querySelector('#speech-to-text-modal');
-    const closeBtns = document.querySelectorAll('.close-speech-to-text-modal')
+    main.insertAdjacentHTML('beforeend', "<%= j(render 'subtitles/transcription_modal') %>");
+    const speechToTextModalWrapper = document.querySelector('#transcription-modal');
+    const closeBtns = document.querySelectorAll('.close-transcription-modal')
     closeBtns.forEach(function(item) {
         item.addEventListener('click', function() {
             speechToTextModalWrapper.remove();
         });
     });
 }
-
+// ローディング
+var loadingShowBtns = document.querySelectorAll('.loading-show-btn');
+loadingShowBtns.forEach(function (item) {
+    item.addEventListener('click', function() {
+        item.nextElementSibling.classList.remove('is-hide');
+    });
+});
 
 <% else %>
 
