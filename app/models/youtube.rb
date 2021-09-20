@@ -180,6 +180,13 @@ class Youtube < ApplicationRecord
     end
   end
 
+  def self.get_amount(duration)
+    if duration < 300
+      0
+    else
+      duration / 300
+    end
+  end
 
   # タイトルの翻訳を取得する
   def self.get_translated_title(url, lang_code)

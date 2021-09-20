@@ -11,7 +11,7 @@ consumer.subscriptions.create("DownloadTranscriptionChannel", {
 
     received(data) {
         // Called when there's incoming data on the websocket for this channel
-        var speechToTextModalWrapper = document.querySelector('#speech-to-text-' + data['token']);
+        var speechToTextModalWrapper = document.querySelector('#transcription-' + data['token']);
         if (!speechToTextModalWrapper) {
             return;
         }
@@ -58,7 +58,6 @@ consumer.subscriptions.create("DownloadTranscriptionChannel", {
             const a = document.querySelector('#download-csv-btn');
             a.download = 'transcription.csv';
             a.href = window.URL.createObjectURL(blob);
-            //a.click();
         }
 
         function downloadTXT(content) {
@@ -67,7 +66,6 @@ consumer.subscriptions.create("DownloadTranscriptionChannel", {
             const a = document.querySelector('#download-txt-btn');
             a.download = 'transcription.txt';
             a.href = window.URL.createObjectURL(blob);
-            //a.click();
         }
 
 

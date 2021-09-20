@@ -8,3 +8,5 @@ ja:
     title: "Youtubeの字幕をダウンロードする"
     description: "無料でYouTubeの動画の字幕をダウンロードできます。"
     keywords: "YouTube, ユーチューブ, 字幕, ダウンロード"
+    download_caption: '字幕をダウンロード'
+    transcribe_video: '動画を文字起こし'

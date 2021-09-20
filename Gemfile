@@ -46,7 +46,8 @@ gem 'google-api-client', '~> 0.11'
 gem 'google-cloud-speech'
 # 文字起こしするための音声ファイルのアップロード先
 gem 'google-cloud-storage'
-
+# Stripe
+gem 'stripe'
 
 group :development, :test do
   gem 'sqlite3', '1.4.1'

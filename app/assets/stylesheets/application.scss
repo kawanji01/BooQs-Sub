@@ -19,8 +19,8 @@
 $brand-black: #273132;
 $bg-color: #f6f7f9;
 $brand-green: #27ae60;
-$bright-green: #48c78e;
-
+$emerald-green: #48c78e;
+$bright-green: #A7DC4D;
 
 body {
   background-color: $bg-color;
@@ -48,8 +48,8 @@ body {
 
 /* ボタンデザインの書き換え */
 .btn-info {
-  background-color: #48c78e;
-  border-color: #48c78e;
+  background-color: $emerald-green;
+  border-color: $emerald-green;
 }
 
 // ローディング画面
@@ -212,8 +212,75 @@ footer {
     font-size: 16px;
     color: white;
     &:hover {
-      color: $bright-green;
+      color: $emerald-green;
       text-decoration: none;
+    }
+  }
+}
+
+#nav-menu {
+  height: 48px; /*メニューの縦幅*/
+  background-color: $brand-black; /*メニューの背景色*/
+  width: 100%;
+
+  .nav-menu-inner {
+    list-style-type: none;
+    height: 100%;
+    margin: 0 auto;
+    padding: 4px 0 0 0;
+    text-align: center;
+
+    .active {
+      font-weight: bold;
+
+      a {
+        color: $bright-green;
+      }
+      padding-bottom: 8px;
+      //border-bottom: solid 3px $bright-green;
+    }
+  }
+
+  li {
+    height: 100%;
+    display: inline;
+  }
+
+  a {
+    display: inline-block;
+    height: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    color: darkgrey; /*文字色*/
+    font-size: 15px;
+    text-decoration: none;
+    line-height: 40px; /*メニューの縦幅*/
+
+    &:hover {
+      color: $bright-green;
+    }
+  }
+
+  @media(max-width: 670px) {
+    overflow-y: hidden;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    .nav-menu-inner {
+      margin: 0;
+      li {
+        float: left;
+      }
+    }
+  }
+}
+
+// パンくずのリンクの色をブランドカラーの緑に揃える。
+.breadcrumb-item {
+  a {
+    color: $emerald-green;
+
+    &:hover {
+      color: #2E7D32;
     }
   }
 }

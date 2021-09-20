@@ -1,0 +1,31 @@
+<% if items_hash.present? %>
+  <nav aria-label="breadcrumb" class="mx-auto" style="max-width: 1140px;">
+
+    <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+
+      <% items_hash.each.with_index(1) do |(key, value), i| %>
+        <% if value.present? %>
+
+          <li class="breadcrumb-item" itemprop="itemListElement" itemscope
+              itemtype="https://schema.org/ListItem">
+            <a itemprop="item" href="<%= value %>">
+              <span itemprop="name"><%= key %></span></a>
+            <meta itemprop="position" content="<%= i %>"/>
+          </li>
+
+        <% else %>
+
+          <li class="breadcrumb-item active" aria-current="page"
+              itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <span itemprop="name"><%= key %></span>
+            <meta itemprop="position" content="<%= i %>"/>
+          </li>
+
+        <% end %>
+
+
+      <% end %>
+
+    </ol>
+  </nav>
+<% end %>
