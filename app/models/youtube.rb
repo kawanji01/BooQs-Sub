@@ -123,7 +123,7 @@ class Youtube < ApplicationRecord
 
         previous_text_array = text_array
 
-        values = [text.strip, start_time, start_time_minutes, start_time_seconds,
+        values = [text, start_time, start_time_minutes, start_time_seconds,
                   end_time, end_time_minutes, end_time_seconds, lang_number]
         csv << values
       end
@@ -141,7 +141,7 @@ class Youtube < ApplicationRecord
       text = <<~TEXT
         #{i}
         #{start_time} --> #{end_time}
-        #{row['text']&.strip}
+        #{row['text'].strip}
       TEXT
       array << text
     end
@@ -151,7 +151,7 @@ class Youtube < ApplicationRecord
   def self.convert_csv_into_txt(csv_str)
     array = []
     CSV.parse(csv_str, headers: true).each do |row|
-      text = row['text']&.strip
+      text = row['text']
       array << text
     end
     array.join("\n")
