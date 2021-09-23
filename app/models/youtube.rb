@@ -141,7 +141,7 @@ class Youtube < ApplicationRecord
       text = <<~TEXT
         #{i}
         #{start_time} --> #{end_time}
-        #{row['text']}
+        #{row['text'].strip}
       TEXT
       array << text
     end
