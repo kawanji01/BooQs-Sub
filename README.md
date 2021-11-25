@@ -1,6 +1,7 @@
-# BooQs-Sub
 English | [日本語](./README-ja.md)
- 
+
+# BooQs-Sub
+
 BooQs-Sub is a tool to download captions from YouTube.
 
 With BooQs-Sub, You can download captions as SRT, CSV, and TXT.
@@ -15,7 +16,7 @@ Check it out => https://www.booqs-sub.com/en
 # Features
  
 - Download video captions that are auto-generated or prepared from YouTube.
-- Transcript videos.(Free to use up to 5 minutes)
+- Transcript videos.(Paid feature)
  
 # Author
  
