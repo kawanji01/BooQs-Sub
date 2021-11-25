@@ -15,7 +15,7 @@ Check it out => https://www.booqs-sub.com/en
 # Features
  
 - Download video captions that are auto-generated or prepared from YouTube.
-- Transcript videos.(Paid feature)
+- Transcript videos.(Free to use up to 5 minutes)
  
 # Author
  
