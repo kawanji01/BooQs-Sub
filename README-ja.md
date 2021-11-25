@@ -1,5 +1,6 @@
-# BooQs-Sub
 [English](./README.md) | 日本語
+
+# BooQs-Sub
  
 BooQs-SubはYouTubeから動画の字幕をダウンロードできるツールです。.
 
