@@ -1,0 +1,13 @@
+<div class="dropdown d-inline ml-2">
+  <button class="btn btn-sm btn-gray-article rounded-circle dropdown-toggle remove-arrow" type="button" id="dropdownMenuPassage-<%= passage.id %>"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+          style="min-width:34px;min-height: 34px;">
+    <i class="fal fa-ellipsis-v-alt non-margin"></i>
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuPassage-<%= passage.id %>">
+    <%= render 'passages/inserting_passage_btn', passage: passage, article: passage.article %>
+    <!--
+    <button class="dropdown-item my-2" type="button">工事中</button>
+    -->
+  </div>
+</div>

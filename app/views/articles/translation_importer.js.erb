@@ -1,0 +1,11 @@
+$('.loading').addClass('is-hide');
+$('#main').append('<%= j(render 'articles/translation_importer_modal') %>');
+//$("#translation-importer").animate({'top': '56px'}, 400, 'easeOutExpo');
+
+// プログレスバーを表示するとき、.off()でイベントを削除できるようにするために、.onでclickイベントをつける（document）で指定しない。
+$('.close-translation-importer-modal').on('click', function() {
+    $('#translation-importer-modal').fadeOut().queue(function() {
+        $("#translation-importer-modal").remove();
+    });
+});
+

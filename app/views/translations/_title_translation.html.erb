@@ -1,0 +1,27 @@
+<% translation ||= article&.find_title_translation(@lang_number_of_translation) %>
+
+<% if translation.present? %>
+
+  <% lang_number = translation.lang_number %>
+  <% lines = translation.text.lines %>
+
+  <h3 class="gray my-4">
+    <% lines.each_with_index do |l, i| %>
+      <!-- https://docs.ruby-lang.org/ja/latest/method/String/i/split.html -->
+
+      <div class="translation-line" style="letter-spacing: -.4em;">
+
+        <%= render "shared/line_with_dict", line: l, lang_number: lang_number %>
+
+        <!-- 最後の行の文末に編集ボタンを置く -->
+        <% if i == lines.length - 1 %>
+          <%= render 'translations/edit_btn_of_title_translation', translation: translation %>
+        <% end %>
+      </div>
+    <% end %>
+  </h3>
+
+  <!-- ユーザーの言語設定が記事のタイトルの言語と同じなら、翻訳追加ボタンを表示しない -->
+<% elsif article.lang_number != @lang_number_of_translation %>
+  <%= render 'translations/adding_title_translation_btn', article: article %>
+<% end %>

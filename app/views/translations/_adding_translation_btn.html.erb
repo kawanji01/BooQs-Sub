@@ -1,0 +1,13 @@
+<!-- 「翻訳を追加するボタン（translations#new）」 -->
+<%= form_with url: new_translation_path, method: :get do |f| %>
+  <%= f.hidden_field :passage_id, value: passage.id, class: 'form-control' %>
+  <%= button_tag type: 'submit', class: 'btn btn-sm btn-gray-article float-left mr-2 loading-show-btn', id: "passage-#{passage.id}-translation-btn" do %>
+    <!--
+    <i class="fas fa-plus mr-2"></i><#%= t 'translations.translate_passage' %>
+    -->
+    <i class="far fa-language"></i>
+  <% end %>
+  <div class="loading is-hide">
+    <div class="loading_icon"></div>
+  </div>
+<% end %>

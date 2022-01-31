@@ -1,0 +1,55 @@
+@import "./variables";
+/* sidebar / https://jsfiddle.net/gableroux/S2SMK/ */
+
+.fixed {
+  position: fixed;
+}
+
+
+#mb-sidebar {
+  max-height: 640px;
+  overflow: scroll;
+
+  @media(min-width: 1140px) {
+    position: fixed;
+    max-width: 320px;
+  }
+  /* Videoコンテンツのページで一定高度を下回ったときに、メインコンテンツに統合されたsidebarの設定 */
+  &.style-reset {
+    @media(min-width: 1140px) {
+      position: static;
+      max-width: 840px;
+      /* 高さをリセットしてスクロールを不要にする 参考：https://qiita.com/skwbr/items/90654ed6bb81c2b8cdaf */
+      max-height: initial;
+    }
+  }
+  @media(min-width: 1440px) {
+    max-width: 400px;
+  }
+
+  /* col-xlの適用が外れるときには、スクロールを無効にする。 */
+  @media(max-width: 992px) {
+    max-height: initial;
+  }
+}
+
+/* scrollSpy付きsidebar */
+
+.bs-docs-sidebar {
+  padding-left: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* all links */
+.bs-docs-sidebar .nav > li > a {
+  color: #999;
+  border-left: 2px solid transparent;
+  padding: 4px 20px;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  background-color: $light-green;
+}

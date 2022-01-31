@@ -1,0 +1,269 @@
+@import "./variables";
+
+/* ボタンデザインの書き換え */
+
+.btn {
+  margin-bottom: 4px;
+}
+
+.btn-info {
+  background-color: $emerald-green;
+  border-color: $emerald-green;
+}
+
+
+.btn-success {
+  background-color: $brand-green;
+  border-color: $brand-green;
+}
+
+
+
+.btn-green {
+  background-color: $brand-green;
+  border-color: $brand-green;
+  color: white;
+
+  &:hover {
+    color: white;
+    background-color: darken($brand-green, 20%);
+    border-color: darken($brand-green, 20%);
+  }
+}
+
+
+.btn-light-green {
+  /*margin-bottom: 8px; */
+  background-color: $light-green;
+  border-color: $light-green;
+  color: white;
+
+  &:hover {
+    color: white;
+    background-color: darken($light-green, 20%);
+    border-color: darken($light-green, 20%);
+  }
+}
+
+.btn-pale-green {
+  background-color: #effaf5;
+  border-color: transparent;
+  color: #257953;
+
+  &:hover {
+    color: #257953;
+    background-color: darken(#effaf5, 20%);
+    //border-color: darken($light-green, 20%);
+  }
+}
+
+
+.btn-pale-red {
+  background-color: #feecf0;
+  border-color: transparent;
+  color: #cc0f35;
+
+  &:hover {
+    color: #cc0f35;
+    background-color: darken(#feecf0, 20%);
+  }
+}
+
+.btn-pale-gray {
+  background-color: #f5f5f5;
+  border-color: transparent;
+  color: rgba(0,0,0,.7);
+
+  &:hover {
+    color: rgba(0,0,0,.7);
+    background-color: darken(#f5f5f5, 20%);
+  }
+}
+
+
+.btn-disable {
+  background-color: #B3B3B3;
+  border-color: #B3B3B3;
+  color: white;
+}
+
+
+
+
+.btn-border-gray {
+  background-color: white;
+  border-color: #B3B3B3;
+  color: gray;
+
+  &:hover {
+    color: gray;
+    background-color: darken(white, 10%);
+    border-color: darken(#B3B3B3, 10%);
+  }
+}
+
+
+
+
+
+.btn-solid {
+  cursor: pointer;
+  color: #fff;
+  font-size: 17px;
+  font-weight: bold;
+  letter-spacing: 4px;
+  text-decoration: none;
+  background: #6fc173;
+  border-radius: 5px;
+  box-shadow: 0 3px #449f49;
+  position: relative;
+  display: inline-block;
+  top: -2px;
+  padding: 15px;
+  text-align: center;
+  margin: 10px 0;
+
+  &:hover {
+    box-shadow: 0 1px #449f49;
+    transform: translateY(2px);
+  }
+}
+
+
+.btn-solid-disabled {
+  cursor: pointer;
+  color: #fff;
+  font-size: 17px;
+  font-weight: bold;
+  letter-spacing: 4px;
+  text-decoration: none;
+  background: #B3B3B3;
+  border-radius: 5px;
+  box-shadow: 0 3px darken(#B3B3B3, 20%);
+  position: relative;
+  display: inline-block;
+  top: -2px;
+  padding: 15px;
+  text-align: center;
+  margin: 10px 0;
+
+  &:hover {
+    box-shadow: 0 1px darken(#B3B3B3, 20%);
+    top: 1px;
+  }
+}
+
+
+.btn-outline-secondary {
+  color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-outline-secondary.active {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+}
+
+.btn-outline-danger {
+  background-color: white;
+  color: #d9534f;
+  border-color: #d43f3a;
+
+  &:hover {
+    color: #d9534f;
+    background-color: darken(white, 10%);
+  }
+}
+
+.speech-btn-position {
+  @media(max-width: 544px) {
+    margin-left: 35%;
+  }
+}
+
+.speech-btn {
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+  background: #6fc173;
+  color: #FFF;
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 1.2em;
+  overflow: hidden;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
+  border-bottom: solid 3px #449f49;
+  transition: .4s;
+
+  i {
+    margin: 0;
+  }
+
+  &:active {
+    -webkit-transform: translateY(2px);
+    transform: translateY(2px);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
+    border-bottom: none;
+  }
+}
+
+
+/* CSS */
+.button-default {
+  background-color: #FFFFFF;
+  border: 1px solid rgb(209, 213, 219);
+  border-radius: .5rem;
+  box-sizing: border-box;
+  color: #111827;
+  font-family: "Inter var", ui-sans-serif, system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: .875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  padding: .75rem 1rem;
+  text-align: center;
+  text-decoration: none #D1D5DB solid;
+  text-decoration-thickness: auto;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  &:hover {
+    background-color: rgb(249, 250, 251);
+  }
+  &:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+  &:focus-visible {
+    box-shadow: none;
+  }
+}
+
+// ドロップダウンボタンの矢印を消す
+.remove-arrow.dropdown-toggle::after {
+  display: none;
+}
+
+.btn-gray-article {
+  background-color: rgba(51, 51, 51, 0.05);
+  // border-color: #B3B3B3;
+  color: gray;
+  //color: #333333;
+  border-width: 0;
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  touch-action: manipulation;
+
+  &:hover {
+    //color: gray;
+    color: #333333;
+    background-color: darken(white, 10%);
+    //border-color: darken(#B3B3B3, 10%);
+  }
+}
+
+

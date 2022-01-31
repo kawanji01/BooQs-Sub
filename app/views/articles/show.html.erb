@@ -1,0 +1,396 @@
+<% set_meta_tags title: @article.display_title(@lang_number_of_locale),
+                 og: {image: @article.scraped_image, description: @article.display_lead(@lang_number_of_locale)},
+                 twitter: {card: 'summary_large_image'} %>
+
+
+<div class="row main-column" id="article-<%= @article.public_uid %>">
+
+
+  <div class="col-xl-9 my-3">
+
+
+    <% if @processing.present? %>
+      <div class="container bg-white pt-5 pb-5 my-5">
+        <%= render 'shared/progress_bar', content_id: @article.public_uid %>
+      </div>
+    <% end %>
+
+
+    <div class="container bg-white pt-5 pb-5 my-5" style="min-height: 640px;">
+      <div class="row justify-content-md-center">
+        <div class="col col-lg-10">
+
+
+          <div class="text-right text-muted small mb-3"><%= t 'articles.updated_at' %>
+            : <%= @article.updated_at.to_date %>
+          </div>
+
+
+          <div class="text-right d-xl-none">
+            <%= button_to select_translation_article_path(@article, sub: @lang_of_translation), class: 'btn btn-sm btn-border-gray main-loading-show-btn mb-3', remote: true, method: :get do %>
+              <i class="far fa-language"></i><%= lang_number_to_lang_name(@lang_number_of_translation) %>
+            <% end %>
+          </div>
+
+
+          <div id="article-title-<%= @article.public_uid %>" class="mt-3">
+            <%= render 'articles/article_title', article: @article %>
+          </div>
+
+          <div id="title-translation-<%= @lang_of_translation %>" class="mt-3">
+            <%= render 'translations/title_translation', article: @article, translation: @title_translation %>
+          </div>
+
+
+          <% if @article.video? %>
+            <%= render 'articles/video' %>
+          <% end %>
+
+          <div id="passages_and_translations">
+            <%= render 'articles/passages', article: @article, passages: @passages %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <%= render 'layouts/breadcrumb', items_hash: @breadcrumb_hash %>
+
+  </div>
+
+
+  <!-- =================== Article Side Bar  =================== -->
+
+  <div class="col-xl-3 my-3">
+    <div class="container bg-white my-5 box w-100" id="mb-sidebar">
+
+      <div class="py-4">
+
+        <h4 class="my-3 font-weight-bold">
+          <i class="far fa-closed-captioning mr-2"></i><%= t 'articles.displayed_captions' %>
+        </h4>
+
+        <%= link_to article_path(@article) do %>
+          <div class="mx-1 my-1 font-weight-bold btn btn <%= params[:sub].blank? ? 'btn-light-green' : 'btn-border-gray' %>">
+            <%= t('articles.original') %>
+          </div>
+        <% end %>
+
+        <% @translated_lang_numbers.each do |i| %>
+          <% lang_code = Lang.convert_number_to_code(i) %>
+          <%= link_to article_path(@article, sub: lang_code) do %>
+            <div class="mx-1 my-1 font-weight-bold btn btn <%= @lang_number_of_translation == i ? 'btn-light-green' : 'btn-border-gray' %>">
+              <%= lang_code_to_lang_name(lang_code) %>
+            </div>
+          <% end %>
+        <% end %>
+
+
+        <%= link_to "他の翻訳を表示する", root_url, class: "text-success my-3 small d-block" %>
+
+
+        <div class="dropdown mt-4 mb-3">
+          <button type="button" class="dropdown-toggle button-default w-100" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-flip="true">
+            <i class="far fa-pen mr-2"></i>原文を編集する
+          </button>
+          <!-- https://stackoverflow.com/questions/17904862/bootstrap-position-of-dropdown-menu-relative-to-navbar-item/19253730#19253730 -->
+          <div class="dropdown-menu dropdown-menu-right">
+            <%= link_to new_passages_via_srt_article_path(@article), remote: true, class: 'dropdown-item my-2' do %>
+              SRTファイルを取り込む
+              <!--
+              <#%= t('articles.create_passages_via_srt') %>
+              -->
+            <% end %>
+          </div>
+        </div>
+
+
+        <div class="dropdown my-3">
+          <button type="button" class="dropdown-toggle button-default w-100" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-flip="true">
+            <i class="far fa-language mr-2"></i>翻訳を編集する
+          </button>
+          <!-- https://stackoverflow.com/questions/17904862/bootstrap-position-of-dropdown-menu-relative-to-navbar-item/19253730#19253730 -->
+          <div class="dropdown-menu dropdown-menu-right">
+
+            <%= link_to translation_importer_article_path(@article), remote: true, method: :post, class: 'dropdown-item my-2 main-loading-show-btn' do %>
+              <%= t 'articles.import_captions' %>
+            <% end %>
+
+            <%= link_to new_translation_article_path(@article), remote: true, class: 'dropdown-item my-2' do %>
+              <%= t 'articles.create_another_translation' %>
+            <% end %>
+
+            <%= link_to new_translations_via_srt_article_path(@article), remote: true, class: 'dropdown-item my-2' do %>
+              SRTファイルを取り込む
+              <!--
+              <#%= t('articles.create_translations_via_srt') %>
+              -->
+            <% end %>
+
+            <%= link_to form_to_translate_all_article_path(@article), remote: true, class: 'dropdown-item my-2' do %>
+              原文を機械翻訳する
+              <!--
+              <#%= t 'articles.translate_all' %>
+              -->
+            <% end %>
+
+          </div>
+        </div>
+
+
+
+
+        <% if @tags.present? %>
+          <div class="mt-5 mb-4">
+            <h4 class="my-3 font-weight-bold">
+              <i class="far fa-tags mr-2"></i><%= t 'tags.tags' %>
+            </h4>
+            <% @tags.each do |tag| %>
+              <%= link_to articles_tag_path(tag.id) do %>
+                <div class="btn btn-sm btn-light-green font-weight-bold">
+                  <i class="far fa-tag mr-2"></i><%= tag.name %>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+
+        <% end %>
+
+
+        <% if @article.video? %>
+          <h4 class="mt-5 mb-3 green font-weight-bold">
+            <i class="far fa-download mr-2"></i><%= t('articles.caption_download') %>
+          </h4>
+          <p class="gray"><%= t('articles.download_explanation') %></p>
+          <%= button_to t('articles.download_subtitles'), download_subtitles_article_url(@article), method: :get, class: 'btn btn btn-border-green font-weight-bold my-3' %>
+
+          <%= button_to "#{t('articles.download_translations')}(#{lang_code_to_lang_name @lang_of_translation})", download_translations_article_url(@article), {method: :get, params: {download_lang_number: @lang_number_of_translation}, class: 'btn btn btn-border-green font-weight-bold my-3'} %>
+        <% else %>
+          <p class="mt-5 text-secondary"><%= t 'articles.nothing_to_download' %></p>
+        <% end %>
+
+
+        <%= link_to download_subtitles_article_url(@article) do %>
+          <div class="button-default w-100 my-3">
+            <i class="far fa-download mr-2"></i><%= t('articles.caption_download') %>
+          </div>
+        <% end %>
+
+
+        <%= link_to edit_article_path(@article) do %>
+          <div class="button-default w-100 my-3">
+            <i class="far fa-cog mr-2"></i><%= t 'articles.setting' %>
+          </div>
+        <% end %>
+
+        <div class="w-100" style="height: 160px;"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- =================== Article Side Bar  =================== -->
+
+
+  <% if @related_articles.present? %>
+    <div class="col-xl-9 my-3" id="related-contents">
+      <div class="box">
+        <div class="wrapper">
+          <h3 class="mb-4 text-center">
+            <b class="green"><i class="fad fa-newspaper"></i><%= t 'articles.and_more' %></b>
+          </h3>
+          <!--
+          <div class="row">
+            <#%= render partial: 'articles/card_2_line', collection: @related_articles, as: 'article' %>
+          </div>
+          -->
+
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+</div>
+
+<script>
+    // YOUTUBE
+    // iframe Player APIについて： https://developers.google.com/youtube/iframe_api_reference?hl=ja
+    // playerVarsについて： https://developers.google.com/youtube/player_parameters.html?playerVersion=HTML5&hl=ja
+    // iframeがTurbolinksで読み込めない問題の解決法：　https://stackoverflow.com/questions/18751904/can-youtube-play-nicely-with-turbolinks
+
+    // gonとturbolinksを併用する場合は、gonを使ったスクリプトはbodyタグに入れておく必要がある？　/ https://twitter.com/tchikuba/status/993795122524446720?lang=el
+
+    var reloadYoutube = function () {
+        /* if YT already initialized return */
+        if (window.YT === undefined) {
+            console.log('reloadYoutube')
+            // 2. This code loads the IFrame Player API code asynchronously.
+            var tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        }
+    };
+
+
+    /* youtube callback */
+    var player = null;
+
+    function onYouTubeIframeAPIReady() {
+        if (window.YT === undefined) {
+            reloadYoutube();
+        } else {
+            var $videoId = $('#videoId').text();
+            console.log('videoId:' + $videoId);
+            player = new YT.Player('player', {
+                height: '360',
+                width: '640',
+                videoId: $videoId,
+                playerVars: {
+                    autoplay: 1,
+                    modestbranding: 1,
+                    playsinline: 1,
+                    rel: 0,
+                    loop: 1
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+    }
+
+
+    // onReady
+    function onPlayerReady(event) {
+        event.target.playVideo();
+    }
+
+    // onStateChange
+    function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.PLAYING) {
+            var marking = setInterval(function () {
+                var $passages = $('#passages_and_translations').find('.passage-component');
+                // setIntervalを止めずにブラウザバックした場合に強制的にsetIntervalを止める処理
+                if (player.i == null) {
+                    clearInterval(marking);
+                } else if (player.getPlayerState() === 1) {
+                    var currentTime = parseFloat(player.getCurrentTime());
+                    var readingPassage = $passages.filter(function () {
+                        var startTime = parseFloat($(this).data('start'));
+                        var endTime = parseFloat($(this).data('end'));
+                        return startTime < currentTime && endTime > currentTime
+                    })
+                    $passages.removeClass('reading');
+                    readingPassage.addClass('reading');
+
+                    if (readingPassage.length && $('#auto-scroll-passage').hasClass('enabled')) {
+                        var position = readingPassage.offset().top - 280;
+                        // stop()を入れることで前に実行したanimationをキャンセルする。これによってanimationが積み重なって動画を止めた後も動かなくなる問題を解決できる
+                        $('html, body').stop().animate({scrollTop: position}, 500);
+                        console.log('移動' + position)
+                    }
+
+
+                } else if (player.getPlayerState() === 0) {
+                    // 動画が終了した場合の処理
+                    console.log('終了');
+                    player.pauseVideo()
+                    player.seekTo(0);
+                    clearInterval(marking);
+                } else {
+                    clearInterval(marking);
+                }
+            }, 500);
+        }
+    }
+
+    // タイムスタンプボタンを押したとき、その時間範囲の最初から再生する。
+    $(document).on("click", "button.timestamp", function () {
+        var $timestamp = $(this).data('start');
+        if (player.getPlayerState() !== 1) {
+            player.playVideo()
+        }
+        player.seekTo($timestamp);
+    });
+
+    //  停止ボタンを押した時に、動画を止める
+    $(document).on('click', 'button.pause-button', function () {
+        if (player.getPlayerState() !== 1) {
+            player.playVideo()
+        } else {
+            player.pauseVideo()
+        }
+    });
+
+    // 自動スクロールボタンのON/OFF切り替え
+    $(document).on("click", "#auto-scroll-passage", function () {
+        var $this = $(this);
+        if ($this.hasClass('enabled')) {
+            $this.removeClass('enabled');
+        } else {
+            $this.addClass('enabled');
+        }
+    });
+
+
+    // 再生箇所のプレビュー
+    $(document).on('click', '.playtime-preview-btn', function () {
+        var $this = $(this);
+        var $wrapper = $this.parents('.playtime-preview-wrapper');
+        var startTimeSeconds = $wrapper.find('.start-time-seconds').val();
+        var startTimeMinutes = $wrapper.find('.start-time-minutes').val();
+        var startTime = (parseFloat(startTimeMinutes) * 60.0) + parseFloat(startTimeSeconds);
+        var endTimeSeconds = $wrapper.find('.end-time-seconds').val();
+        var endTimeMinutes = $wrapper.find('.end-time-minutes').val();
+        var endTime = (parseFloat(endTimeMinutes) * 60.0) + parseFloat(endTimeSeconds);
+        var $feedbackMessage = $wrapper.find('.preview-feedback-message');
+        // 再生時間がendTimeまできちんと設定されていたらプレビューを開始する
+        if (startTime < endTime) {
+            $feedbackMessage.html('<div class="spinner-grow spinner-grow-sm text-success" role="status">\n' +
+                '  <span class="sr-only">Loading...</span>\n' +
+                '</div>');
+            if (player.getPlayerState() !== 1) {
+                player.playVideo()
+            }
+            player.seekTo(startTime);
+            // endTimeまで再生して、停止する。
+            var marking = setInterval(function () {
+                // setIntervalを止めずにブラウザバックした場合に強制的にsetIntervalを止める処理
+                if (player.i == null) {
+                    clearInterval(marking);
+                } else if (player.getPlayerState() === 1 || player.getPlayerState() === 3) {
+                    // 再生中かバッファリング中なら実行
+                    var currentTime = parseFloat(player.getCurrentTime());
+                    // 再生箇所がendTimeを超えたら動画を止める
+                    if (endTime < currentTime) {
+                        player.pauseVideo()
+                        $feedbackMessage.html('');
+                        clearInterval(marking);
+                    }
+
+                } else if (player.getPlayerState() === 0) {
+                    // 動画がラストまで到達して終了した場合の処理
+                    player.pauseVideo()
+                    player.seekTo(0);
+                    clearInterval(marking);
+                } else {
+                    clearInterval(marking);
+                }
+            }, 100);
+        } else {
+            $feedbackMessage.html('<span class="text-danger">EndTime Error</span>');
+        }
+        // 画面遷移をキャンセルする
+        return false;
+    });
+
+
+    document.addEventListener("turbolinks:load", function () {
+        reloadYoutube();
+        onYouTubeIframeAPIReady();
+    });
+
+
+</script>

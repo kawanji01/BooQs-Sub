@@ -1,15 +1,18 @@
 <nav id="nav-menu" class="mb-5">
-  <ul class="nav-menu-inner">
+  <ul class="nav-menu-inner container">
+
     <li class="<%= "active" if request.path == root_path %>">
       <a href="<%= root_path %>">
-        <%= t('layouts.download_caption') %>
+        <i class="far fa-newspaper mr-2"></i><%= t('articles.articles') %>
       </a>
     </li>
 
-    <li class="<%= "active" if request.path == transcriber_path %>">
-      <a href="<%= transcriber_path %>">
-        <%= t('layouts.transcribe_video') %>
+    <li class="<%= "active" if request.path == tags_path %>">
+      <a href="<%= tags_path %>">
+        <i class="far fa-tags mr-2"></i><%= t('tags.tags') %>
       </a>
     </li>
+
+
   </ul>
 </nav>

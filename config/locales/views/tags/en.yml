@@ -1,0 +1,7 @@
+en:
+  tags:
+    tags: 'Tags'
+    article_tags: 'Article Tags'
+    article_list: 'Articles with "%{tag_name}"'
+    popular: 'Popular'
+    content_list:  'Contents with "%{tag_name}"'

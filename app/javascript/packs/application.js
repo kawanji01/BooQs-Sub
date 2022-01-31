@@ -7,6 +7,11 @@ require("@rails/ujs").start()
 require("turbolinks").start()
 require("@rails/activestorage").start()
 require("channels")
+// jQueryの導入
+require('jquery')
+// bootstrap
+//require("bootstrap")
+//
 
 
 // Uncomment to copy all static images under ../images to the output folder and reference
@@ -15,9 +20,14 @@ require("channels")
 //
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
+
 //= require jquery3
 //= require popper
 //= require bootstrap
+
+import "./infinite-scroll_implementation"
+import "./video"
+import "./loading"
 
 
 
@@ -39,4 +49,14 @@ document.addEventListener("turbolinks:load", function() {
         });
     });
 
+    // フラッシュメッセージをクリックで消せるようにする。
+    $(document).on("click", "feedback_message .alert", function () {
+        var $alert = $(this)
+        if (!$alert.hasClass('not-remove')) {
+            $alert.fadeOut().queue(function () {
+                $alert.remove();
+            });
+        }
+    });
 });
+

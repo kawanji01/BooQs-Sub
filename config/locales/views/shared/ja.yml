@@ -1,0 +1,8 @@
+ja:
+  shared:
+    diff:
+      addition: '追加'
+      modification: '修正'
+      elimination: '削除'
+  infiniteScroll:
+    all_loaded: '全て読み込みました。'

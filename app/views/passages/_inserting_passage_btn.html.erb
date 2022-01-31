@@ -1,0 +1,10 @@
+<%= form_with url: new_passage_path, method: :get do |f| %>
+  <%= f.hidden_field :start_time, value: passage.start_time %>
+  <%= f.hidden_field :end_time, value: passage.end_time %>
+  <%= f.hidden_field :start_time_minutes, value: passage.end_time_minutes %>
+  <%= f.hidden_field :start_time_seconds, value: passage.end_time_seconds %>
+  <%= f.hidden_field :article_id, value: article.id %>
+  <%= button_tag type: 'submit', class: 'dropdown-item main-loading-show-btn my-2' do %>
+    <i class="far fa-plus mr-2"></i><%= t('passages.insert_passage') %>
+  <% end %>
+<% end %>

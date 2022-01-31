@@ -7,11 +7,11 @@ class Youtube < ApplicationRecord
 
   # youtubeのURLかどうかを判別する
   def self.youtube_url?(url)
-   if url.present? && url =~ /\A#{URI::DEFAULT_PARSER.make_regexp(%w[http https])}\z/
-     url.include?('https://www.youtube.com/watch?v=') || url.include?('https://youtu.be/')
-   else
-     false
-   end
+    if url.present? && url =~ /\A#{URI::DEFAULT_PARSER.make_regexp(%w[http https])}\z/
+      url.include?('https://www.youtube.com/watch?v=') || url.include?('https://youtu.be/')
+    else
+      false
+    end
   end
 
   # 短縮urlかどうかを確認する。
@@ -37,7 +37,9 @@ class Youtube < ApplicationRecord
     video_id = get_video_id(url)
     p url
     p video_id
-    file = open("http://video.google.com/timedtext?hl=en&v=#{video_id.to_s}&ts=&type=list&tlangs=1",
+    #file = open("http://video.google.com/timedtext?hl=en&v=#{video_id.to_s}&ts=&type=list&tlangs=1",
+    #            'User-Agent' => 'User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:28.0) Gecko/20100101 Firefox/28.0')
+    file = open("https://video.google.com/timedtext?type=list&v=#{video_id.to_s}",
                 'User-Agent' => 'User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:28.0) Gecko/20100101 Firefox/28.0')
     xml = Nokogiri::XML(file)
     entries = xml.search('track')
@@ -48,23 +50,29 @@ class Youtube < ApplicationRecord
     lang_code
   end
 
-  # 手動で作られた字幕をスクレイピングして配列に変換する。
-  def self.caption_array(url, caption_lang_code)
-    video_id = get_video_id(url)
-    file = open("http://video.google.com/timedtext?hl=en&v=#{video_id}&ts=&type=track&name=&lang=#{caption_lang_code}",
-                'User-Agent' => 'User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:28.0) Gecko/20100101 Firefox/28.0')
-    xml = Nokogiri::XML(file)
-    texts = xml.search('text')
-    array = []
-    texts.each do |text|
-      start_time = text.get_attribute('start').to_f
-      end_time = start_time + text.get_attribute('dur').to_f
-      # エスケープ文字を可読な状態に直し(unescape)、htmlタグを削除し（Sanitize）、検索を汚染する幅なしスペースを削除する。 / http://319ring.net/blog/archives/3022/
-      text = Sanitize.clean(CGI.unescapeHTML(text.inner_text)).gsub(/[\xe2\x80\x8b]+/, '')
-      text_array = [start_time.floor(3), end_time.floor(3), text]
-      array << text_array
+
+  # 字幕のVTTをダウンロードしてからSRTに変換する。
+  def self.download_sub_srt(file_name, url, lang_code, auto_generated = true)
+    file = nil
+    error = nil
+    # 順番に処理が終わるのを待って実行するために、systemではなく、Open3,capture3を使う。https://doloopwhile.hatenablog.com/entry/2014/02/04/213641
+    if auto_generated
+      stdout, stderr, status = Open3.capture3("youtube-dl --write-auto-sub --sub-lang #{lang_code} --skip-download --output ./tmp/#{file_name} #{url}")
+      error = "Getting auto-sub failed / #{stderr}" if stderr.present?
+    else
+      stdout, stderr, status = Open3.capture3("youtube-dl --write-sub --sub-lang #{lang_code} --skip-download --output ./tmp/#{file_name} #{url}")
+      error = "Getting manual-sub failed / #{stderr}" if stderr.present?
     end
-    array
+    return file, error if error.present?
+
+    # VTTをSRTに変換する。
+    Open3.capture3("ffmpeg -i ./tmp/#{file_name}.*.vtt ./tmp/#{file_name}.srt")
+    # メモ：ffmpegは標準エラーにログを出力するので、stderrでエラーを捕捉できない。なのでtestコマンドを使ってファイルの変換が成功したかを確認する。 / https://yatta47.hateblo.jp/entry/2015/03/03/231204
+    error = 'SRT file not found.' if system("test -e ./tmp/#{file_name}.srt") == false
+    return file, error if error.present?
+
+    file = File.open("./tmp/#{file_name}.srt", 'r')
+    [file, error]
   end
 
   # 自動生成字幕のSRTファイルをtmpにダウンロードしてから開く。返り値は、fileとlang_codeとerrorで、処理でエラーが発生したらコントローラー側で早期リターンできるようにする。
@@ -104,11 +112,11 @@ class Youtube < ApplicationRecord
         start_time_srt = timestamp.split(' ').first
         start_time_seconds = start_time_srt.to_time.strftime('%S.%L')
         start_time_minutes = start_time_srt.to_time.strftime('%M')
-        start_time = (start_time_seconds.to_f + (start_time_minutes.to_i * 60).to_f).round(3)
+        start_time = (start_time_seconds.to_d + (start_time_minutes.to_i * 60).to_d).round(3)
         end_time_srt = timestamp.split(' ').last
         end_time_seconds = end_time_srt.to_time.strftime('%S.%L')
         end_time_minutes = end_time_srt.to_time.strftime('%M')
-        end_time = (end_time_seconds.to_f + (end_time_minutes.to_i * 60).to_f).round(3)
+        end_time = (end_time_seconds.to_d + (end_time_minutes.to_i * 60).to_d).round(3)
         # １行目と２行目を取り除いたtextをつくる
         delete_list = [paragraph.lines.first, paragraph.lines.second]
         text_array = paragraph.lines.delete_if { |line| delete_list.include?(line) }
@@ -136,8 +144,8 @@ class Youtube < ApplicationRecord
     # 参照： https://docs.ruby-lang.org/ja/latest/method/CSV/s/parse.html
     CSV.parse(csv_str, headers: true).each do |row|
       i += 1
-      start_time = ApplicationController.helpers.return_play_time_for_srt(row['start_time'].to_f)
-      end_time = ApplicationController.helpers.return_play_time_for_srt(row['end_time'].to_f)
+      start_time = ApplicationController.helpers.return_play_time_for_srt(row['start_time'].to_d)
+      end_time = ApplicationController.helpers.return_play_time_for_srt(row['end_time'].to_d)
       text = <<~TEXT
         #{i}
         #{start_time} --> #{end_time}
@@ -155,29 +163,6 @@ class Youtube < ApplicationRecord
       array << text
     end
     array.join("\n")
-  end
-
-  # 手動で作られた字幕をスクレイピングしてCSVに変換する。
-  def self.scrape_caption_csv(url, lang_code)
-    caption_array = Youtube.caption_array(url, lang_code)
-    lang_number = Lang.convert_code_to_number(lang_code)
-    CSV.generate do |csv|
-      header = %w[text start_time start_time_minutes start_time_seconds end_time end_time_minutes end_time_seconds lang_number]
-      csv << header
-      caption_array.each do |caption|
-        start_time = caption[0]
-        start_time_minutes = start_time.to_i / 60
-        start_time_seconds = start_time - (start_time_minutes * 60).to_f
-        end_time = caption[1]
-        end_time_minutes = end_time.to_i / 60
-        end_time_seconds = end_time - (end_time_minutes * 60).to_f
-        # スクレイピングしてきたhtmlでutf-8にない文字コードがあった場合、分かち書きや他のテキストとの結合時にEncoding::UndefinedConversionErrorやEncoding::CompatibilityErrorが起きる。解決方法：　https://blog.tanebox.com/archives/452/
-        text = caption[2]&.force_encoding('UTF-8')
-        values = [text, start_time, start_time_minutes, start_time_seconds,
-                  end_time, end_time_minutes, end_time_seconds, lang_number]
-        csv << values
-      end
-    end
   end
 
   def self.get_amount(duration)
@@ -235,7 +220,6 @@ class Youtube < ApplicationRecord
   end
 
 
-
   # snippetを取得する。
   def self.get_snippet(url)
     Youtube.get_video_data(url, 'snippet')
@@ -275,6 +259,22 @@ class Youtube < ApplicationRecord
     end
   end
 
+  # 動画の音声の言語を取得する。
+  # Youtube-dlではオリジナルの自動字幕を判別できないので、audioの言語を取得することで、オリジナルの字幕の言語を導き出す。参考： https://stackoverflow.com/questions/47105402/is-it-possible-to-obtain-the-spoken-language-from-youtube-dl
+  def self.get_default_audio_language(snippet)
+    return if snippet.blank?
+
+    snippet.items.first.snippet.default_audio_language
+  end
+
+  # タイトルと説明文の言語を取得する。
+  def self.get_default_language(snippet)
+    return if snippet.blank?
+
+    snippet.items.first.snippet.default_language
+  end
+
+
   # Youtube DATA APIで動画情報を取得する。
   # partには決まった形式を指定する /
   # 参考： https://developers.google.com/youtube/v3/docs/videos?hl=ja / https://developers.google.com/youtube/v3/docs/videos/list?hl=ja
@@ -285,7 +285,7 @@ class Youtube < ApplicationRecord
     youtube = Google::Apis::YoutubeV3::YouTubeService.new
     youtube.key = ENV['GOOGLE_CLOUD_API_KEY']
     options = {
-      id: video_id
+        id: video_id
     }
     youtube.list_videos(part, options)
   end
@@ -298,7 +298,7 @@ class Youtube < ApplicationRecord
     stdout, stderr, status = Open3.capture3("youtube-dl --extract-audio --audio-format flac --output '#{file_name}.%(ext)s' #{url}")
     p "1:#{stdout}:#{stderr}:#{status}"
     # yotuubeの音声はステレオなので、文字起こしの精度を上げるためにモノラルに分割する / 参考： https://cloud.google.com/solutions/media-entertainment/optimizing-audio-files-for-speech-to-text?hl=ja
-    stdout, stderr, status =  Open3.capture3("ffmpeg -i #{file_name}.flac -filter_complex '[0:a]channelsplit=channel_layout=stereo[left][right]' -map '[left]' #{file_name}_FL.flac -map '[right]' #{file_name}_FR.flac")
+    stdout, stderr, status = Open3.capture3("ffmpeg -i #{file_name}.flac -filter_complex '[0:a]channelsplit=channel_layout=stereo[left][right]' -map '[left]' #{file_name}_FL.flac -map '[right]' #{file_name}_FR.flac")
     p "2:#{stdout}:#{stderr}:#{status}"
     file_name + '_FL.flac'
   end
@@ -337,5 +337,75 @@ class Youtube < ApplicationRecord
     lang_codes
   end
 
+  def self.importable_sub_lang_list(url, audio_lang)
+    outputs = Open3.capture3("youtube-dl --ignore-config --list-subs #{url}")
+    list_subs = outputs.first
+    auto_sub_lang_array = if list_subs.include?('Available automatic captions')
+                            Youtube.auto_sub_lang_code_array(list_subs, audio_lang)
+                          else
+                            []
+                          end
+    sub_lang_array = if list_subs.include?('Available subtitles')
+                       Youtube.sub_lang_code_array(list_subs)
+                     else
+                       []
+                     end
+    lang_codes = (sub_lang_array + auto_sub_lang_array).compact
+    { auto_sub_codes: auto_sub_lang_array, manual_sub_codes: sub_lang_array, lang_codes: lang_codes }
+  end
+
+  # 自動字幕の言語コードの配列を取得する
+  def self.auto_sub_lang_code_array(list_subs, audio_lang)
+    lines = list_subs.split("\n")
+    lang_codes = []
+    is_auto_sub = true
+    # auto_subの情報は常に３行目から。
+    index = 3
+    while is_auto_sub
+      # 言語コードだけ抜き出す。
+      code = lines[index]&.split&.first
+      if Lang.lang_code_supported?(code)
+        # 一度言語コードを番号に変換してからコードに再変換することで、booqsの対応している言語コードに変換する。
+        lang_number = Lang.convert_code_to_number(code)
+        valid_lang_code = Lang.convert_number_to_code(lang_number)
+        lang_codes << "auto-#{valid_lang_code}"
+        index += 1
+      else
+        is_auto_sub = false
+      end
+    end
+    # lang_codesには機械翻訳された大量の字幕が含まれているので、audio_langの自動字幕が存在する場合には、機械翻訳を取り除く。
+    if audio_lang.present? && lang_codes.include?("auto-#{audio_lang}")
+      ["auto-#{audio_lang}"]
+    else
+      lang_codes
+    end
+
+  end
+
+  # 手動字幕の言語コードを抜き出す。
+  def self.sub_lang_code_array(list_subs)
+    lines = list_subs.split("\n")
+    # 手動字幕についての記載が始まる最初の行を調べる。
+    first_line_index = lines.index { |l| l.include?('Available subtitles') }
+    # 手動字幕の言語コードが記載されているのは、最初の行の二行先。
+    index = first_line_index + 2
+    lang_codes = []
+    is_auto_sub = true
+    while is_auto_sub
+      # 言語コードだけ抜き出す。
+      code = lines[index]&.split&.first
+      if Lang.lang_code_supported?(code)
+        # 一度言語コードを番号に変換してからコードに再変換することで、booqsの対応している言語コードに変換する。
+        lang_number = Lang.convert_code_to_number(code)
+        valid_lang_code = Lang.convert_number_to_code(lang_number)
+        lang_codes << valid_lang_code
+        index += 1
+      else
+        is_auto_sub = false
+      end
+    end
+    lang_codes
+  end
 
 end

@@ -1,0 +1,14 @@
+<h1 class="text-left font-weight-bold mb-5"><i class="far fa-video-plus mr-2"></i><%= t('articles.video_select') %></h1>
+
+
+<%= form_with model: article, url: new_video_articles_path, method: :get do |f| %>
+  <div id="scraping-error-massages"></div>
+  <%= f.text_field :reference_url, class: "form-control", id: 'reference-url-form', placeholder: t('chapters.placeholder_video_url') %>
+  <div class="invalid-feedback" id="reference-url-invalid-message"></div>
+
+  <%= button_tag type: 'submit', class: "btn btn-solid font-weight-bold my-5 w-100 main-loading-show-btn" do %>
+    OK
+  <% end %>
+
+
+<% end %>

@@ -7,8 +7,6 @@
                  alternate: { "en" => transcriber_url(locale: 'en'),
                               "ja" => transcriber_url(locale: 'ja')} %>
 
-<%= render 'layouts/navbar' %>
-
 
 <%= render 'layouts/recommendation_to_switch_locale' %>
 
@@ -16,6 +14,18 @@
 
   <div class="row justify-content-md-center mb-5">
     <div class="col col-lg-10">
+
+      <ul class="nav nav-tabs mb-5">
+        <li class="nav-item">
+          <a class="nav-link text-success" href="<%= caption_downloader_path %>"><%= t('layouts.download_caption') %></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="#"> <%= t('layouts.transcribe_video') %></a>
+        </li>
+
+      </ul>
+
+
       <h1 class="font-weight-bold mb-4"><%= t 'subtitles.transcribe_videos_on_youtube' %></h1>
 
 
@@ -34,7 +44,7 @@
 
 
 
-        <%= f.submit 'OK', class: 'btn btn-lg btn-info w-100 mb-4 font-weight-bold main-loading-show-btn' %>
+        <%= f.submit 'OK', class: 'btn btn-solid w-100 mb-4 main-loading-show-btn' %>
 
       <% end %>
 

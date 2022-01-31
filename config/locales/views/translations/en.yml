@@ -1,0 +1,22 @@
+en:
+  translations:
+    translate_title: 'Translate Title'
+    translate_passage: 'Translate'
+    text_placeholder: 'Please write a translation.'
+    write_comments: 'Write Comments'
+    comments_placeholder: 'You can comments.'
+    modify_translation: 'Modify Translation'
+    modify_title_translation: 'Modify Title Translation'
+    add_translation: 'Add Translation'
+    add_title_translation: 'Add Title Translation'
+    create: 'Create'
+    created_message: 'Translation created'
+    update: 'Modify'
+    updated_message: 'Translation Updated'
+    destroy: 'Destroy'
+    destroyed_message: 'Translation was destroyed.'
+    confirmation: 'Confirmation'
+    confirmation_text: 'You are about to destroy this translation. Are you sure?'
+    lang_number_cannot_be_duplicated: ': This language translation already exists. Please select another language.'
+    histories_of_translation: "Translation's Histories"
+

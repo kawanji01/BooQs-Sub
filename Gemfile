@@ -33,12 +33,20 @@ gem 'roo', '~> 2.8.0'
 
 # スクレイピングしてきたテキストの整形
 gem 'sanitize', '~> 5.2.1'
-
+# タグ機能 / 公式：https://github.com/mbleigh/acts-as-taggable-on / 参考：https://ruby-rails.hatenadiary.com/entry/20150225/1424858414
+gem 'acts-as-taggable-on', '~> 9.0'
+# urlにインクリメンタルな主キー（id）を表示しないためのgem
+gem 'public_uid', '~> 2.1.1'
+# scrollに対応して自動でコンテンツを読み込む(無限スクロール) ために導入。
+gem 'kaminari'
 # SEO対策のためのmetaタグ設定
 gem 'meta-tags'
-
 # ---Accept-Language HTTPnヘッダーからユーザーの言語設定を読み込むためのgem
 gem 'http_accept_language'
+# アップローダー。インポートする字幕ファイルなどをS3にあげる。
+gem 'carrierwave', '~> 2.0'
+# ダウンロードしてきた字幕など、テキストのhtmlタグを取り除くために導入。
+gem 'sanitize', '~> 5.2.1'
 
 # 用途は、1,文字起こしの料金を計算するためのyoutubeの動画の長さの取得, 2,タイトルの翻訳の取得
 gem 'google-api-client', '~> 0.11'
@@ -50,8 +58,20 @@ gem 'google-cloud-storage'
 gem 'stripe'
 
 group :development, :test do
-  gem 'sqlite3', '1.4.1'
+  # gem 'sqlite3', '1.4.1'
+  gem 'pg', '~> 1.2.3'
   gem 'byebug',  '11.0.1', platforms: [:mri, :mingw, :x64_mingw]
+  # Rspec / https://qiita.com/tatsurou313/items/c923338d2e3c07dfd9ee
+  gem 'rspec-rails', '~> 4.0.1'
+  gem 'factory_bot_rails'
+  gem 'database_cleaner-active_record'
+  # ブラウザとのインターフェース　参考：https://github.com/titusfortner/webdrivers
+  gem 'capybara',           '3.28.0'
+  gem 'selenium-webdriver', '3.142.4'
+  gem 'webdrivers',         '4.1.2'
+  # Rubymineのデバッグ用gem
+  gem 'debase'
+  gem 'ruby-debug-ide', '~> 0.7.2'
 end
 
 group :development do
@@ -61,16 +81,12 @@ group :development do
   gem 'spring-watcher-listen', '2.0.1'
   # .envにローカルの環境変数を設定するためのgem
   gem 'dotenv-rails'
-end
-
-group :test do
-  gem 'capybara',           '3.28.0'
-  gem 'selenium-webdriver', '3.142.4'
-  gem 'webdrivers',         '4.1.2'
+  gem 'rubocop',       require: false
+  gem 'rubocop-rails', require: false
 end
 
 group :production do
-  gem 'pg', '0.20.0'
+  gem 'pg', '~> 1.2.3'
 end
 
 # Windows ではタイムゾーン情報用の tzinfo-data gem を含める必要があります

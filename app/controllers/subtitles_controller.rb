@@ -6,15 +6,24 @@ class SubtitlesController < ApplicationController
     @error_message = t('subtitles.error_message_not_youtube') if @valid == false
     return if @valid == false
 
+    # progressbarをActionCableで機能させるためのトークン
     @token = SecureRandom.uuid
-    # タイトルと画像を取得。
-    page = MetaInspector&.new(@url)
-    @title = page&.title
-    @image = page&.images&.best
 
-    @auto_sub_codes = Youtube.importable_auto_sub_lang_list(@url)
-    @lang_code = Youtube.get_transcript_list(@url)
-    @lang_code.unshift('auto-generated') if @auto_sub_codes.present?
+    snippet = Youtube.get_snippet(@url)
+    @title = Youtube.get_title(snippet)
+    @image = Youtube.get_thumbnail(snippet)
+    @audio_lang = Youtube.get_default_audio_language(snippet)
+    @sub_lang_list = Youtube.importable_sub_lang_list(@url, @audio_lang)
+
+    # 手動字幕がないか、手動字幕にオーディオ言語の字幕がない場合、自動字幕をデフォルトのインポート対象にする。
+    if @sub_lang_list[:manual_sub_codes].blank? || @sub_lang_list[:manual_sub_codes].exclude?(@audio_lang)
+      @audio_lang = "auto-#{@audio_lang}"
+    end
+
+    # セレクトフォームに渡すValueを設定する。
+    @sub_lang_codes = if @sub_lang_list[:lang_codes].present?
+                        @sub_lang_list[:lang_codes]
+                      end
 
     respond_to do |format|
       format.html { redirect_to root_url }
@@ -25,18 +34,20 @@ class SubtitlesController < ApplicationController
   def download_caption
     url = params[:url]
     @token = params[:token]
+    @title = params[:title]
+
     # 自動字幕読み込み
-    if params[:transcript] == 'auto-generated'
+    if params[:sub_lang_code].include?('auto-')
       # 自動字幕の言語コード
-      lang_code = params[:auto_sub_lang_code]
+      lang_code = params[:sub_lang_code].sub('auto-', '')
       return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
 
-      DownloadAutoSubWorker.perform_async(url, lang_code, @token, @locale)
-    elsif params[:transcript].present?
-      lang_code = params[:transcript]
+      CaptionDownloadWorker.perform_async(url, lang_code, @token, @locale, 'auto-generated')
+    elsif params[:sub_lang_code].present?
+      lang_code = params[:sub_lang_code]
       return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
 
-      DownloadSubtitleWorker.perform_async(url, lang_code, @token, @locale)
+      CaptionDownloadWorker.perform_async(url, lang_code, @token, @locale, 'manual')
     end
 
     respond_to do |format|
@@ -83,7 +94,7 @@ class SubtitlesController < ApplicationController
       @duration = Youtube.get_duration(@url)
       @amount = Youtube.get_amount(@duration)
       return redirect_to transcribe_subtitles_url(url: @url, bcp47: @bcp47, token: @token) if @amount.zero?
-      
+
       price = case @locale.to_s
               when 'en'
                 ENV['STRIPE_PRICE_TO_TRANSCRIBE_KEY_EN']
@@ -92,19 +103,18 @@ class SubtitlesController < ApplicationController
               else
                 ENV['STRIPE_PRICE_TO_TRANSCRIBE_KEY_EN']
               end
-      p  request.base_url
       @session = Stripe::Checkout::Session.create({
-                                                    line_items: [{
-                                                      price: price,
-                                                      quantity: @amount,
-                                                    }],
-                                                    payment_method_types: [
-                                                      'card',
-                                                    ],
-                                                    mode: 'payment',
-                                                    locale: @locale,
-                                                    success_url: request.base_url + "/#{@locale}/subtitles/transcribe?url=#{@url}&bcp47=#{@bcp47}&token=#{@token}&session_id={CHECKOUT_SESSION_ID}",
-                                                    cancel_url: transcriber_url,
+                                                      line_items: [{
+                                                                       price: price,
+                                                                       quantity: @amount,
+                                                                   }],
+                                                      payment_method_types: [
+                                                          'card',
+                                                      ],
+                                                      mode: 'payment',
+                                                      locale: @locale,
+                                                      success_url: request.base_url + "/#{@locale}/subtitles/transcribe?url=#{@url}&bcp47=#{@bcp47}&token=#{@token}&session_id={CHECKOUT_SESSION_ID}",
+                                                      cancel_url: transcriber_url,
                                                   })
     else
       flash[:danger] = t('subtitles.error_message_not_youtube')

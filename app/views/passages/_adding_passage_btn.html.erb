@@ -1,0 +1,10 @@
+<%= form_with url: new_passage_path, method: :get, class: 'd-inline' do |f| %>
+  <%= f.hidden_field :article_id, value: article.id %>
+  <%= button_tag type: 'submit', class: 'btn btn-sm btn-gray-article loading-show-btn', id: 'new-passage-btn' do %>
+    <i class="fal fa-plus mr-2"></i><%= t 'passages.add_passage' %>
+  <% end %>
+  <div class="loading is-hide">
+    <div class="loading_icon"></div>
+  </div>
+<% end %>
+

@@ -1,0 +1,9 @@
+<%= form_with model: passage, url: edit_passage_path(passage), method: :get, class: 'ml-2 d-inline' do %>
+  <%= button_tag type: 'submit', class: 'btn btn-sm btn-gray-article loading-show-btn rounded-circle',
+                 style: 'min-width: 34px; min-height: 34px;' do %>
+    <span class="far fa-pen"></span>
+  <% end %>
+  <div class="loading is-hide">
+    <div class="loading_icon"></div>
+  </div>
+<% end %>

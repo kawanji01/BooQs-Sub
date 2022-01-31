@@ -1,0 +1,7 @@
+ja:
+  tags:
+    tags: 'タグ'
+    article_tags: '記事のタグ'
+    article_list: '『%{tag_name}』の記事'
+    popular: '人気'
+    content_list:  '『%{tag_name}』のコンテンツ'

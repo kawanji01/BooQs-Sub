@@ -1,0 +1,65 @@
+<h1 class="text-left font-weight-bold mb-5"><i class="far fa-video-plus mr-2"></i><%= t('chapters.create_video') %></h1>
+
+
+<%= form_with model: article, url: create_video_articles_path, method: :post do |f| %>
+  <div id="scraping-error-massages"></div>
+  <%= f.hidden_field :reference_url, value: article&.reference_url %>
+  <%= f.hidden_field :scraped_image, value: article&.scraped_image %>
+
+  <%= image_tag article&.scraped_image, class: 'img-fluid w-25 mb-2' %>
+
+  <%= f.text_field :title, class: 'form-control form-control-lg font-weight-bold' %>
+
+
+  <div class="input-group my-3">
+    <div class="input-group-prepend">
+      <label class="input-group-text" for="articleTitleLanguage"><%= t('articles.language_of_title') %></label>
+    </div>
+    <%= f.select :lang_number, lang_form_and_auto_configure,
+                 {},
+                 {class: 'custom-select form-control', id: 'articleTitleLanguage'} %>
+  </div>
+
+  <div class="input-group my-3">
+    <div class="input-group-prepend">
+      <label class="input-group-text" for="articleAudioLanguage"><%= t('articles.language_of_audio') %></label>
+    </div>
+    <%= f.select :lang_number_of_audio, lang_form_array,
+                 {},
+                 {class: 'custom-select form-control', id: 'articleAudioLanguage'} %>
+  </div>
+
+
+
+  <div class="input-group mt-4 mb-2">
+    <div class="input-group-prepend">
+      <div class="input-group-text"><i class="far fa-tag mr-2"></i><%= t('tags.tags') %></div>
+    </div>
+    <%= f.text_area :tag_list, class: 'form-control', value: @tags&.join(','), placeholder: "タグを入力してください。", id: 'inlineFormInputGroup', rows: 3 %>
+    <!--
+    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Username">
+    -->
+  </div>
+  <div class="text-left">
+    <span class="text-secondary small text-left"><%= t('articles.multiple_tags_setting') %></span>
+  </div>
+
+  <h4 class="text-left font-weight-bold mt-5 mb-4"><%= t 'articles.import_transcript' %></h4>
+  <p><%= t 'articles.please_select_transcript' %></p>
+
+
+  <%= f.select :sub_lang_code, options_for_select(@sub_lang_codes.map { |code| import_select_form_creator(code) }, @audio_lang),
+               {},
+               {class: 'form-control form-control my-3 w-100'} %>
+
+
+
+
+  <%= button_tag type: 'submit', class: "btn btn-solid loading-show-btn mt-5 w-100" do %>
+    <i class="far fa-edit"></i><%= t('chapters.create') %>
+  <% end %>
+  <div class="loading is-hide">
+    <div class="loading_icon"></div>
+  </div>
+
+<% end %>

@@ -1,0 +1,97 @@
+@import "./variables";
+
+/* Youtubeの埋め込みのレスポンシブ対応 https://design.webclips.jp/youtube-movie-size/ */
+
+.movie-wrap {
+  position: relative;
+  padding-bottom: 56.25%; /*アスペクト比 16:9の場合の縦幅*/
+  height: 0;
+  overflow: hidden;
+}
+
+.movie-wrap iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* article/showの動画の固定表示 */
+#movie-wrap.is-fixed {
+  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  background: #FFF;
+  margin-bottom: 56.25%;
+  position: fixed;
+  top: 32px;
+  right: 32px;
+  z-index: 90;
+
+  @media(max-width: 544px) {
+    width: auto;
+    top: 0;
+    right: 0;
+    left: 0;
+  }
+
+}
+
+
+/* position: stickyを使ってメインコンテンツ部分に動画を表示する方法 */
+/* 却下理由は、issueの#1296を参照 */
+/*
+#movie-wrap.is-sticky {
+  width: 400px;
+  position: -webkit-sticky;
+  position: sticky;
+  top:0;
+  margin-left: auto;
+  margin-right: auto;
+  background: #FFF;
+  z-index: 90;
+  @media(max-width: 544px) {
+    width: auto;
+    top: 0;
+    right: 0;
+    left: 0;
+  }
+}
+
+ */
+
+
+.passage-component.reading {
+  border-right: 2px solid;
+  border-color: #2ECC71;
+  .timestamp.btn.btn-border-gray {
+    font-weight: bold;
+    border-radius: 0;
+    /* ボタンの色を書き換え */
+    background-color: $light-green;
+    border-color: $light-green;
+    color: white;
+    &:hover {
+      color: white;
+      background-color: darken($light-green, 20%);
+      border-color: darken($light-green, 20%);
+    }
+  }
+}
+
+#auto-scroll-passage.btn-border-gray.enabled {
+  font-weight: bold;
+  /* ボタンの色を書き換え */
+  background-color: $light-green;
+  border-color: $light-green;
+  color: white;
+  &:hover {
+    color: white;
+    background-color: darken($light-green, 20%);
+    border-color: darken($light-green, 20%);
+  }
+}
+
+
+/* movie finish */

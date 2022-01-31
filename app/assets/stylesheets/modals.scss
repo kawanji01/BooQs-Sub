@@ -1,0 +1,85 @@
+@import "./variables";
+
+/* モーダル */
+%modal-wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+
+
+  .overlay {
+    @extend %overlay;
+  }
+}
+
+
+%overlay {
+  z-index: 1032;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  background-color: rgba(0, 0, 0, 0.75);
+  cursor: pointer;
+
+  .close-btn {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: right;
+
+    .fal.fa-times {
+      cursor: pointer;
+      margin-right: 8px;
+      margin-top: 12px;
+      color: $bright-green;
+      font-size: 2em;
+    }
+  }
+}
+
+
+.modal-wrapper {
+  display: none;
+  @extend %modal-wrapper;
+}
+
+
+/* badgeモーダル */
+/* .modal-wrapperとbadge-modal-wrapperの違いは、前者がdisplay:none;がついている一方、後者にはついてないこと */
+.badge-modal-wrapper {
+  @extend %modal-wrapper;
+
+  h4.cracker {
+    font-size: 40px;
+    color: $brand-green;
+  }
+}
+
+
+
+.modal-booqs {
+  margin: 0 auto;
+  display: inherit;
+  position: absolute;
+  top: 64px;
+  left: 0;
+  background-color: #e6ecf0;
+  padding: 20px 5% 40px 5%;
+  border-radius: 4px;
+  max-width: 640px;
+  max-height: 680px;
+  @media(max-width: 544px) {
+    max-height: 440px;
+  }
+  overflow-y: scroll;
+
+  right: 0;
+  bottom: 0;
+  z-index: 1050;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+}

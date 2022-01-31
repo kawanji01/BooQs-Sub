@@ -1,0 +1,53 @@
+// Place all the styles related to the words controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "./variables";
+
+/* 辞書検索機能付き文章 */
+a {
+  &.word-with-searching-dict {
+    cursor: pointer;
+    color: $brand-black;
+    font-size: 1.1em;
+    line-height: 1.8;
+
+    &.phrase {
+      color: #16a085;
+    }
+
+    &:hover {
+      color: $brand-green;
+      // font-size: 1.2em;
+      // クリック可能なことが伝わりにくくなっても、font-sizeを変えない理由
+      // hoverしたときにボタンの位置が変更したりして、レイアウトが崩れる。
+      // 全文リンクになったときなど、hoverが目立ちすぎる。
+    }
+  }
+
+}
+
+h2, h3 {
+  a.word-with-searching-dict {
+    color: $text-black;
+  }
+
+  &.article-title {
+    a.word-with-searching-dict {
+      color: $brand-green;
+    }
+  }
+
+}
+
+
+.line-with-dict {
+  &.green {
+    a.word-with-searching-dict {
+      color: $brand-green;
+    }
+  }
+
+}
+
+/* */

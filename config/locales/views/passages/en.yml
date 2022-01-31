@@ -1,0 +1,25 @@
+en:
+  passages:
+    modify_passage: 'Modify Passage'
+    add_passage: 'Add Passage'
+    please_write_passage: 'Please write a passage'
+    start_time: 'Start Time'
+    end_time: 'End Time'
+    minutes_placeholder: 'Minutes'
+    seconds_placeholder: 'Seconds'
+    set_image: 'Set image'
+    delete_image: 'delete_image'
+    comment: 'Write a comment'
+    comment_placeholder: 'You can comment about this.'
+    create: 'Create'
+    update: 'Modify'
+    destroy: 'Destroy'
+    confirmation: 'Confirmation'
+    confirmation_text: 'You are about to destroy this passage. Are you sure?'
+    passage_created: 'Passage was created!'
+    passage_updated: 'Passage was updated!'
+    passage_destroyed: 'Passage was Destroyed.'
+    elimination_request_submitted: 'Elimination request submitted'
+    histories_of_passage: "Passage's histories"
+    insert_passage: 'Insert new passage'
+

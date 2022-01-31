@@ -38,6 +38,18 @@ module LangHelper
   end
 
 
+  #
+  def import_select_form_creator(code)
+    if code.nil?
+      ["#{t("lang.none")}", nil]
+    elsif code.include?('auto-')
+      lang_code = code.sub('auto-', '')
+      ["#{t("articles.auto_sub")}：#{t("lang.#{lang_code}")}", code]
+    else
+      ["#{t("lang.#{code}")}", code]
+    end
+  end
+
 
   # javascripts/answer.js.erb, models/Langと数字と言語の対応を揃える。
   def speech_btn(lang_number)
@@ -70,8 +82,6 @@ module LangHelper
       'speech-btn-en'
     end
   end
-
-
 
 
 end

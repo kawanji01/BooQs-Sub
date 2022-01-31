@@ -1,0 +1,16 @@
+// loading画面を消す
+//document.querySelector('#loading').classList.add("is-hide");
+$('.loading').addClass('is-hide');
+<% if @valid %>
+
+var $createVideo = $('#create-video');
+$createVideo.html("<%= j(render 'articles/new_video_form', article: @article) %>");
+//$createVideo.remove();
+//console.log($createVideo);
+
+
+<% else %>
+
+$('#reference-url-form').addClass('is-invalid');
+$('#reference-url-invalid-message').text('<%= t('articles.please_input_youtube_url') %>')
+<% end %>

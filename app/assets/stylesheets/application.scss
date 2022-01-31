@@ -14,13 +14,16 @@
  *= require_self
  */
 @import "bootstrap";
+@import "./variables";
+@import "./modals";
+@import "./custom";
+@import "./buttons";
+@import "./loading";
+@import "./sidebar";
+@import "./video";
+@import "./card";
 
-// 色 //
-$brand-black: #273132;
-$bg-color: #f6f7f9;
-$brand-green: #27ae60;
-$emerald-green: #48c78e;
-$bright-green: #A7DC4D;
+
 
 body {
   background-color: $bg-color;
@@ -52,154 +55,6 @@ p {
   }
 }
 
-/* ボタンデザインの書き換え */
-.btn-info {
-  background-color: $emerald-green;
-  border-color: $emerald-green;
-}
-
-// ローディング画面
-.is-hide {
-  display: none;
-}
-
-.loading {
-  position: fixed;
-  z-index: 100;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: rgba(0, 0, 0, .5);
-}
-
-.loading::before {
-  content: "";
-  display: block;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  width: 50px;
-  height: 50px;
-  border-radius: 5px;
-  margin-top: -18px;
-  margin-left: -18px;
-  background: white;
-}
-
-.loading::after {
-  content: "";
-  display: block;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  width: 32px;
-  height: 32px;
-  border-radius: 20px;
-  margin-top: -10px;
-  margin-left: -10px;
-  border: 4px solid $brand-green;
-  border-right: 4px solid white;
-  animation: rotate 1s infinite linear;
-}
-
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-
-
-
-/* モーダル */
-%modal-wrapper {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1050;
-
-
-  .overlay {
-    @extend %overlay;
-  }
-}
-
-
-%overlay {
-  z-index: 1032;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 120%;
-  background-color: rgba(0, 0, 0, 0.75);
-  cursor: pointer;
-
-  .close-btn {
-    max-width: 640px;
-    margin: 0 auto;
-    text-align: right;
-
-    .fal.fa-times {
-      cursor: pointer;
-      margin-right: 8px;
-      margin-top: 12px;
-      color: $bright-green;
-      font-size: 2em;
-    }
-  }
-}
-
-
-.modal-wrapper {
-  display: none;
-  @extend %modal-wrapper;
-}
-
-
-/* badgeモーダル */
-/* .modal-wrapperとbadge-modal-wrapperの違いは、前者がdisplay:none;がついている一方、後者にはついてないこと */
-.badge-modal-wrapper {
-  @extend %modal-wrapper;
-
-  h4.cracker {
-    font-size: 40px;
-    color: $brand-green;
-  }
-}
-
-
-
-.modal-booqs {
-  margin: 0 auto;
-  display: inherit;
-  position: absolute;
-  top: 64px;
-  left: 0;
-  background-color: #e6ecf0;
-  padding: 20px 5% 40px 5%;
-  border-radius: 4px;
-  max-width: 640px;
-  max-height: 680px;
-  @media(max-width: 544px) {
-    max-height: 440px;
-  }
-  overflow-y: scroll;
-
-  right: 0;
-  bottom: 0;
-  z-index: 1050;
-  -webkit-overflow-scrolling: touch;
-  outline: 0;
-}
-
-
 footer {
   min-height: 360px;
   width: 100%;
@@ -218,77 +73,16 @@ footer {
     font-size: 16px;
     color: white;
     &:hover {
-      color: $emerald-green;
+      color: $bright-green;
       text-decoration: none;
     }
   }
 }
 
-#nav-menu {
-  height: 48px; /*メニューの縦幅*/
-  background-color: $brand-black; /*メニューの背景色*/
-  width: 100%;
-
-  .nav-menu-inner {
-    list-style-type: none;
-    height: 100%;
-    margin: 0 auto;
-    padding: 4px 0 0 0;
-    text-align: center;
-
-    .active {
-      font-weight: bold;
-
-      a {
-        color: $bright-green;
-      }
-      padding-bottom: 8px;
-      //border-bottom: solid 3px $bright-green;
-    }
-  }
-
-  li {
-    height: 100%;
-    display: inline;
-  }
-
-  a {
-    display: inline-block;
-    height: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-    color: darkgrey; /*文字色*/
-    font-size: 15px;
-    text-decoration: none;
-    line-height: 40px; /*メニューの縦幅*/
-
-    &:hover {
-      color: $bright-green;
-    }
-  }
-
-  @media(max-width: 670px) {
-    overflow-y: hidden;
-    overflow-x: scroll;
-    -webkit-overflow-scrolling: touch;
-    .nav-menu-inner {
-      margin: 0;
-      li {
-        float: left;
-      }
-    }
-  }
+.main-column {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-// パンくずのリンクの色をブランドカラーの緑に揃える。
-.breadcrumb-item {
-  a {
-    color: $emerald-green;
-
-    &:hover {
-      color: #2E7D32;
-    }
-  }
-}
 
 

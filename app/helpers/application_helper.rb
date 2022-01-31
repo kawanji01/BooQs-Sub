@@ -80,4 +80,10 @@ module ApplicationHelper
     "#{return_play_time(start_time)} ~ #{return_play_time(end_time)}"
   end
 
+
+  # wikiリンクを取り除いたテキストを返す。
+  def sanitize_links(text)
+    text.gsub(/(\[{2}.*?\]{2})/) { |s| s.delete("[[,]]").sub(/\|+.*/, '')}
+  end
+
 end

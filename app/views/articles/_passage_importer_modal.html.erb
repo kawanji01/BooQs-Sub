@@ -1,0 +1,45 @@
+<div class="badge-modal-wrapper" id="passage-importer-modal">
+  <div class="overlay close-passage-importer-modal">
+
+    <div class="close-btn">
+      <i class="fal fa-times"></i>
+    </div>
+
+  </div>
+  <div class="modal-booqs" id="passage-importer">
+
+    <h3 class="green my-3"><%= t 'articles.import_captions' %></h3>
+
+    <%= form_with model: @article, url: create_passages_via_srt_article_path(@article), method: :post do |f| %>
+      <% if @sub_lang_codes.present? %>
+
+        <%= f.select :sub_lang_code, options_for_select(@sub_lang_codes.map { |code| import_select_form_creator(code) }, @audio_lang),
+                     {},
+                     {class: 'form-control form-control my-3 w-100'} %>
+
+        <%= button_tag type: 'submit', class: "btn btn-solid loading-show-btn mt-5 w-100" do %>
+          <%= t 'articles.import' %>
+        <% end %>
+        <div class="loading is-hide">
+          <div class="loading_icon"></div>
+        </div>
+
+      <% else %>
+
+        <p class="text-danger"><%= t 'subtitles.there_are_no_subtitles' %></p>
+        <p class="text-danger"><%= t('subtitles.recommend_transcription') %></p>
+
+        <%= link_to transcriber_path do %>
+          <div class="btn btn-lg btn-info loading-show-btn my-3 w-100 font-weight-bold">
+            <%= t('subtitles.transcribe') %>
+          </div>
+        <% end %>
+
+      <% end %>
+    <% end %>
+
+
+  </div>
+</div>
+
+

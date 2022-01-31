@@ -12,10 +12,12 @@
 
     <div id="contents-form">
       <%= form_with url: download_caption_subtitles_path, remote: true, method: :post do |f| %>
+
         <%= f.hidden_field :url, value: @url %>
         <%= f.hidden_field :token, value: @token %>
         <div id="scraping-error-massages"></div>
         <h5 class="text-secondary font-weight-normal"><%= @title %></h5>
+        <%= f.hidden_field :title, value: @title %>
 
         <% if @image.present? %>
           <div class="d-block mt-2 mb-4">
@@ -23,31 +25,13 @@
           </div>
         <% end %>
 
-        <% if @lang_code.present? %>
+        <% if @sub_lang_codes.present? %>
 
-          <% @lang_code.each do |code| %>
-            <% next if Lang.lang_code_unsupported?(code) && code != 'auto-generated' && code != 'none' %>
+          <%= f.select :sub_lang_code, options_for_select(@sub_lang_codes.map { |code| import_select_form_creator(code) }, @audio_lang),
+                       {},
+                       {class: 'form-control form-control my-3 w-100'} %>
 
-            <% if code == 'auto-generated' %>
-              <div class="form-check form-check-inline">
-                <!-- caption一覧に、記事の言語と一致するものがなかった場合、自動文字起こしにチェックを入れる。 -->
-                <%= radio_button_tag :transcript, code, class: 'form-check-input mr-2', id: "transcript-of-#{code}" %>
-                <label class="form-check-label mr-2" for="transcript-of-<%= code %>"> </label>
-
-                <%= f.select :auto_sub_lang_code, options_for_select(@auto_sub_codes.map { |code| ["#{t("subtitles.auto_sub")}：#{t("lang.#{code}")}", code] }, @locale.to_s),
-                             {},
-                             { class: 'form-control form-control-sm my-3' } %>
-
-              </div>
-            <% else %>
-              <div class="form-check form-check-inline">
-                <%= radio_button_tag :transcript, code, class: 'form-check-input mr-2' %>
-                <label class="form-check-label ml-2" for="transcript_<%= code %>"><%= lang_code_to_lang_name(code) %></label>
-              </div>
-            <% end %>
-          <% end %>
-
-          <%= button_tag type: 'submit', class: "btn btn-lg btn-info loading-show-btn mt-5 w-100 font-weight-bold" do %>
+          <%= button_tag type: 'submit', class: "btn btn-solid loading-show-btn mt-5 w-100" do %>
             <%= t 'subtitles.download' %>
           <% end %>
           <div class="loading is-hide">

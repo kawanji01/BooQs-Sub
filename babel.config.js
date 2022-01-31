@@ -66,7 +66,9 @@ module.exports = function(api) {
         {
           async: false
         }
-      ]
+      ],
+        // 参考： https://prograshi.com/framework/rails/babel-compile-alert/
+      ["@babel/plugin-proposal-private-methods", { "loose": true }]
     ].filter(Boolean)
   }
 }

@@ -1,0 +1,8 @@
+<% if (translation = passage.translations.find_by(lang_number: @lang_number_of_translation, article_id: passage.article_id)) %>
+  <!-- editやupdateで利用するセレクタ。 -->
+  <div id="translation-<%= translation.id %>">
+    <%= render 'translations/translation', translation: translation %>
+  </div>
+<% elsif translation.blank? && passage.lang_number != @lang_number_of_translation %>
+  <%= render 'translations/adding_translation_btn', passage: passage %>
+<% end %>

@@ -1,0 +1,36 @@
+<h4 class="my-3">
+  <b class="green"><i class="far fa-language"></i><%= t 'articles.displayed_translations' %></b>
+</h4>
+
+<%= link_to article_path(@article) do %>
+  <div class="mx-1 my-1 font-weight-bold btn btn <%= params[:sub].blank? ? 'btn-light-green' : 'btn-border-green' %>">
+    <%= t('articles.original') %>
+  </div>
+<% end %>
+
+<% @translated_lang_numbers.each do |i| %>
+
+  <% lang_code = Lang.convert_number_to_code(i) %>
+  <%= link_to article_path(@article, sub: lang_code) do %>
+    <div class="mx-1 my-1 font-weight-bold btn btn <%= @lang_number_of_translation == i ? 'btn-light-green' : 'btn-border-green' %>">
+      <%= lang_code_to_lang_name(lang_code) %>
+    </div>
+  <% end %>
+
+<% end %>
+
+
+<%= link_to new_translation_article_path(@article), remote: true do %>
+  <div class="btn btn-border-gray d-block mt-4 mb-2 main-loading-show-btn">
+    <i class="fas fa-plus"></i><%= t 'articles.create_another_translation' %>
+  </div>
+<% end %>
+
+
+<%= link_to form_to_translate_all_article_path(@article), remote: true do %>
+  <div class="btn btn btn-border-gray w-100 my-2 main-loading-show-btn">
+    <i class="far fa-language"></i><%= t 'articles.translate_all' %>
+  </div>
+<% end %>
+
+

@@ -1,0 +1,60 @@
+<div id="videoId" class="d-none"><%= @video_id %></div>
+<div id="movie-wrap" style="background-color: transparent;">
+  <div class="movie-wrap" id="youtube-video">
+    <div id="player"></div>
+  </div>
+  <div class="text-center">
+
+    <!--
+    <div id="article-like-form-video" class="d-inline-block mr-2">
+      <#% if logged_in? && (like = @article.likes.find_by(user_id: current_user.id)) %>
+        <#%= render 'likes/liked_btn_video', article: @article, like: like %>
+      <#% else %>
+        <#%= render 'likes/like_btn_video', article: @article %>
+      <#% end %>
+    </div>
+    -->
+
+
+    <!-- 自動スクロールボタン -->
+    <div class="btn btn-sm btn-border-gray my-1 d-inline-block" id="auto-scroll-passage">
+      <i class="fad fa-chevron-double-down mr-2"></i><%= t 'articles.auto_scroll' %>
+    </div>
+
+    <!-- ビデオの表示・非表示ボタン -->
+    <div class="btn btn-sm btn-border-gray my-1 d-inline-block" id="video-display-toggle">
+      <i class="fas fa-eye-slash"></i>
+    </div>
+
+    <div class="btn-group dropdown">
+      <button type="button" class="dropdown-toggle btn btn-sm btn-border-gray my-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-flip="true">
+        <span><i class="fas fa-ellipsis-v"></i></span>
+      </button>
+      <!-- https://stackoverflow.com/questions/17904862/bootstrap-position-of-dropdown-menu-relative-to-navbar-item/19253730#19253730 -->
+      <div class="dropdown-menu dropdown-menu-right">
+        <%= render 'articles/dropdown_menu' %>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<p class="text-secondary text-center mt-3"><%= @article.view_count&.to_s(:delimited, delimiter: ',') %><%= t('articles.video_views') %></p>
+
+
+
+
+
+
+<div id="auto-scroll-padding"></div>
+<!--
+<#% video_id = return_youtube_id(@article.reference_url) %>
+<div id="movie-wrap">
+  <div class="movie-wrap" id="youtube-video">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/<#%= video_id %>?playsinline=1&autoplay=1&mute=0&start=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</div>
+<div id="auto-scroll-padding"></div>
+-->
+<p>　</p>
+<p>　</p>

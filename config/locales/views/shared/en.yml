@@ -1,0 +1,8 @@
+en:
+  shared:
+    diff:
+      addition: 'Addition'
+      modification: 'Modification'
+      elimination: 'Elimination'
+  infiniteScroll:
+    all_loaded: 'All Loaded'
