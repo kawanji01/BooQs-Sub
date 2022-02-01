@@ -50,7 +50,7 @@ document.addEventListener("turbolinks:load", function() {
     });
 
     // フラッシュメッセージをクリックで消せるようにする。
-    $(document).on("click", "feedback_message .alert", function () {
+    $(document).on("click", ".feedback_message .alert", function () {
         var $alert = $(this)
         if (!$alert.hasClass('not-remove')) {
             $alert.fadeOut().queue(function () {

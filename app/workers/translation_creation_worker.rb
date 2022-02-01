@@ -5,9 +5,8 @@ class TranslationCreationWorker
   def perform(article_uid, translation_type, lang_code, locale, user_uid)
     article = Article.find_param(article_uid)
     lang_number = Lang.convert_code_to_number(lang_code)
-
-    # タイトルにまで翻訳がついていないなら、youtubeからタイトルの翻訳も取得する。
-    if article.title_translations.find_by(lang_number: lang_number).blank?
+    # タイトルに指定の言語の翻訳がついておらず、かつ、タイトルの言語と翻訳の言語が異なるなら、YouTubeからタイトルの翻訳も取得する。
+    if article.find_title_translation(lang_number).blank? && article.lang_number != lang_number
       translated_title = Youtube.get_translated_title(article.reference_url, lang_code)
       # return ifの早期リターンで抜けようとするとsidekiqの処理そのものが終了してしまったので、ifをネストした。
       if translated_title.present?
@@ -39,10 +38,6 @@ class TranslationCreationWorker
     translations_csv.each_with_index do |row, i|
       # htmlタグ＆末尾の不要な改行を取り除く。
       text = Sanitize.clean(row['text'].strip)
-      # lang_numberがわかっているなら、それを引数で渡して設定したほうがいい。
-      lang_number = row['lang_number'].to_i if lang_number.blank?
-      lang_number = Lang.return_lang_number(text) if lang_number.blank?
-      lang_number = article.lang_number if lang_number.blank?
       next if text.blank?
 
       start_time = row['start_time'].to_d
@@ -56,16 +51,17 @@ class TranslationCreationWorker
       next if passage.lang_number == lang_number
 
       # whereではなくfindで検索しているのは、前回のイテレーションでbuildしたtranslationも検索範囲に含めたいから。
-      if (translation = passage&.translations&.find { |t| t&.lang_number == lang_number })
+      if (translation = passage.translations&.find { |t| t&.lang_number == lang_number && t.article_id == article.id })
         # 参照元候補のpassageに、対象言語の翻訳がすでについているなら、参照元候補のpassageの翻訳に、翻訳をマージする。
         text = [translation.text, text].join("\n")
         translation.text = text.strip
       else
-        passage.translations.build(article: article,
-                                   text: text,
-                                   lang_number: lang_number)
+        translation = passage.translations.build(article_id: article.id,
+                                                 text: text,
+                                                 lang_number: lang_number)
       end
-      passage.save
+      translation.save
+
       # translation.separate_text
       ActionCable.server.broadcast 'progress_bar_channel',
                                    content_id: article_uid,

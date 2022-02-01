@@ -102,7 +102,7 @@ class Article < ApplicationRecord
     translations&.find_by(passage_id: nil, lang_number: lang_number)
   end
 
-  # 翻訳されたタイトルを取得
+  # 翻訳されたタイトルを取得する
   def translated_title(lang_number)
     find_title_translation(lang_number)&.text
   end
