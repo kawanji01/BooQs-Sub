@@ -112,7 +112,7 @@ class Article < ApplicationRecord
 
   # タイトルの翻訳インスタンスを作成する
   def title_translation_new(lang_number, text)
-    translations&.build(passage_id: nil, lang_number: lang_number, text: text)
+    translations&.build(title: true, lang_number: lang_number, text: text, passage_id: nil)
   end
 
 

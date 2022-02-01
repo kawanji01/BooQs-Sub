@@ -103,8 +103,6 @@ class ArticlesController < ApplicationController
       redirect_to new_video_articles_url
     end
 
-    p "present? #{params[:article][:sub_lang_code].present?}"
-
     # 自動字幕読み込み
     if params[:article][:sub_lang_code].include?('auto-')
       # 自動字幕の言語コード
@@ -118,7 +116,6 @@ class ArticlesController < ApplicationController
     else
       # ユーザーが取り込む字幕に「なし」を選んだ場合。
       @error = "not importing any caption"
-      p @error
     end
 
     respond_to do |format|
@@ -483,7 +480,6 @@ class ArticlesController < ApplicationController
     return if params[:article][:file].blank?
 
     file = File.open(params[:article][:file].path, 'r')
-    #file = open_srt_file(params[:article][:file])
     @article_uid = @article.public_uid
     lang_number = params[:article][:lang_number].to_i
     return if file.blank?
@@ -493,6 +489,10 @@ class ArticlesController < ApplicationController
     token = SecureRandom.uuid
     file_name = "#{token}.csv"
     uploaded_file_url = FileUtility.upload_file_and_get_s3_path(csv, file_name)
+    # 原文の重複や乱れを防ぐために、インポートする前にすべての原文（と翻訳）を削除する。
+    @article.delete_all_passages
+    # workerの書き込みとの競合を防ぐために、workerの処理まで３秒開ける。
+    sleep(3)
     PassageFileImportWorker.perform_async(uploaded_file_url, file_name, lang_number, @article_uid, @user_uid, @locale)
     flash[:success] = t 'articles.passages_updated'
     respond_to do |format|
@@ -507,6 +507,29 @@ class ArticlesController < ApplicationController
 
   def import_translation_file
     @article = Article.find_param(params[:id])
+    @user_uid = SecureRandom.uuid
+    return if params[:article][:file].blank?
+
+    file = File.open(params[:article][:file].path, 'r')
+    @article_uid = @article.public_uid
+    lang_number = params[:article][:lang_number].to_i
+    return if file.blank?
+
+    csv = Youtube.convert_srt_into_csv(file, lang_number, false)
+    # CSVをs3にアップロードして、ファイルのpathを手に入れる。
+    token = SecureRandom.uuid
+    file_name = "#{token}.csv"
+    uploaded_file_url = FileUtility.upload_file_and_get_s3_path(csv, file_name)
+    # 重複や文の乱れを防ぐために、インポートする前に指定言語の翻訳を、タイトル以外の翻訳以外はすべて削除する。
+    @article.translations&.where(lang_number: lang_number, title: false)&.delete_all
+    # workerの書き込みとの競合を防ぐために、workerの処理まで３秒開ける。
+    sleep(3)
+    TranslationFileImportWorker.perform_async(uploaded_file_url, file_name, lang_number, @article_uid, @user_uid, @locale)
+    flash[:success] = t 'articles.translations_updated'
+    respond_to do |format|
+      format.html { redirect_to @article }
+      format.js
+    end
   end
 
   private

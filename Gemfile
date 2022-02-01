@@ -11,7 +11,7 @@ gem 'jbuilder',   '2.9.1'
 gem 'bootsnap',   '1.4.5', require: false
 
 # boostrapの導入：https://qiita.com/amatsukix/items/6ec083428df48b166357
-gem 'bootstrap', '~> 4.1.1'
+gem 'bootstrap', '~> 4.3.0'
 gem 'jquery-rails'
 
 

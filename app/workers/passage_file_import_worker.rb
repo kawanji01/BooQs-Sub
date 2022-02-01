@@ -35,12 +35,8 @@ class PassageFileImportWorker
                                    redirect_url: "/#{locale}/articles/#{article_uid}"
     end
 
-    #if article.save && Rails.env.production?
     # 使い終わったCSVをS３から消す
     FileUtility.delete_s3_tmp_file(file_name)
-    #else
-    #Open3.capture3("rm tmp/#{file_name}")
-    #end
 
     ActionCable.server.broadcast 'progress_bar_channel',
                                  content_id: article_uid,

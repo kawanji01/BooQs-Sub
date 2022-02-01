@@ -1,0 +1,45 @@
+<div class="badge-modal-wrapper" id="translation-file-importer-modal">
+  <div class="overlay close-translation-file-importer-modal">
+
+    <div class="close-btn">
+      <i class="fal fa-times"></i>
+    </div>
+
+  </div>
+  <div class="modal-booqs" id="translation-file-importer">
+
+    <h3 class="font-weight-bold mt-3 mb-4"><%= t 'articles.import_file' %></h3>
+    <p class="text-left"><%= t('articles.you_can_import_srt_as_translations_html', path: caption_downloader_path) %></p>
+    <% if @article.passages.present? %>
+      <p class="text-danger"><%= t('articles.warning_to_edit_all_translations') %></p>
+    <% end %>
+
+    <%= form_with model: @article, url: import_translation_file_article_path(@article), method: :post do |f| %>
+
+
+      <div class="custom-file">
+        <%= f.file_field :file, class: 'custom-file-input', id: 'customFile' %>
+        <label class="custom-file-label" for="customFile" data-browse="<%= t('articles.file_reference') %>"><%= t('articles.select_file') %></label>
+      </div>
+
+      <div class="input-group my-4">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="articleTitleLanguage"><%= t('articles.srt_lang') %></label>
+        </div>
+        <%= f.select :lang_number, options_for_select(lang_form_and_auto_configure, @lang_number_of_translation),
+                     {},
+                     {class: 'custom-select form-control', id: 'articleTitleLanguage'} %>
+      </div>
+
+      <%= f.submit t('articles.execute'), class: 'btn btn-solid d-block w-100 my-5 loading-show-btn' %>
+
+      <div class="loading is-hide" id="loading">
+        <div class="loading_icon"></div>
+      </div>
+    <% end %>
+
+
+  </div>
+</div>
+
+

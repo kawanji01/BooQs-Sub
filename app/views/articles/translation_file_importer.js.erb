@@ -1,0 +1,15 @@
+$('.loading').addClass('is-hide');
+$('#main').append('<%= j(render 'articles/translation_file_importer_modal') %>');
+//$("#translation-importer").animate({'top': '56px'}, 400, 'easeOutExpo');
+
+// プログレスバーを表示するとき、.off()でイベントを削除できるようにするために、.onでclickイベントをつける（document）で指定しない。
+$('.close-translation-file-importer-modal').on('click', function() {
+    $('#translation-file-importer-modal').fadeOut().queue(function() {
+        $("#translation-file-importer-modal").remove();
+    });
+});
+
+// bootstrapのcustom-file-inputでファイル名を表示できるようにする。参照： https://codepen.io/cccabinet/pen/VXaemy
+$('.custom-file-input').on('change',function(){
+    $(this).next('.custom-file-label').html($(this)[0].files[0].name);
+})
