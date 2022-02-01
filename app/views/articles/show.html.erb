@@ -91,12 +91,12 @@
 
         <div class="dropdown mt-4 mb-3">
           <button type="button" class="dropdown-toggle button-default w-100" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-flip="true">
-            <i class="far fa-pen mr-2"></i>原文を一括で編集する
+            <i class="far fa-pen mr-2"></i><%= t('articles.edit_all_originals') %>
           </button>
           <!-- https://stackoverflow.com/questions/17904862/bootstrap-position-of-dropdown-menu-relative-to-navbar-item/19253730#19253730 -->
           <div class="dropdown-menu dropdown-menu-right">
             <%= link_to passage_importer_article_path(@article), remote: true, method: :post, class: 'dropdown-item my-2 main-loading-show-btn' do %>
-              <%= t 'articles.import_captions' %>
+              <%= t 'articles.import_passages' %>
             <% end %>
             <%= link_to passage_file_importer_article_path(@article), remote: true, method: :post, class: 'dropdown-item my-2 main-loading-show-btn' do %>
               <%= t('articles.import_file') %>
@@ -107,13 +107,13 @@
 
         <div class="dropdown my-3">
           <button type="button" class="dropdown-toggle button-default w-100" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-flip="true">
-            <i class="far fa-language mr-2"></i>翻訳を一括で編集する
+            <i class="far fa-language mr-2"></i><%= t('articles.edit_all_translations') %>
           </button>
           <!-- https://stackoverflow.com/questions/17904862/bootstrap-position-of-dropdown-menu-relative-to-navbar-item/19253730#19253730 -->
           <div class="dropdown-menu dropdown-menu-right">
 
             <%= link_to translation_importer_article_path(@article), remote: true, method: :post, class: 'dropdown-item my-2 main-loading-show-btn' do %>
-              <%= t 'articles.import_captions' %>
+              <%= t 'articles.import_translation' %>
             <% end %>
 
 
@@ -121,11 +121,8 @@
               <%= t('articles.import_file') %>
             <% end %>
 
-            <%= link_to form_to_translate_all_article_path(@article), remote: true, class: 'dropdown-item my-2' do %>
-              原文を機械翻訳する
-              <!--
-              <#%= t 'articles.translate_all' %>
-              -->
+            <%= link_to batch_translation_article_path(@article), remote: true, method: :post, class: 'dropdown-item my-2 main-loading-show-btn' do %>
+              <%= t 'articles.batch_translation' %>
             <% end %>
 
           </div>

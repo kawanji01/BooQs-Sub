@@ -1,0 +1,91 @@
+<div class="badge-modal-wrapper" id="batch-translation-modal">
+  <div class="overlay close-batch-translation-modal">
+
+    <div class="close-btn">
+      <i class="fal fa-times"></i>
+    </div>
+
+  </div>
+  <div class="modal-booqs" id="batch-translation">
+
+    <h3 class="font-weight-bold mt-3 mb-4"><i class="far fa-language mr-2"></i><%= t('articles.batch_translation') %></h3>
+    <p class="text-secondary"><%= t('articles.explanation_about_batch_translation') %></p>
+    <p class="text-danger"><%= t('articles.warning_to_edit_all_translations') %></p>
+
+    <%= form_with model: @article, url: translate_in_bulk_article_path(@article), method: :post do |f| %>
+
+      <div class="card my-3">
+        <div class="card-body">
+          <%= f.select :lang_number_of_translation, options_for_select(lang_form_array, @lang_number_of_translation), {},
+                       { class: 'form-control form-control mb-3' } %>
+          <div class="form-check form-check-inline text-left mb-4">
+            <%= radio_button_tag :type_of_translator, 'deepl', true, class: 'form-check-input', id: "deepl-translator" %>
+            <label class="form-check-label ml-1 mr-3" for="deepl-translator">DeepL翻訳</label>
+            <%= radio_button_tag :type_of_translator, 'google', false, class: 'form-check-input', id: "google-translator" %>
+            <label class="form-check-label ml-1 mr-3" for="google-translator">Google翻訳</label>
+          </div>
+
+          <!--
+          <p class="text-secondary">文字数：<#%= @characters_count %></p>
+          <p class="text-secondary mb-1">料金：<b><#%= @amount %>円</b></p>
+          -->
+
+        </div>
+      </div>
+
+      <%= f.submit t('articles.execute'), class: 'btn btn-solid w-100 mt-5 loading-show-btn' %>
+      <div class="loading is-hide">
+        <div class="loading_icon"></div>
+      </div>
+    <% end %>
+
+
+
+
+    <!-- 課金する場合 -->
+    <!--
+    <h3 class="green my-3"><i class="far fa-language"></i>一括で翻訳する</h3>
+    <p class="text-secondary text-left">原文をすべて自動で翻訳します。</p>
+
+    <p class="text-secondary text-left">翻訳には、１万文字まで100円、その後は１万文字ごとに100円の追加料金がかかります。</p>
+    -->
+
+
+    <!-- 埋め込みのstripe.jsがきちんと機能するようにturbolinksを切る -->
+    <!--
+    <div data-turbolinks='false'>
+      <#%= form_with model: @article, url: checkout_translation_article_path(@article), method: :get, local: true do |f| %>
+        <#%= hidden_field_tag :sub, request.referer[/sub=(.+)/, 1] %>
+
+        <div class="card">
+          <div class="card-body">
+            <#%= f.select :lang_number_of_translation, options_for_select(@lang_array, @trans_lang_number), {},
+                         {class: 'form-control form-control mb-3'} %>
+            <div class="form-check form-check-inline text-left mb-4">
+              <#%= radio_button_tag :type_of_translator, 'deepl', true, class: 'form-check-input', id: "deepl-translator" %>
+              <label class="form-check-label ml-1 mr-3" for="deepl-translator">DeepL翻訳</label>
+              <#%= radio_button_tag :type_of_translator, 'google', false, class: 'form-check-input', id: "google-translator" %>
+              <label class="form-check-label ml-1 mr-3" for="google-translator">Google翻訳</label>
+            </div>
+
+            <p class="text-secondary">文字数：<#%= @characters_count %></p>
+            <p class="text-secondary mb-1">料金：<b><#%= @amount %>円</b></p>
+
+          </div>
+        </div>
+
+        <#%= f.submit "一括で翻訳する", class: 'btn btn-solid w-100 mt-5 loading-show-btn' %>
+        <div class="loading is-hide">
+          <div class="loading_icon"></div>
+        </div>
+      <#% end %>
+    </div>
+    -->
+
+  </div>
+
+</div>
+
+
+
+

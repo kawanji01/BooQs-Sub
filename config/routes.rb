@@ -41,10 +41,12 @@ Rails.application.routes.draw do
         get :edit_title
         patch :update_title
         get :cancel
-        get :form_to_translate_all
+        # 翻訳
+        post :batch_translation
+        post :translate_in_bulk
+        # 翻訳に課金する場合は以下
         get :checkout_translation
         get :success_translation
-
         # Youtubeから原文と翻訳をインポートする
         post :passage_importer
         post :import_passages

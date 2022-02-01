@@ -27,9 +27,9 @@
 <% end %>
 
 
-<%= link_to form_to_translate_all_article_path(@article), remote: true do %>
+<%= link_to batch_translation_article_path(@article), remote: true do %>
   <div class="btn btn btn-border-gray w-100 my-2 main-loading-show-btn">
-    <i class="far fa-language"></i><%= t 'articles.translate_all' %>
+    <i class="far fa-language"></i><%= t 'articles.batch_translation' %>
   </div>
 <% end %>
 

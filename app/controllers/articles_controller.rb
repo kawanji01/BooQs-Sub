@@ -185,77 +185,6 @@ class ArticlesController < ApplicationController
   end
 
 
-  def form_to_translate_all
-    @article = Article.find_param(params[:id])
-    # refererからsubを取ってくる必要があるので、@lagn_of_translationは使えない。
-    @trans_lang = request.referer[/sub=(.+)/, 1].presence || current_user&.return_lang_code
-    @trans_lang_number = Lang.convert_code_to_number(@trans_lang)
-    @lang_array = ApplicationController.helpers.lang_form_array
-
-    @deepl_supported = Lang.deepl_supported_languages.include?(@lang_of_translation)
-    @characters_count = @article.characters_count
-    @amount = @article.translation_fee
-
-    respond_to do |format|
-      format.html { redirect_to article_path(@article) }
-      format.js
-    end
-  end
-
-  def checkout_translation
-    @user = current_user
-    @article = Article.find_param(params[:id])
-    price = ENV['ALL_TRANSLATION_PRICE_ID']
-    lang_number = params[:article][:lang_number_of_translation].to_i
-    lang_code = Lang.convert_number_to_code(lang_number)
-    deepl = params[:type_of_translator] == 'deepl' && Lang.deepl_supported_languages.include?(lang_code)
-    if lang_code.blank?
-      redirect_to @article
-    elsif (customer = @user.customer)
-      @session = Stripe::Checkout::Session.create({
-                                                      customer: customer.stripe_customer_id,
-                                                      line_items: [{
-                                                                       price: price,
-                                                                       quantity: 1,
-                                                                   }],
-                                                      payment_method_types: [
-                                                          'card',
-                                                      ],
-                                                      mode: 'payment',
-                                                      locale: @locale,
-                                                      success_url: request.base_url + "/#{@locale}/articles/#{@article.public_uid}/success_translation?lang_code=#{lang_code}&deepl=#{deepl}&session_id={CHECKOUT_SESSION_ID}",
-                                                      cancel_url: article_url(@article),
-                                                  })
-    else
-      @session = Stripe::Checkout::Session.create({
-                                                      customer_email: @user.email,
-                                                      line_items: [{
-                                                                       price: price,
-                                                                       quantity: 1,
-                                                                   }],
-                                                      payment_method_types: [
-                                                          'card',
-                                                      ],
-                                                      mode: 'payment',
-                                                      locale: @locale,
-                                                      success_url: request.base_url + "/#{@locale}/articles/#{@article.public_uid}/success_translation?lang_code=#{lang_code}&deepl=#{deepl}&session_id={CHECKOUT_SESSION_ID}",
-                                                      cancel_url: article_url(@article),
-                                                  })
-    end
-  end
-
-  def success_translation
-    return redirect_to @article if params[:session_id].blank?
-
-    @user = current_user
-    @article = Article.find_param(params[:id])
-    lang_code = params[:lang_code]
-    deepl = ActiveRecord::Type::Boolean.new.cast(params[:deepl])
-    flash[:success] = t 'articles.translating_all_succeeded'
-    TranslateAllWorker.perform_async(@article.public_uid, lang_code, @locale, @user&.public_uid, deepl)
-  end
-
-
   def edit
     @article = Article.find_param(params[:id])
   end
@@ -368,6 +297,102 @@ class ArticlesController < ApplicationController
     send_data(data, filename: "#{file_name}.srt")
   end
 
+  def batch_translation
+    @article = Article.find_param(params[:id])
+    @article_uid = @article.public_uid
+
+    # refererからsubを取ってくる必要があるので、@lagn_of_translationは使えない。
+    @trans_lang = request.referer[/sub=(.+)/, 1].presence
+    @trans_lang_number = Lang.convert_code_to_number(@trans_lang)
+    @lang_array = ApplicationController.helpers.lang_form_array
+
+    @deepl_supported = Lang.deepl_supported_languages.include?(@lang_of_translation)
+    # @characters_count = @article.characters_count
+    # @amount = @article.translation_fee
+
+    respond_to do |format|
+      format.html { redirect_to article_path(@article) }
+      format.js
+    end
+  end
+
+  def translate_in_bulk
+    @article = Article.find_param(params[:id])
+    @article_uid = @article.public_uid
+    @user_uid = SecureRandom.uuid
+    lang_number = params[:article][:lang_number_of_translation].to_i
+    lang_code = Lang.convert_number_to_code(lang_number)
+    # deepl翻訳を利用するか否か。
+    translator_type = if params[:type_of_translator] == 'deepl' && Lang.deepl_supported_languages.include?(lang_code)
+                       'deepl'
+                     else
+                       'google'
+                     end
+    # 重複を防ぐために、インポートする前に指定言語の翻訳をすべて削除する。
+    @article.translations&.where(lang_number: lang_number)&.delete_all
+    # workerの書き込みとの競合を防ぐために、workerの処理まで３秒開ける。
+    sleep(3)
+    BatchTranslationWorker.perform_async(@article.public_uid, lang_code, @locale, @user_uid, translator_type)
+    flash[:success] = t 'articles.translating_all_succeeded'
+    respond_to do |format|
+      format.html { redirect_to article_path(@article) }
+      format.js
+    end
+  end
+
+  def checkout_translation
+    @user = current_user
+    @article = Article.find_param(params[:id])
+    price = ENV['ALL_TRANSLATION_PRICE_ID']
+    lang_number = params[:article][:lang_number_of_translation].to_i
+    lang_code = Lang.convert_number_to_code(lang_number)
+    deepl = params[:type_of_translator] == 'deepl' && Lang.deepl_supported_languages.include?(lang_code)
+    if lang_code.blank?
+      redirect_to @article
+    elsif (customer = @user.customer)
+      @session = Stripe::Checkout::Session.create({
+                                                      customer: customer.stripe_customer_id,
+                                                      line_items: [{
+                                                                       price: price,
+                                                                       quantity: 1,
+                                                                   }],
+                                                      payment_method_types: [
+                                                          'card',
+                                                      ],
+                                                      mode: 'payment',
+                                                      locale: @locale,
+                                                      success_url: request.base_url + "/#{@locale}/articles/#{@article.public_uid}/success_translation?lang_code=#{lang_code}&deepl=#{deepl}&session_id={CHECKOUT_SESSION_ID}",
+                                                      cancel_url: article_url(@article),
+                                                  })
+    else
+      @session = Stripe::Checkout::Session.create({
+                                                      customer_email: @user.email,
+                                                      line_items: [{
+                                                                       price: price,
+                                                                       quantity: 1,
+                                                                   }],
+                                                      payment_method_types: [
+                                                          'card',
+                                                      ],
+                                                      mode: 'payment',
+                                                      locale: @locale,
+                                                      success_url: request.base_url + "/#{@locale}/articles/#{@article.public_uid}/success_translation?lang_code=#{lang_code}&deepl=#{deepl}&session_id={CHECKOUT_SESSION_ID}",
+                                                      cancel_url: article_url(@article),
+                                                  })
+    end
+  end
+
+  def success_translation
+    return redirect_to @article if params[:session_id].blank?
+
+    @user = current_user
+    @article = Article.find_param(params[:id])
+    lang_code = params[:lang_code]
+    deepl = ActiveRecord::Type::Boolean.new.cast(params[:deepl])
+    flash[:success] = t 'articles.translating_all_succeeded'
+    TranslateAllWorker.perform_async(@article.public_uid, lang_code, @locale, @user&.public_uid, deepl)
+  end
+
 
   def passage_importer
     @article = Article.find_param(params[:id])
@@ -449,7 +474,7 @@ class ArticlesController < ApplicationController
       lang_code = params[:article][:sub_lang_code].sub('auto-', '')
       return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
 
-      # 重複を防ぐために、インポートする前に指定言語の翻訳をすべてリセットする。
+      # 重複を防ぐために、インポートする前に指定言語の翻訳をすべて削除する。
       @article.translations&.where(lang_number: Lang.convert_code_to_number(lang_code))&.delete_all
       # workerの書き込みとの競合を防ぐために、workerの処理まで３秒開ける。
       sleep(3)

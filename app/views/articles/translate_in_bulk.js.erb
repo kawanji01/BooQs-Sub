@@ -1,0 +1,11 @@
+
+$('.loading').addClass('is-hide');
+$('#batch-translation').html('<%= j(render 'shared/progress_bar', content_id: @article_uid, user_id: @user_uid) %>');
+
+// 削除アイコンを消す＆モーダルを閉じられなくする
+var $closeModal = $('.close-batch-translation-modal');
+$closeModal.html('');
+$closeModal.off();
+
+
+
