@@ -46,6 +46,8 @@
             <%= render 'articles/video' %>
           <% end %>
 
+          <%= @article.characters_count %>
+
           <div id="passages_and_translations">
             <%= render 'articles/passages', article: @article, passages: @passages %>
           </div>
