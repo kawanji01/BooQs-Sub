@@ -38,14 +38,14 @@ class PassageCreationWorker
       lang_number = article.lang_number if lang_number.blank?
       next if text.blank?
 
-      passage = article.passages.build(text: text.strip,
-                                       lang_number: lang_number,
-                                       start_time: row['start_time'].to_f,
-                                       start_time_minutes: row['start_time_minutes'].to_i,
-                                       start_time_seconds: row['start_time_seconds'].to_f,
-                                       end_time: row['end_time'].to_f,
-                                       end_time_minutes: row['end_time_minutes'].to_i,
-                                       end_time_seconds: row['end_time_seconds'].to_f)
+      article.passages.build(text: text.strip,
+                             lang_number: lang_number,
+                             start_time: row['start_time'].to_d,
+                             start_time_minutes: row['start_time_minutes'].to_i,
+                             start_time_seconds: row['start_time_seconds'].to_d,
+                             end_time: row['end_time'].to_d,
+                             end_time_minutes: row['end_time_minutes'].to_i,
+                             end_time_seconds: row['end_time_seconds'].to_d)
       # passage.save
       # p 'passage-save'
       # passage.separate_text

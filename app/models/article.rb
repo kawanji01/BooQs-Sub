@@ -20,8 +20,11 @@ class Article < ApplicationRecord
   ##### 便利メソッド START #####
 
   # 記事の文字数を取得
+  # 原文の文字数を返す。
   def characters_count
-    passages.sum { |passage| passage.text.size } + title.size
+    title_characters = title.size
+    passage_characters = (passages.present? ? passages.sum(:characters_count) : 0)
+    title_characters + passage_characters
   end
 
   # 言語コードを返す
@@ -109,8 +112,10 @@ class Article < ApplicationRecord
 
   # タイトルの翻訳インスタンスを作成する
   def title_translation_new(lang_number, text)
-    translations&.build(passage_id: nil, lang_number: lang_number, text: text)
+    translations&.build(title: true, lang_number: lang_number, text: text, passage_id: nil)
   end
+
+
 
   # すべての原文を削除する
   def delete_all_passages

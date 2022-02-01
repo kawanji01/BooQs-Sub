@@ -1,0 +1,16 @@
+<% if @error.blank? %>
+$('.loading').addClass('is-hide');
+$('#translation-file-importer').html('<%= j(render 'shared/progress_bar', content_id: @article_uid, user_id: @user_uid) %>');
+
+// 削除アイコンを消す＆モーダルを閉じられなくする
+var $closeModal = $('.close-translation-file-importer-modal');
+$closeModal.html('');
+$closeModal.off();
+
+
+<% else %>
+
+var articlePath = "<%= article_path(@article)%>";
+window.location.href = articlePath;
+
+<% end %>

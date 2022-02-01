@@ -45,12 +45,14 @@ Rails.application.routes.draw do
         get :checkout_translation
         get :success_translation
 
+        # Youtubeから原文と翻訳をインポートする
         post :passage_importer
         post :import_passages
-        post :passage_file_importer
-        post :import_passage_file
         post :translation_importer
         post :import_translations
+        # SRTから原文と翻訳をインポートする。
+        post :passage_file_importer
+        post :import_passage_file
         post :translation_file_importer
         post :import_translation_file
         # patch :complete

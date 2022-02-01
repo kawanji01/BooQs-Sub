@@ -1,8 +1,15 @@
 class Passage < ApplicationRecord
   belongs_to :article
   has_many :translations, dependent: :destroy
+  before_validation :count_characters
   validates :text, presence: true
   validate :lang_number_set
+
+
+  # バリデーションをかける前に文字数を格納する。
+  def count_characters
+    self.characters_count = (text.present? ? text.size : 0)
+  end
 
   def lang_number_set
     errors.add(:lang_number, I18n.t('articles.lang_number_error')) if lang_number.blank?
