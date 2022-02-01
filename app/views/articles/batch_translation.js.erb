@@ -1,0 +1,12 @@
+$('.loading').addClass('is-hide');
+$('#main').append('<%= j(render 'articles/batch_translation_modal') %>');
+$// ("#all-translation").animate({'top': '56px'},400, 'easeOutExpo');
+$('body').addClass('overflow-hidden');
+
+// プログレスバーを表示するとき、.off()でイベントを削除できるようにするために、.onでclickイベントをつける（document）で指定しない。
+$('.close-batch-translation-modal').on('click', function() {
+    $('#batch-translation-modal').fadeOut().queue(function() {
+        $("#batch-translation-modal").remove();
+        $('body').removeClass('overflow-hidden');
+    });
+});

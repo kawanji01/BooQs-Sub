@@ -58,7 +58,11 @@ gem 'google-api-client', '~> 0.11'
 gem 'google-cloud-speech'
 # 文字起こしするための音声ファイルのアップロード先
 gem 'google-cloud-storage'
-# Stripe
+# Google Cloud Translation / https://cloud.google.com/translate/docs/setup?hl=ja
+gem 'google-cloud-translate', '~> 2.1.1'
+# DeepLによる翻訳
+gem 'deepl-rb', require: 'deepl'
+# 決済
 gem 'stripe'
 
 group :development, :test do
