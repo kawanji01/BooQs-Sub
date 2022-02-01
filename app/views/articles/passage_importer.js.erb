@@ -1,11 +1,10 @@
 $('.loading').addClass('is-hide');
-$('#main').append('<%= j(render 'articles/upload_srt_modal') %>');
-$("#upload-srt").animate({'top': '56px'},400, 'easeOutExpo');
+$('#main').append('<%= j(render 'articles/passage_importer_modal') %>');
 
 // プログレスバーを表示するとき、.off()でイベントを削除できるようにするために、.onでclickイベントをつける（document）で指定しない。
-$('.close-upload-srt-modal').on('click', function() {
-    $('#upload-srt-modal').fadeOut().queue(function() {
-        $("#upload-srt-modal").remove();
+$('.close-passage-importer-modal').on('click', function() {
+    $('#passage-importer-modal').fadeOut().queue(function() {
+        $("#passage-importer-modal").remove();
     });
 });
 

@@ -8,17 +8,22 @@
   </div>
   <div class="modal-booqs" id="passage-importer">
 
-    <h3 class="green my-3"><%= t 'articles.import_captions' %></h3>
+    <h3 class="font-weight-bold mt-3 mb-4"><%= t 'articles.import_captions' %></h3>
 
-    <%= form_with model: @article, url: create_passages_via_srt_article_path(@article), method: :post do |f| %>
+    <p><%= t('articles.explanation_for_importing_passages') %></p>
+    <% if @article.passages.present? %>
+      <p class="text-danger"><%= t('articles.warning_to_edit_all_passages') %></p>
+    <% end %>
+
+    <%= form_with model: @article, url: import_passages_article_path(@article), method: :post do |f| %>
       <% if @sub_lang_codes.present? %>
 
         <%= f.select :sub_lang_code, options_for_select(@sub_lang_codes.map { |code| import_select_form_creator(code) }, @audio_lang),
                      {},
                      {class: 'form-control form-control my-3 w-100'} %>
 
-        <%= button_tag type: 'submit', class: "btn btn-solid loading-show-btn mt-5 w-100" do %>
-          <%= t 'articles.import' %>
+        <%= button_tag type: 'submit', class: "btn btn-solid loading-show-btn mt-4 w-100" do %>
+          <%= t 'articles.execute' %>
         <% end %>
         <div class="loading is-hide">
           <div class="loading_icon"></div>

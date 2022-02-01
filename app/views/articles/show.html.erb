@@ -91,12 +91,15 @@
 
         <div class="dropdown mt-4 mb-3">
           <button type="button" class="dropdown-toggle button-default w-100" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-flip="true">
-            <i class="far fa-pen mr-2"></i>原文を編集する
+            <i class="far fa-pen mr-2"></i>原文を一括で編集する
           </button>
           <!-- https://stackoverflow.com/questions/17904862/bootstrap-position-of-dropdown-menu-relative-to-navbar-item/19253730#19253730 -->
           <div class="dropdown-menu dropdown-menu-right">
+            <%= link_to passage_importer_article_path(@article), remote: true, method: :post, class: 'dropdown-item my-2 main-loading-show-btn' do %>
+              <%= t 'articles.import_captions' %>
+            <% end %>
             <%= link_to new_passages_via_srt_article_path(@article), remote: true, class: 'dropdown-item my-2' do %>
-              SRTファイルを取り込む
+              SRTファイルを読み込む
               <!--
               <#%= t('articles.create_passages_via_srt') %>
               -->
@@ -107,7 +110,7 @@
 
         <div class="dropdown my-3">
           <button type="button" class="dropdown-toggle button-default w-100" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-flip="true">
-            <i class="far fa-language mr-2"></i>翻訳を編集する
+            <i class="far fa-language mr-2"></i>翻訳を一括で編集する
           </button>
           <!-- https://stackoverflow.com/questions/17904862/bootstrap-position-of-dropdown-menu-relative-to-navbar-item/19253730#19253730 -->
           <div class="dropdown-menu dropdown-menu-right">
@@ -116,12 +119,14 @@
               <%= t 'articles.import_captions' %>
             <% end %>
 
-            <%= link_to new_translation_article_path(@article), remote: true, class: 'dropdown-item my-2' do %>
-              <%= t 'articles.create_another_translation' %>
-            <% end %>
+            <!--
+            <#%= link_to new_translation_article_path(@article), remote: true, class: 'dropdown-item my-2' do %>
+              <#%= t 'articles.create_another_translation' %>
+            <#% end %>
+            -->
 
             <%= link_to new_translations_via_srt_article_path(@article), remote: true, class: 'dropdown-item my-2' do %>
-              SRTファイルを取り込む
+              SRTファイルを読み込む
               <!--
               <#%= t('articles.create_translations_via_srt') %>
               -->
@@ -152,28 +157,35 @@
                 </div>
               <% end %>
             <% end %>
+
+            <%= link_to "タグを編集する", root_url, class: "text-success my-3 small d-block" %>
+
           </div>
 
         <% end %>
+
+
+        <!--
+        <#% if @article.video? %>
+          <h4 class="mt-5 mb-3 green font-weight-bold">
+            <i class="far fa-download mr-2"></i><#%= t('articles.caption_download') %>
+          </h4>
+          <p class="gray"><#%= t('articles.download_explanation') %></p>
+          <#%= button_to t('articles.download_subtitles'), download_subtitles_article_url(@article), method: :get, class: 'btn btn btn-border-green font-weight-bold my-3' %>
+
+          <#%= button_to "#{t('articles.download_translations')}(#{lang_code_to_lang_name @lang_of_translation})", download_translations_article_url(@article), {method: :get, params: {download_lang_number: @lang_number_of_translation}, class: 'btn btn btn-border-green font-weight-bold my-3'} %>
+        <#% else %>
+          <p class="mt-5 text-secondary"><#%= t 'articles.nothing_to_download' %></p>
+        <#% end %>
+        -->
 
 
         <% if @article.video? %>
-          <h4 class="mt-5 mb-3 green font-weight-bold">
-            <i class="far fa-download mr-2"></i><%= t('articles.caption_download') %>
-          </h4>
-          <p class="gray"><%= t('articles.download_explanation') %></p>
-          <%= button_to t('articles.download_subtitles'), download_subtitles_article_url(@article), method: :get, class: 'btn btn btn-border-green font-weight-bold my-3' %>
-
-          <%= button_to "#{t('articles.download_translations')}(#{lang_code_to_lang_name @lang_of_translation})", download_translations_article_url(@article), {method: :get, params: {download_lang_number: @lang_number_of_translation}, class: 'btn btn btn-border-green font-weight-bold my-3'} %>
-        <% else %>
-          <p class="mt-5 text-secondary"><%= t 'articles.nothing_to_download' %></p>
-        <% end %>
-
-
-        <%= link_to download_subtitles_article_url(@article) do %>
-          <div class="button-default w-100 my-3">
-            <i class="far fa-download mr-2"></i><%= t('articles.caption_download') %>
-          </div>
+          <%= link_to download_subtitles_article_url(@article) do %>
+            <div class="button-default w-100 my-3">
+              <i class="far fa-download mr-2"></i><%= t('articles.caption_download') %>
+            </div>
+          <% end %>
         <% end %>
 
 

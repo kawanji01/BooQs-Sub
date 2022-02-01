@@ -102,7 +102,7 @@ class Article < ApplicationRecord
     translations&.find_by(passage_id: nil, lang_number: lang_number)
   end
 
-  # 翻訳されたタイトルを取得
+  # 翻訳されたタイトルを取得する
   def translated_title(lang_number)
     find_title_translation(lang_number)&.text
   end
@@ -110,6 +110,13 @@ class Article < ApplicationRecord
   # タイトルの翻訳インスタンスを作成する
   def title_translation_new(lang_number, text)
     translations&.build(passage_id: nil, lang_number: lang_number, text: text)
+  end
+
+  # すべての原文を削除する
+  def delete_all_passages
+    # タイトルの翻訳以外、すべての翻訳を削除する。
+    translations.where.not(passage_id: nil).delete_all
+    passages.delete_all
   end
 
   ##### 便利メソッド END #####
