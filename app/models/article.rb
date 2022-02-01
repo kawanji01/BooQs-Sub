@@ -112,6 +112,13 @@ class Article < ApplicationRecord
     translations&.build(passage_id: nil, lang_number: lang_number, text: text)
   end
 
+  # すべての原文を削除する
+  def delete_all_passages
+    # タイトルの翻訳以外、すべての翻訳を削除する。
+    translations.where.not(passage_id: nil).delete_all
+    passages.delete_all
+  end
+
   ##### 便利メソッド END #####
 
 

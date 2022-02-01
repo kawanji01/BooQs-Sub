@@ -95,7 +95,7 @@
           </button>
           <!-- https://stackoverflow.com/questions/17904862/bootstrap-position-of-dropdown-menu-relative-to-navbar-item/19253730#19253730 -->
           <div class="dropdown-menu dropdown-menu-right">
-            <%= link_to new_passages_via_srt_article_path(@article), remote: true, class: 'dropdown-item my-2' do %>
+            <%= link_to passage_importer_article_path(@article), remote: true, method: :post, class: 'dropdown-item my-2 main-loading-show-btn' do %>
               <%= t 'articles.import_captions' %>
             <% end %>
             <%= link_to new_passages_via_srt_article_path(@article), remote: true, class: 'dropdown-item my-2' do %>
@@ -157,6 +157,9 @@
                 </div>
               <% end %>
             <% end %>
+
+            <%= link_to "タグを編集する", root_url, class: "text-success my-3 small d-block" %>
+
           </div>
 
         <% end %>

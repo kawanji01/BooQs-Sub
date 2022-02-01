@@ -10,6 +10,9 @@
 
     <h3 class="mt-3 mb-4 font-weight-bold"><%= t 'articles.import_captions' %></h3>
 
+    <p><%= t('articles.explanation_for_importing_translations') %></p>
+    <p class="text-danger"><%= t('articles.warning_to_edit_all_translations') %></p>
+
     <%= form_with model: @article, url: import_translations_article_path(@article), method: :post do |f| %>
       <% if @sub_lang_codes.present? %>
 
@@ -18,7 +21,7 @@
                      {class: 'form-control form-control my-3 w-100'} %>
 
         <%= button_tag type: 'submit', class: "btn btn-solid loading-show-btn mt-4 w-100" do %>
-          <%= t 'articles.import' %>
+          <%= t 'articles.execute' %>
         <% end %>
         <div class="loading is-hide">
           <div class="loading_icon"></div>

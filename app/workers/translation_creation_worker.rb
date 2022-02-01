@@ -37,7 +37,7 @@ class TranslationCreationWorker
     translations_count = translations_csv.length
     translations_csv.each_with_index do |row, i|
       # htmlタグ＆末尾の不要な改行を取り除く。
-      text = Sanitize.clean(row['text'].strip)
+      text = Sanitize.clean(row['text']).strip
       next if text.blank?
 
       start_time = row['start_time'].to_d
@@ -50,7 +50,7 @@ class TranslationCreationWorker
       # passageと同じ言語の翻訳は作らない。
       next if passage.lang_number == lang_number
 
-      # whereではなくfindで検索しているのは、前回のイテレーションでbuildしたtranslationも検索範囲に含めたいから。
+      # whereではなくfindで検索しているのは、前回のイテレーションでsaveしたtranslationも確実に検索結果に含めたいから。
       if (translation = passage.translations&.find { |t| t&.lang_number == lang_number && t.article_id == article.id })
         # 参照元候補のpassageに、対象言語の翻訳がすでについているなら、参照元候補のpassageの翻訳に、翻訳をマージする。
         text = [translation.text, text].join("\n")

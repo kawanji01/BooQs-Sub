@@ -384,6 +384,38 @@ class ArticlesController < ApplicationController
     end
   end
 
+  def import_passages
+    @article = Article.find_param(params[:id])
+    @article_uid = @article.public_uid
+    @user_uid = SecureRandom.uuid
+
+    # 自動字幕読み込み
+    if params[:article][:sub_lang_code].include?('auto-')
+      # 自動字幕の言語コード
+      lang_code = params[:article][:sub_lang_code].sub('auto-', '')
+      return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
+
+      # 原文の重複や乱れを防ぐために、インポートする前にすべての原文（と翻訳）を削除する。
+      @article.delete_all_passages
+      # workerの書き込みとの競合を防ぐために、workerの処理まで３秒開ける。
+      sleep(3)
+      PassageCreationWorker.perform_async(@article_uid, 'auto-generated', lang_code, @locale, @user_uid)
+    elsif params[:article][:sub_lang_code].present?
+      lang_code = params[:article][:sub_lang_code]
+      return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
+
+      @article.delete_all_passages
+      sleep(3)
+      PassageCreationWorker.perform_async(@article_uid, 'manual-sub', lang_code, @locale, @user_uid)
+    end
+    flash[:success] = t('articles.creating_caption_succeeded')
+
+    respond_to do |format|
+      format.html { redirect_to @article }
+      format.js
+    end
+  end
+
   def translation_importer
     @article = Article.find_param(params[:id])
     @audio_lang = Lang.convert_number_to_code(@article.lang_number_of_audio)
