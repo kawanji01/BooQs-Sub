@@ -103,6 +103,8 @@ class ArticlesController < ApplicationController
       redirect_to new_video_articles_url
     end
 
+    p "present? #{params[:article][:sub_lang_code].present?}"
+
     # 自動字幕読み込み
     if params[:article][:sub_lang_code].include?('auto-')
       # 自動字幕の言語コード
@@ -113,6 +115,10 @@ class ArticlesController < ApplicationController
       lang_code = params[:article][:sub_lang_code]
       return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
       PassageCreationWorker.perform_async(@article_uid, 'manual-sub', lang_code, @locale, @user_uid)
+    else
+      # ユーザーが取り込む字幕に「なし」を選んだ場合。
+      @error = "not importing any caption"
+      p @error
     end
 
     respond_to do |format|
@@ -467,6 +473,42 @@ class ArticlesController < ApplicationController
     end
   end
 
+  def passage_file_importer
+    @article = Article.find_param(params[:id])
+  end
+
+  def import_passage_file
+    @article = Article.find_param(params[:id])
+    @user_uid = SecureRandom.uuid
+    return if params[:article][:file].blank?
+
+    file = File.open(params[:article][:file].path, 'r')
+    #file = open_srt_file(params[:article][:file])
+    @article_uid = @article.public_uid
+    lang_number = params[:article][:lang_number].to_i
+    return if file.blank?
+
+    csv = Youtube.convert_srt_into_csv(file, lang_number, false)
+    # CSVをs3にアップロードして、ファイルのpathを手に入れる。
+    token = SecureRandom.uuid
+    file_name = "#{token}.csv"
+    uploaded_file_url = FileUtility.upload_file_and_get_s3_path(csv, file_name)
+    PassageFileImportWorker.perform_async(uploaded_file_url, file_name, lang_number, @article_uid, @user_uid, @locale)
+    flash[:success] = t 'articles.passages_updated'
+    respond_to do |format|
+      format.html { redirect_to @article }
+      format.js
+    end
+  end
+
+  def translation_file_importer
+    @article = Article.find_param(params[:id])
+  end
+
+  def import_translation_file
+    @article = Article.find_param(params[:id])
+  end
+
   private
 
   def article_params
@@ -475,7 +517,7 @@ class ArticlesController < ApplicationController
                                     :reference_url, :scraped_image,
                                     :video,
                                     # レコードにはないが、送信したいパラメーター
-                                    :tag_list, :lang_number_of_translation)
+                                    :tag_list)
   end
 
 end

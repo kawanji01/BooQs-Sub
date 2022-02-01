@@ -47,6 +47,10 @@ gem 'http_accept_language'
 gem 'carrierwave', '~> 2.0'
 # ダウンロードしてきた字幕など、テキストのhtmlタグを取り除くために導入。
 gem 'sanitize', '~> 5.2.1'
+# ユーザーがアップロードしたSRTファイルなどの一時保存先としてS3を利用する。
+gem 'aws-sdk'
+# 開発環境からもs3のtmpに字幕をアップロードできるようにする。
+gem 'fog-aws',  '2.0.1'
 
 # 用途は、1,文字起こしの料金を計算するためのyoutubeの動画の長さの取得, 2,タイトルの翻訳の取得
 gem 'google-api-client', '~> 0.11'

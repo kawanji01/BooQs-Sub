@@ -46,8 +46,6 @@
             <%= render 'articles/video' %>
           <% end %>
 
-          <%= @article.characters_count %>
-
           <div id="passages_and_translations">
             <%= render 'articles/passages', article: @article, passages: @passages %>
           </div>
@@ -100,11 +98,8 @@
             <%= link_to passage_importer_article_path(@article), remote: true, method: :post, class: 'dropdown-item my-2 main-loading-show-btn' do %>
               <%= t 'articles.import_captions' %>
             <% end %>
-            <%= link_to new_passages_via_srt_article_path(@article), remote: true, class: 'dropdown-item my-2' do %>
-              SRTファイルを読み込む
-              <!--
-              <#%= t('articles.create_passages_via_srt') %>
-              -->
+            <%= link_to passage_file_importer_article_path(@article), remote: true, method: :post, class: 'dropdown-item my-2 main-loading-show-btn' do %>
+              <%= t('articles.import_file') %>
             <% end %>
           </div>
         </div>
@@ -128,10 +123,8 @@
             -->
 
             <%= link_to new_translations_via_srt_article_path(@article), remote: true, class: 'dropdown-item my-2' do %>
-              SRTファイルを読み込む
-              <!--
-              <#%= t('articles.create_translations_via_srt') %>
-              -->
+              <%= t('articles.import_file') %>
+
             <% end %>
 
             <%= link_to form_to_translate_all_article_path(@article), remote: true, class: 'dropdown-item my-2' do %>
