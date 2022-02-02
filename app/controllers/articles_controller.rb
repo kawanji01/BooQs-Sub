@@ -108,10 +108,12 @@ class ArticlesController < ApplicationController
       # 自動字幕の言語コード
       lang_code = params[:article][:sub_lang_code].sub('auto-', '')
       return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
+
       PassageCreationWorker.perform_async(@article_uid, 'auto-generated', lang_code, @locale, @user_uid)
     elsif params[:article][:sub_lang_code].present?
       lang_code = params[:article][:sub_lang_code]
       return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
+
       PassageCreationWorker.perform_async(@article_uid, 'manual-sub', lang_code, @locale, @user_uid)
     else
       # ユーザーが取り込む字幕に「なし」を選んだ場合。
@@ -122,66 +124,6 @@ class ArticlesController < ApplicationController
       format.html { redirect_to root_url }
       format.js
     end
-  end
-
-
-  def new_passages_via_srt
-    @article = Article.find_param(params[:id])
-    respond_to do |format|
-      format.html do
-        redirect_to @article
-      end
-      format.js
-    end
-  end
-
-  def create_passages_via_srt
-    @article = Article.find_param(params[:id])
-    return if params[:article][:file].blank?
-
-    file = File.open(params[:article][:file].path, 'r')
-    #file = open_srt_file(params[:article][:file])
-    @article_uid = @article.public_uid
-    @user_uid = current_user.public_uid
-    lang_number = params[:article][:lang_number].to_i
-    return if file.blank?
-
-    csv = Youtube.convert_srt_into_csv(file, lang_number, false)
-    # CSVをs3にアップロードして、ファイルのpathを手に入れる。
-    token = SecureRandom.uuid
-    file_name = "#{token}.csv"
-    uploaded_file_url = FileUtility.upload_file_and_get_s3_path(csv, file_name)
-    ImportFileAsPassagesWorker.perform_async(uploaded_file_url, file_name, lang_number, @article_uid, @user_uid, @locale)
-    flash[:success] = t 'articles.passages_updated'
-  end
-
-  def new_translations_via_srt
-    @article = Article.find_param(params[:id])
-    respond_to do |format|
-      format.html do
-        redirect_to @article
-      end
-      format.js
-    end
-  end
-
-  def create_translations_via_srt
-    @article = Article.find_param(params[:id])
-    return if params[:article][:file].blank?
-
-    file = File.open(params[:article][:file].path, 'r')
-    @article_uid = @article.public_uid
-    @user_uid = current_user.public_uid
-    lang_number = params[:article][:lang_number].to_i
-    return if file.blank?
-
-    csv = Youtube.convert_srt_into_csv(file, lang_number, false)
-    # CSVをs3にアップロードして、ファイルのpathを手に入れる。
-    token = SecureRandom.uuid
-    file_name = "#{token}.csv"
-    uploaded_file_url = FileUtility.upload_file_and_get_s3_path(csv, file_name)
-    ImportFileAsTranslationsWorker.perform_async(uploaded_file_url, file_name, lang_number, @article_uid, @user_uid, @locale)
-    flash[:success] = t 'articles.passages_updated'
   end
 
 
@@ -206,45 +148,35 @@ class ArticlesController < ApplicationController
 
   def edit_title
     @article = Article.find_param(params[:id])
+    @token = SecureRandom.uuid
   end
 
   def update_title
     @article = Article.find_param(params[:id])
-    @user = current_user
-    return if @article.title_modification_permitted_by(@user) == false
-
-    comment = params[:comment]
-    ip = request.remote_ip
-    @chapter = @article.chapter
+    token = params[:article][:token]
     @article.assign_attributes(article_params)
     @article.set_lang_number
     @valid = @article.valid?
     return if @valid == false
 
-    @article.separate_text if params[:separateText].present?
-    request = @article.create_modification_request(current_user, comment, ip)
-    if @article.screen_requests?(current_user)
-      @article = Article.find_param(@article.public_uid)
-      @message = t('article_requests.modification_request_submitted')
-      request.notify_author_of_being_proposed
-    else
-      @article.merge_with(request)
-      @message = t('articles.title_updated')
-      # 画像の縦横比を保存する。
-      @article.update_width_and_height_of_image
-      request.notify_article_changed_without_screening
-      user_icon = ApplicationController.helpers.icon_for(request.user)
-      ActionCable.server.broadcast 'title_modification_channel',
-                                   html: render(partial: 'articles/article_title', locals: {article: @article}),
-                                   article: @article,
-                                   message: @message,
-                                   user_name: (request.user.present? ? request.user.name : t('users.anonymous_user')),
-                                   user_icon: user_icon
-    end
+    # @article.separate_text if params[:separateText].present?
+
+    @article.save
+    @message = t('articles.title_updated')
+    # 画像の縦横比を保存する。
+    # @article.update_width_and_height_of_image
+    # user_icon = ApplicationController.helpers.icon_for(request.user)
+    ActionCable.server.broadcast 'title_modification_channel',
+                                 html: render(partial: 'articles/article_title', locals: {article: @article}),
+                                 article: @article,
+                                 message: @message,
+                                 token: token
+
   end
 
   def cancel
     @article = Article.find_param(params[:id])
+    @token   = params[:article][:token]
   end
 
   # モバイルでの翻訳切り替えボタン
@@ -324,10 +256,10 @@ class ArticlesController < ApplicationController
     lang_code = Lang.convert_number_to_code(lang_number)
     # deepl翻訳を利用するか否か。
     translator_type = if params[:type_of_translator] == 'deepl' && Lang.deepl_supported_languages.include?(lang_code)
-                       'deepl'
-                     else
-                       'google'
-                     end
+                        'deepl'
+                      else
+                        'google'
+                      end
     # 重複を防ぐために、インポートする前に指定言語の翻訳をすべて削除する。
     @article.translations&.where(lang_number: lang_number)&.delete_all
     # workerの書き込みとの競合を防ぐために、workerの処理まで３秒開ける。

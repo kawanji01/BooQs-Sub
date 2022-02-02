@@ -1,0 +1,5 @@
+
+$('#article-title-<%= @article.public_uid  %>').replaceWith("<%= j(render 'articles/title_edit_form', article: @article, token: @token) %>");
+//var position = $('#article-title-<#%= @article.public_uid %>-edit-form-uid-<#%= @token %>').offset().top;
+//$('html, body').animate({scrollTop: position}, 500);
+

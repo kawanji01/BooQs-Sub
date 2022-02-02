@@ -32,15 +32,11 @@ Rails.application.routes.draw do
       member do
         get :download_subtitles
         get :download_translations
-        get :new_passages_via_srt
-        post :create_passages_via_srt
-        get :new_translations_via_srt
-        post :create_translations_via_srt
         get :new_translation
         get :select_translation
-        get :edit_title
+        post  :edit_title
         patch :update_title
-        get :cancel
+        post :cancel
         # 翻訳
         post :batch_translation
         post :translate_in_bulk
@@ -61,11 +57,15 @@ Rails.application.routes.draw do
         # get :title_histories
         # get :histories_of_user
         # get :appraisals_of_user
-        #  # get :edit_exercise
-        #         # patch :update_exercise
+        # get :edit_exercise
+        # patch :update_exercise
         # get :pending_requests
         # get :accepted_requests
         # get :request_setting
+        # get :new_passages_via_srt
+        # post :create_passages_via_srt
+        # get :new_translations_via_srt
+        # post :create_translations_via_srt
       end
       collection do
         get :new_video

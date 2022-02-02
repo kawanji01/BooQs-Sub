@@ -1,23 +1,25 @@
+<div id="article-title-<%= article.public_uid %>" class="mt-3">
+  <div class="headline-green" id="article-title-<%= article.public_uid %>-feedback-wrapper">
 
-<div class="headline-green">
+    <% lang_number = article.lang_number %>
+    <% lines = article.title.lines %>
 
-  <% lang_number = article.lang_number %>
-  <% lines = article.title.lines %>
+    <h2 class="article-title font-weight-bold">
+      <b>
+        <% lines.each_with_index do |l, i| %>
+          <!-- https://docs.ruby-lang.org/ja/latest/method/String/i/split.html -->
+          <div class="title-line">
+            <%= render "shared/line_with_dict", line: l, lang_number: lang_number %>
 
-  <h2 class="article-title font-weight-bold">
-    <b>
-      <% lines.each_with_index do |l, i| %>
-        <!-- https://docs.ruby-lang.org/ja/latest/method/String/i/split.html -->
-        <div class="title-line">
-          <%= render "shared/line_with_dict", line: l, lang_number: lang_number %>
+            <!-- 最後の行の文末に編集ボタンを置く -->
+            <% if i == lines.length - 1 %>
+              <%= render 'articles/edit_title_btn', article: article %>
+            <% end %>
+          </div>
+        <% end %>
+      </b>
+    </h2>
 
-          <!-- 最後の行の文末に編集ボタンを置く -->
-          <% if i == lines.length - 1 %>
-            <%= render 'articles/edit_title_btn', article: article %>
-          <% end %>
-        </div>
-      <% end %>
-    </b>
-  </h2>
-
+    <div class="feedback-message my-3 small text-success"></div>
+  </div>
 </div>

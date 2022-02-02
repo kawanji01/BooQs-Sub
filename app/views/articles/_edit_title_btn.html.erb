@@ -1,4 +1,4 @@
-<%= form_with model: article, url: edit_title_article_path(article), method: :get, class: 'ml-2 d-inline' do |f| %>
+<%= form_with model: article, url: edit_title_article_path(article), method: :post, class: 'ml-2 d-inline' do |f| %>
   <%= button_tag type: 'submit', class: 'btn btn-sm btn-gray-article loading-show-btn rounded-circle',
                  style: "min-width:34px;min-height: 34px;" do %>
     <i class="far fa-pen"></i>

@@ -33,9 +33,9 @@
           </div>
 
 
-          <div id="article-title-<%= @article.public_uid %>" class="mt-3">
-            <%= render 'articles/article_title', article: @article %>
-          </div>
+
+          <%= render 'articles/article_title', article: @article %>
+
 
           <div id="title-translation-<%= @lang_of_translation %>" class="mt-3">
             <%= render 'translations/title_translation', article: @article, translation: @title_translation %>
@@ -46,7 +46,7 @@
             <%= render 'articles/video' %>
           <% end %>
 
-          <div id="passages_and_translations">
+          <div id="passages-and-translations">
             <%= render 'articles/passages', article: @article, passages: @passages %>
           </div>
 
@@ -269,7 +269,7 @@
     function onPlayerStateChange(event) {
         if (event.data === YT.PlayerState.PLAYING) {
             var marking = setInterval(function () {
-                var $passages = $('#passages_and_translations').find('.passage-component');
+                var $passages = $('#passages-and-translations').find('.passage-component');
                 // setIntervalを止めずにブラウザバックした場合に強制的にsetIntervalを止める処理
                 if (player.i == null) {
                     clearInterval(marking);
