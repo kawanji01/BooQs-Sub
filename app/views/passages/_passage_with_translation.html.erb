@@ -2,10 +2,10 @@
   <!-- 本文 -->
   <%= render 'passages/passage', passage: passage %>
   <!-- 翻訳 -->
-  <!-- 「翻訳を追加するボタン（translations#new）」で利用するセレクタ -->
-  <div id="passage-<%= passage.id %>-translation-<%= @lang_of_translation %>">
-    <%= render 'passages/translation', passage: passage %>
-  </div>
+  <!--TODO: translationを事前に読み込んでN+1を解決する。 -->
+  <% translation ||= passage&.translations&.find_by(lang_number: @lang_number_of_translation, article_id: passage.article_id)%>
+  <%= render 'passages/translation', passage: passage, translation: translation %>
+
 
   <!-- 動画の再生ボタンなどの下部要素 -->
   <div class="d-flex justify-content-end mt-3 mb-5">

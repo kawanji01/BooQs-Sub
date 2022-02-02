@@ -1,9 +1,9 @@
-<div class="box my-3" id="article-title-<%= article.public_uid %>-edit-form-uid-<%= token %>">
+<div class="my-3" id="article-title-<%= article.public_uid %>-edit-form-uid-<%= editor_token %>">
   <div id="article-title-<%= article.public_uid %>-feedback-wrapper">
     <!-- Cancel button -->
     <div class="text-right">
-      <%= form_with model: article, url: cancel_article_path(article), method: :post do |f| %>
-        <%= f.hidden_field :token, value: token, class: 'form-control' %>
+      <%= form_with url: cancel_article_path(article), method: :get do |f| %>
+        <%= hidden_field_tag :editor_token, editor_token %>
         <%= button_tag type: 'submit', class: 'btn btn-sm btn-gray-article py-2 loading-show-btn' do %>
           <i class="far fa-times mr-2"></i><%= t('articles.cancel') %>
         <% end %>
@@ -16,7 +16,7 @@
 
     <h4 class="text-success my-3 font-weight-bold"><i class="fas fa-pen mr-2"></i><%= t 'articles.modify_title' %></h4>
     <%= form_with model: article, url: update_title_article_path(article), method: :patch do |f| %>
-      <%= f.hidden_field :token, value: token, class: 'form-control' %>
+      <%= hidden_field_tag :editor_token, editor_token %>
       <%= render 'shared/error_messages', object: f.object %>
 
       <div class="text-preview-wrapper mb-3">
@@ -45,5 +45,8 @@
       </div>
 
     <% end %>
+
+    <!-- 他のユーザーによる更新をリアルタイムで伝える。 -->
+    <div class="feedback-message my-3 small text-success"></div>
   </div>
 </div>

@@ -1,0 +1,5 @@
+var $translation = $('#passage-<%= @passage.id %>-translation-lang-<%= @lang_code_of_translation %>');
+var position = $translation.offset().top;
+$('html, body').animate({scrollTop: position}, 300);
+$translation
+    .replaceWith("<%= j(render 'translations/edit_form', translation: @translation, passage: @passage, editor_token: @editor_token ) %>");

@@ -1,5 +1,6 @@
 <%= form_with url: new_title_translations_path, method: :get do |f| %>
-  <%= f.hidden_field :article_id, value: article.id %>
+  <%= f.hidden_field :article_uid, value: article.public_uid %>
+  <%= f.hidden_field :lang_code_of_translation, value: @lang_code_of_translation %>
   <%= button_tag type: 'submit', class: 'btn btn-sm btn-gray-article py-2 font-weight-bold loading-show-btn mb-3' do %>
     <!--
     <i class="fas fa-plus mr-2"></i><#%= t 'translations.translate_title' %>

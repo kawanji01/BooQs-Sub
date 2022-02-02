@@ -1,7 +1,7 @@
 <a class="dropdown-item my-2" href="#top" id="scrollTop"><i class="far fa-arrow-to-top mr-2"></i>最上部に移動する</a>
 <a class="dropdown-item my-2" href="#bottom" id="scrollBottom"><i class="far fa-arrow-to-bottom mr-2"></i>最下部に移動する</a>
 
-<%= link_to select_translation_article_path(@article, sub: @lang_of_translation), remote: true, class: 'dropdown-item my-2' do %>
+<%= link_to select_translation_article_path(@article, sub: @lang_code_of_translation), remote: true, class: 'dropdown-item my-2' do %>
   <i class="far fa-language mr-2"></i>他の翻訳を表示する
 <% end %>
 

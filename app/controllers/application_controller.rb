@@ -16,8 +16,8 @@ class ApplicationController < ActionController::Base
     @lang_number_of_locale = Lang.convert_code_to_number(@locale)
     # 表示する翻訳文の言語を設定
     # ページの翻訳文としてもっとも優先的に参照するのは、urlのパラメーター「?sub="言語コード"」にする。
-    @lang_of_translation = params[:sub].presence || @locale
-    @lang_number_of_translation = Lang.convert_code_to_number(@lang_of_translation)
+    @lang_code_of_translation = params[:sub].presence || @locale
+    @lang_number_of_translation = Lang.convert_code_to_number(@lang_code_of_translation)
   end
 
   # urlやpathヘルパーで自動でロケールを設定させる。

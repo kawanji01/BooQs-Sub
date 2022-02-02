@@ -48,6 +48,7 @@ class Translation < ApplicationRecord
   # データをsaveするまでに必要な一連の処理をまとめたメソッド / Method bunching processes that record needs until saving.
   def set_attributes
     set_lang_number
+    self.title = true if passage_id.blank?
   end
 
   def lang_code

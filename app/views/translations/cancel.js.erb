@@ -1,0 +1,10 @@
+<% if @article.present?  %>
+// タイトルの翻訳の編集（translations#new_title,edit_title）のキャンセル
+$('#article-title-<%= @article.public_uid %>-translation-lang-<%= @lang_code_of_translation %>-edit-form-uid-<%= @editor_token %>')
+    .replaceWith("<%= j(render 'translations/title_translation', article: @article, translation: @translation) %>");
+
+<% elsif @passage.present?  %>
+// 翻訳の作成・編集（translations#new,edit）のキャンセル
+$("#passage-<%= @passage.id %>-translation-lang-<%= @lang_code_of_translation %>-edit-form-uid-<%= @editor_token %>")
+    .replaceWith("<%= j(render 'passages/translation', translation: @translation, passage: @passage) %>");
+<% end %>

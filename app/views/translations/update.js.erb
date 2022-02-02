@@ -1,0 +1,4 @@
+<% if @valid == false %>
+$('#passage-<%= @passage.id %>-translation-lang-<%= @lang_code_of_translation %>-edit-form-uid-<%= @editor_token %>')
+    .replaceWith("<%= j(render 'translations/edit_form', translation: @translation, passage: @passage, editor_token: @editor_token ) %>");
+<% end %>

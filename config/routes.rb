@@ -13,11 +13,11 @@ Rails.application.routes.draw do
 
     resources :subtitles do
       collection do
-        get :select_captions
+        get  :select_captions
         post :download_caption
-        get :form_to_transcribe
-        get :checkout
-        get :transcribe
+        get  :form_to_transcribe
+        get  :checkout
+        get  :transcribe
       end
     end
 
@@ -30,13 +30,13 @@ Rails.application.routes.draw do
     # 記事
     resources :articles do
       member do
+        get :new_translation
+        get :edit_title
+        patch :update_title
+        get :cancel
+        get :select_translation
         get :download_subtitles
         get :download_translations
-        get :new_translation
-        get :select_translation
-        post  :edit_title
-        patch :update_title
-        post :cancel
         # 翻訳
         post :batch_translation
         post :translate_in_bulk
@@ -68,7 +68,7 @@ Rails.application.routes.draw do
         # post :create_translations_via_srt
       end
       collection do
-        get :new_video
+        get  :new_video
         post :create_video
       end
     end
@@ -85,19 +85,14 @@ Rails.application.routes.draw do
 
     # 翻訳 / 記事＆原文＆翻訳の投稿は実験のためにログイン不要にしても良い。問題が起きたら対処する。
     resources :translations do
-      member do
-        get :histories
-        # get :title_histories
-      end
       collection do
-        get :new_title
+        get  :new_title
         post :create_title
-        # ajaxで編集フォームを取り消す。getにしてurlを変更してしまうと、params[:translation]を引き渡せないので、翻訳ボタンが表示されなくなるなど不都合が起きる。
         get :cancel
       end
       member do
-        get :edit_title
-        patch :update_title
+        get    :edit_title
+        patch  :update_title
         delete :destroy_title
       end
     end

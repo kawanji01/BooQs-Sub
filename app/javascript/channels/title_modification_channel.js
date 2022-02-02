@@ -20,7 +20,7 @@ consumer.subscriptions.create("TitleModificationChannel", {
 function modifyTitle(data) {
   var articleUid =  data['article']['public_uid'];
   // 編集ユーザーの編集フォームを閉じて、コンテンツを更新する。
-  $('#article-title-' + articleUid + '-edit-form-uid-' + data['token']).replaceWith(data['html']);
+  $('#article-title-' + articleUid + '-edit-form-uid-' + data['editor_token']).replaceWith(data['html']);
   // 他の閲覧ユーザーのコンテンツを更新する。
   $('#article-title-' + articleUid).replaceWith(data['html']);
   var $feedbackWrapper = $('#article-title-' + articleUid + '-feedback-wrapper');

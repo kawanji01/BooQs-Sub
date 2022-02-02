@@ -148,18 +148,20 @@ class ArticlesController < ApplicationController
 
   def edit_title
     @article = Article.find_param(params[:id])
-    @token = SecureRandom.uuid
+    @editor_token = SecureRandom.uuid
+    respond_to do |format|
+      format.html { redirect_to @article }
+      format.js
+    end
   end
 
   def update_title
     @article = Article.find_param(params[:id])
-    token = params[:article][:token]
+    @editor_token = params[:editor_token]
     @article.assign_attributes(article_params)
     @article.set_lang_number
     @valid = @article.valid?
     return if @valid == false
-
-    # @article.separate_text if params[:separateText].present?
 
     @article.save
     @message = t('articles.title_updated')
@@ -170,13 +172,16 @@ class ArticlesController < ApplicationController
                                  html: render(partial: 'articles/article_title', locals: {article: @article}),
                                  article: @article,
                                  message: @message,
-                                 token: token
-
+                                 editor_token: @editor_token
   end
 
   def cancel
     @article = Article.find_param(params[:id])
-    @token   = params[:article][:token]
+    @editor_token = params[:editor_token]
+    respond_to do |format|
+      format.html { redirect_to @article }
+      format.js
+    end
   end
 
   # モバイルでの翻訳切り替えボタン
@@ -238,7 +243,7 @@ class ArticlesController < ApplicationController
     @trans_lang_number = Lang.convert_code_to_number(@trans_lang)
     @lang_array = ApplicationController.helpers.lang_form_array
 
-    @deepl_supported = Lang.deepl_supported_languages.include?(@lang_of_translation)
+    @deepl_supported = Lang.deepl_supported_languages.include?(@lang_code_of_translation)
     # @characters_count = @article.characters_count
     # @amount = @article.translation_fee
 
