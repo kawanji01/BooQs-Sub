@@ -1,8 +1,14 @@
-<% if (translation = passage.translations.find_by(lang_number: @lang_number_of_translation, article_id: passage.article_id)) %>
-  <!-- editやupdateで利用するセレクタ。 -->
-  <div id="translation-<%= translation.id %>">
-    <%= render 'translations/translation', translation: translation %>
+<div id="passage-<%= passage.id %>-translation-lang-<%= @lang_code_of_translation %>">
+  <div id="passage-<%= passage.id %>-translation-lang-<%= @lang_code_of_translation %>-feedback-wrapper">
+
+    <% if translation.present? %>
+      <%= render 'translations/translation', translation: translation %>
+    <% elsif translation.blank? && passage.lang_code != @lang_code_of_translation %>
+      <%= render 'translations/new_btn', passage: passage %>
+    <% end %>
+
+    <!-- 他のユーザーによる更新をリアルタイムで伝える。 -->
+    <div class="feedback-message my-3 small text-success"></div>
   </div>
-<% elsif translation.blank? && passage.lang_number != @lang_number_of_translation %>
-  <%= render 'translations/adding_translation_btn', passage: passage %>
-<% end %>
+
+</div>

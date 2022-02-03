@@ -73,7 +73,7 @@ class Article < ApplicationRecord
   end
 
   def title_translations
-    translations.where(passage_id: nil)
+    translations.where(passage_id: nil, title: true)
   end
 
   # タイトルを表示

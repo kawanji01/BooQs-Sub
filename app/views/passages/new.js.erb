@@ -1,0 +1,48 @@
+$('.loading').addClass('is-hide');
+$('.new-passage-form').remove();
+
+<% if @average.present? %>
+var averageTime = parseFloat("<%= @average %>");
+var $passages = $('#passages-and-translations').find('.passage-component');
+
+var readingPassage = $passages.filter(function () {
+    var startTime = parseFloat($(this).data('start'));
+    var endTime = parseFloat($(this).data('end'));
+    return startTime < averageTime && endTime > averageTime
+});
+
+if (readingPassage.length) {
+    readingPassage.after("<%= j(render 'passages/new_form', passage: @passage, article: @article, editor_token: @editor_token) %>");
+    var $passageForm = $('#new-passage-form-uid-' + '<%= @editor_token %>');
+    var position = $passageForm.offset().top;
+    $('html, body').animate({scrollTop: position}, 500);
+    textPreview($passageForm)
+}
+
+<% else %>
+var $passageFormWrapper = $('#passage-form');
+$passageFormWrapper.append("<%= j(render 'passages/new_form', passage: @passage, article: @article, editor_token: @editor_token) %>");
+var position = $passageFormWrapper.offset().top;
+$('html, body').animate({scrollTop: position}, 500);
+
+var $passageForm = $('#new-passage-form-uid-' + '<%= @editor_token %>');
+textPreview($passageForm)
+
+<% end %>
+
+
+// プレビュー機能（js.erbで呼び出すときはコピペする。）
+function textPreview($form) {
+    var $previewWrapper = $form.find('.text-preview-wrapper');
+    var $previewBtn = $previewWrapper.find(".text-preview-btn");
+    $previewBtn.on('click', function () {
+        // nextではなく、nextAllを使う理由は、本番環境ではmainのすぐ後には<ins class="adsbygoogle adsbygoogle-noablate">が生成されるため。
+        $("#main").nextAll('#loading').removeClass('is-hide');
+        var passageText = $previewWrapper.find('.preview-target-text').val();
+        var LangNumber = $previewWrapper.find('.preview-target-lang-number').val();
+        $.get("/preview", { text: passageText, lang_number: LangNumber } );
+        // 画面遷移をキャンセルする
+        return false;
+    });
+}
+

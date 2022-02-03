@@ -1,0 +1,7 @@
+$('#article-title-<%= @article.public_uid %>-translation-lang-<%= @lang_code_of_translation %>')
+    .replaceWith("<%= j(render 'translations/title_edit_form', translation: @translation, article: @article, editor_token: @editor_token ) %>");
+
+
+//$titleTranslation.html("<#%= j(render 'translations/edit_title_form', translation: @translation, article: @article) %>");
+//var position = $titleTranslation.offset().top;
+//$('html, body').animate({scrollTop: position}, 500);

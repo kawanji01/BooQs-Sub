@@ -50,7 +50,7 @@ class Passage < ApplicationRecord
 
   # attributesをsaveするまでに必要な処理をまとめたメソッド / Method bunching processes that record needs until saving.
   def set_attributes
-    if article.video?
+    if article.video
       set_start_time
       set_end_time
     end

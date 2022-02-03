@@ -1,19 +1,19 @@
-<% lang_number = translation.lang_number %>
-<% lines = translation.text.lines %>
-<% lines&.each_with_index do |l, i| %>
-  <!-- https://docs.ruby-lang.org/ja/latest/method/String/i/split.html -->
+<div id="translation-<%= translation.id %>">
+  <% lang_number = translation.lang_number %>
+  <% lines = translation.text.lines %>
+  <% lines&.each_with_index do |l, i| %>
+    <!-- https://docs.ruby-lang.org/ja/latest/method/String/i/split.html -->
 
-  <!-- inline要素の謎の隙間を埋めるために、親要素の文字間を縮めて、子要素でletter-spacing: normalを指定する 参考：https://qiita.com/BEMU/items/0f500e0306471073ed63 -->
-  <div class="translation-line" style="letter-spacing: -.4em;">
-    <%= render "shared/line_with_dict", line: l, lang_number: lang_number %>
-
-    <!-- 最後の行の文末に編集ボタンを置く -->
-    <% if i == lines.length - 1 %>
-      <%= render 'translations/edit_btn', translation: translation %>
-    <% end %>
-
-  </div>
-<% end %>
+    <!-- inline要素の謎の隙間を埋めるために、親要素の文字間を縮めて、子要素でletter-spacing: normalを指定する 参考：https://qiita.com/BEMU/items/0f500e0306471073ed63 -->
+    <div class="translation-line" style="letter-spacing: -.4em;">
+      <%= render "shared/line_with_dict", line: l, lang_number: lang_number %>
+      <!-- 最後の行の文末に編集ボタンを置く -->
+      <% if i == lines.length - 1 %>
+        <%= render 'translations/edit_btn', translation: translation %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
 
 
 

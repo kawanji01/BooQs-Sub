@@ -1,40 +1,29 @@
 <div id="passage-<%= passage.id %>" class="passage-component" data-start="<%= passage.start_time %>" data-end="<%= passage.end_time %>">
-  <!-- 本文 -->
-  <%= render 'passages/passage', passage: passage %>
-  <!-- 翻訳 -->
-  <!-- 「翻訳を追加するボタン（translations#new）」で利用するセレクタ -->
-  <div id="passage-<%= passage.id %>-translation-<%= @lang_of_translation %>">
-    <%= render 'passages/translation', passage: passage %>
-  </div>
-
-  <!-- 動画の再生ボタンなどの下部要素 -->
-  <div class="d-flex justify-content-end mt-3 mb-5">
+  <div id="passage-<%= passage.id %>-feedback-wrapper" class="mb-5">
+    <!-- 原文 -->
+    <%= render 'passages/passage', passage: passage %>
+    <!-- 翻訳 -->
+    <!--TODO: articles/showでもtranslationを事前に読み込んでN+1を解決したい。 -->
+    <% translation ||= passage&.translations&.find_by(lang_number: Lang.convert_code_to_number(@lang_code_of_translation),
+                                                      article_id: passage.article_id) %>
+    <%= render 'passages/translation', passage: passage, translation: translation %>
 
     <!-- Play btn -->
     <% if passage.article.video? %>
+      <!-- 動画の再生ボタンなどの下部要素 -->
+      <div class="d-flex justify-content-end mt-3">
+        <button class="btn btn-sm btn-border-gray mr-2 pause-button">
+          <span class="far fa-pause"></span>
+        </button>
 
-      <button class="btn btn-sm btn-border-gray mr-2 pause-button">
-        <span class="far fa-pause"></span>
-      </button>
-
-      <button class="timestamp btn btn-sm btn-border-gray" data-start="<%= passage.start_time %>">
-        <i class="far fa-play"></i>
-        <span><%= return_play_time_from_start_to_end(passage.start_time, passage.end_time) %></span>
-      </button>
-
+        <button class="timestamp btn btn-sm btn-border-gray" data-start="<%= passage.start_time %>">
+          <i class="far fa-play"></i>
+          <span><%= return_play_time_from_start_to_end(passage.start_time, passage.end_time) %></span>
+        </button>
+      </div>
     <% end %>
-    <!-- 画面の翻訳設定に該当する翻訳が存在せず、画面の翻訳設定がpassageの言語と異なる場合に、翻訳追加ボタンを表示する -->
-    <!--
-    <#% if translation.blank? && passage.lang_number != @lang_number_of_translation %>
-      <#%= render 'translations/adding_translation_btn', passage: passage %>
-    <#% end %>
-    -->
+
+    <!-- 他のユーザーによる更新をリアルタイムで伝える。 -->
+    <div class="my-3 small text-success passage-feedback-message"></div>
   </div>
-
-  <!--
-  <#% if passage.image.present? %>
-    <#%= image_tag passage.image.url, width: "#{passage.width_of_image}",height: "#{passage.height_of_image}", class: 'img-fluid mb-5', alt: '' %>
-  <#% end %>
-  -->
-
 </div>

@@ -1,0 +1,107 @@
+<div class="mt-3 mb-5" id="article-title-<%= article.public_uid %>-translation-lang-<%= @lang_code_of_translation %>-edit-form-uid-<%= editor_token %>">
+  <div id="article-title-<%= article.public_uid %>-translation-lang-<%= @lang_code_of_translation %>-feedback-wrapper">
+    <!-- Cancel button -->
+    <div class="text-right">
+      <%= form_with url: cancel_translations_path, method: :get do %>
+        <%= hidden_field_tag :editor_token, editor_token %>
+        <%= hidden_field_tag :lang_code_of_translation, @lang_code_of_translation %>
+        <%= hidden_field_tag :article_id, article.id %>
+        <%= hidden_field_tag :translation_id, translation.id %>
+        <%= button_tag type: 'submit', class: 'btn btn-sm btn-gray-article py-2 loading-show-btn' do %>
+          <i class="far fa-times mr-2"></i><%= t('articles.cancel') %>
+        <% end %>
+        <div class="loading is-hide">
+          <div class="loading_icon"></div>
+        </div>
+      <% end %>
+    </div>
+
+
+    <h4 class="text-success my-3 font-weight-bold">
+      <i class="fas fa-pen mr-2"></i><%= t('translations.modify_title_translation') %></h4>
+
+    <!-- Update button -->
+    <%= form_with model: translation, url: update_title_translation_path(translation), method: :patch do |f| %>
+      <%= render "shared/error_messages", object: f.object %>
+      <%= hidden_field_tag :editor_token, editor_token %>
+      <%= hidden_field_tag :lang_code_of_translation, @lang_code_of_translation %>
+
+      <div class="text-preview-wrapper mb-3">
+        <%= f.text_field :text, class: 'form-control form-control-lg preview-target-text', placeholder: t('translations.text_placeholder') %>
+        <%= render 'translations/lang_form', f: f, lang_number: f.object.lang_number %>
+        <div class="small text-left">
+          <a href="#" class="text-success text-preview-btn"><u><%= t('articles.text_preview') %></u></a></div>
+      </div>
+
+      <!--
+      <#%= render 'articles/separate_text_form', f: f %>
+      -->
+
+      <!--
+      <button class="btn btn-sm btn-border-gray w-100 mt-2 mb-4" type="button" data-toggle="collapse" data-target="#collapse-translation-<#%= translation.id %>" aria-expanded="false" aria-controls="collapseExample">
+        <i class="far fa-comment-alt-lines"></i><#%= t('translations.write_comments') %>
+      </button>
+      <div class="collapse" id="collapse-translation-<#%= translation.id %>">
+        <#%= text_area_tag :comment, "", {class: 'form-control', placeholder: t('translations.comments_placeholder'), rows: 4} %>
+      </div>
+      -->
+
+      <%= button_tag type: 'submit', class: 'btn btn-solid loading-show-btn mt-4 w-100' do %>
+        <%= t('translations.update') %>
+      <% end %>
+
+      <div class="loading is-hide">
+        <div class="loading_icon"></div>
+      </div>
+    <% end %>
+
+
+
+
+    <div class="text-right">
+      <div class="form-deletion-btn need-one-or-more btn btn-danger btn btn-sm btn-danger font-weight-bold" data-toggle="modal" data-target="#destroy-translation-<%= translation.id %>">
+        <i class="fas fa-trash-alt mr-2"></i><%= t('translations.destroy') %>
+      </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="destroy-translation-<%= translation.id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title font-weight-bold" id="exampleModalLabel"><%= t('translations.confirmation') %></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <%= form_with model: translation, url: destroy_title_translation_path, method: :delete do %>
+            <%= hidden_field_tag :editor_token, editor_token %>
+            <%= hidden_field_tag :lang_code_of_translation, @lang_code_of_translation %>
+            <div class="modal-body">
+              <p><%= t('translations.confirmation_text') %></p>
+              <!--
+              <#%= text_area_tag :comment, "", {class: 'form-control', placeholder: t('translations.comments_placeholder'), rows: 4} %>
+              -->
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= t('articles.cancel') %></button>
+
+              <%= button_tag type: 'submit', class: 'btn btn btn-danger loading-show-btn' do %>
+                <i class="fas fa-trash-alt mr-2"></i><%= t('translations.destroy') %>
+              <% end %>
+
+              <div class="loading is-hide">
+                <div class="loading_icon"></div>
+              </div>
+
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- 他のユーザーによる更新をリアルタイムで伝える。 -->
+    <div class="feedback-message my-3 small text-success"></div>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<div class="my-3" id="article-title-<%= article.public_uid %>-edit-form-uid-<%= editor_token %>">
+  <div id="article-title-<%= article.public_uid %>-feedback-wrapper">
+    <!-- Cancel button -->
+    <div class="text-right">
+      <%= form_with url: cancel_article_path(article), method: :get do |f| %>
+        <%= hidden_field_tag :editor_token, editor_token %>
+        <%= button_tag type: 'submit', class: 'btn btn-sm btn-gray-article py-2 loading-show-btn' do %>
+          <i class="far fa-times mr-2"></i><%= t('articles.cancel') %>
+        <% end %>
+        <div class="loading is-hide">
+          <div class="loading_icon"></div>
+        </div>
+      <% end %>
+    </div>
+
+
+    <h4 class="text-success my-3 font-weight-bold"><i class="fas fa-pen mr-2"></i><%= t 'articles.modify_title' %></h4>
+    <%= form_with model: article, url: update_title_article_path(article), method: :patch do |f| %>
+      <%= hidden_field_tag :editor_token, editor_token %>
+      <%= render 'shared/error_messages', object: f.object %>
+
+      <div class="text-preview-wrapper mb-3">
+        <%= f.text_field :title, class: 'form-control form-control-lg preview-target-text' %>
+        <%= render 'articles/lang_number_form', f: f %>
+        <div class="small text-left">
+          <a href="#" class="text-success text-preview-btn"><u><%= t('articles.text_preview') %></u></a></div>
+      </div>
+
+      <!--
+      <#%= render 'articles/separate_text_form', f: f %>
+      -->
+
+      <!--
+      <button class="btn btn-sm btn-border-gray w-100 mt-1 mb-4" type="button" data-toggle="collapse" data-target="#collapse-article-<#%= article.id %>-title" aria-expanded="false" aria-controls="collapseExample">
+        <i class="far fa-comment-alt-lines"></i><#%= t 'articles.comment' %>
+      </button>
+      <div class="collapse" id="collapse-article-<#%= article.id %>-title">
+        <#%= text_area_tag :comment, "", {class: 'form-control', placeholder: t('articles.comment_placeholder'), rows: 4} %>
+      </div>
+      -->
+
+      <%= f.submit t('articles.modify'), class: 'btn btn-solid w-100 loading-show-btn my-4' %>
+      <div class="loading is-hide" id="loading">
+        <div class="loading_icon"></div>
+      </div>
+
+    <% end %>
+
+    <!-- 他のユーザーによる更新をリアルタイムで伝える。 -->
+    <div class="feedback-message my-3 small text-success"></div>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+
+<%= f.hidden_field :lang_number, value: lang_number, class: 'form-control preview-target-lang-number' %>
+<fieldset disabled>
+  <div class="form-group my-3">
+    <select id="disabledSelect" class="form-control form-control-sm">
+      <option><%= lang_number_to_lang_name(lang_number) %></option>
+    </select>
+  </div>
+</fieldset>
+

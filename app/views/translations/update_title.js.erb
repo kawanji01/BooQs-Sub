@@ -1,0 +1,5 @@
+<% if @valid == false %>
+$('#article-title-<%= @article.public_uid %>-translation-lang-<%= @lang_code_of_translation %>-edit-form-uid-<%= @editor_token  %>')
+    .replaceWith("<%= j(render 'translations/title_edit_form', translation: @translation, article: @article, editor_token: @editor_token ) %>");
+
+<% end %>
