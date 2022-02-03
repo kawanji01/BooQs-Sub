@@ -1,0 +1,121 @@
+<div class="box my-3" id="passage-<%= passage.id %>-edit-form-uid-<%= editor_token %>">
+  <div id="passage-<%= passage.id %>-feedback-wrapper">
+
+    <!-- Cancel button -->
+    <div class="text-right">
+      <%= form_with url: cancel_passages_path, method: :get do |f| %>
+        <%= f.hidden_field :lang_code_of_translation, value: @lang_code_of_translation %>
+        <%= f.hidden_field :editor_token, value: editor_token %>
+        <%= f.hidden_field :article_id, value: article.id %>
+        <%= f.hidden_field :passage_id, value: passage.id %>
+        <%= button_tag type: 'submit', class: 'btn btn-sm btn-gray-article loading-show-btn py-2' do %>
+          <i class="far fa-times mr-2"></i><%= t('articles.cancel') %>
+        <% end %>
+        <div class="loading is-hide">
+          <div class="loading_icon"></div>
+        </div>
+
+      <% end %>
+    </div>
+
+    <h4 class="text-success my-3 font-weight-bold"><i class="fas fa-pen mr-2"></i><%= t 'passages.modify_passage' %>
+    </h4>
+    <!-- Create button -->
+    <%= form_with model: passage do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= hidden_field_tag :lang_code_of_translation, @lang_code_of_translation %>
+      <%= hidden_field_tag :editor_token, editor_token %>
+
+      <%= f.hidden_field :article_id, value: article.id %>
+
+      <div class="text-preview-wrapper">
+        <%= f.text_area :text, class: 'form-control preview-target-text', placeholder: "#{t 'passages.please_write_passage'}", rows: 3 %>
+        <%= render 'articles/lang_number_form', f: f %>
+        <div class="small text-left">
+          <a href="#" class="text-success text-preview-btn"><u><%= t('articles.text_preview') %></u></a></div>
+      </div>
+
+
+      <% if article.video? %>
+        <div class="playtime-preview-wrapper my-3">
+          <div class="d-flex flex-row justify-content-end align-items-baseline">
+            <h6 class="mr-2 text-nowrap"><%= t 'passages.start_time' %></h6>
+            <div><%= f.number_field :start_time_minutes, class: "form-control form-control-sm start-time-minutes", placeholder: t('passages.minutes_placeholder') %></div>
+            <h5 class="align-left font-weight-bold">：</h5>
+            <div><%= f.number_field :start_time_seconds, class: "form-control form-control-sm start-time-seconds", placeholder: t('passages.seconds_placeholder'), step: "any" %></div>
+          </div>
+
+          <div class="d-flex flex-row justify-content-end align-items-baseline">
+            <h6 class="text-nowrap mr-2"><%= t 'passages.end_time' %></h6>
+            <div><%= f.number_field :end_time_minutes, class: "form-control form-control-sm end-time-minutes", placeholder: t('passages.minutes_placeholder') %></div>
+            <h5 class="font-weight-bold align-left">：</h5>
+            <div><%= f.number_field :end_time_seconds, class: "form-control form-control-sm end-time-seconds", placeholder: t('passages.seconds_placeholder'), step: "any" %></div>
+          </div>
+
+          <div class="small text-right my-2">
+            <a href="#" class="text-success playtime-preview-btn"><u><%= t('articles.playtime_preview') %></u></a>
+            <span class="preview-feedback-message"></span>
+          </div>
+        </div>
+      <% end %>
+
+
+
+      <%= button_tag type: 'submit', class: 'btn btn-solid loading-show-btn my-4', style: 'width: 100%' do %>
+        <%= t 'passages.update' %>
+      <% end %>
+      <div class="loading is-hide">
+        <div class="loading_icon"></div>
+      </div>
+
+    <% end %>
+
+
+
+
+    <!-- Destroy button -->
+    <div class="text-right">
+      <div class="form-deletion-btn need-one-or-more btn btn-sm btn-danger font-weight-bold" data-toggle="modal" data-target="#destroy-passage-<%= passage.id %>">
+        <i class="fas fa-trash-alt mr-2"></i><%= t 'passages.destroy' %>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="destroy-passage-<%= passage.id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title font-weight-bold" id="exampleModalLabel"><%= t 'passages.confirmation' %></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <%= form_with model: passage, method: :delete do %>
+            <%= hidden_field_tag :lang_code_of_translation, @lang_code_of_translation %>
+            <%= hidden_field_tag :editor_token, editor_token %>
+
+            <div class="modal-body">
+              <p><%= t 'passages.confirmation_text' %></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= t('articles.cancel') %></button>
+
+              <%= button_tag type: 'submit', class: 'btn btn btn-danger loading-show-btn' do %>
+                <i class="fas fa-trash-alt mr-2"></i><%= t 'passages.destroy' %>
+              <% end %>
+              <div class="loading is-hide">
+                <div class="loading_icon"></div>
+              </div>
+
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- 他のユーザーによる更新をリアルタイムで伝える。 -->
+    <div class="my-3 small text-success passage-feedback-message"></div>
+  </div>
+</div>
+

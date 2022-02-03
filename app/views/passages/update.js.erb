@@ -1,0 +1,4 @@
+<% if @valid == false %>
+$("#passage-<%= @passage.id %>-edit-form-uid-<%= @editor_token %>")
+    .replaceWith("<%= j(render 'passages/edit_form', passage: @passage, article: @article, editor_token: @editor_token) %>");
+<% end %>

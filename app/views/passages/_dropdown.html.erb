@@ -5,8 +5,9 @@
     <i class="fal fa-ellipsis-v-alt non-margin"></i>
   </button>
   <div class="dropdown-menu" aria-labelledby="dropdownMenuPassage-<%= passage.id %>">
-    <%= render 'passages/inserting_passage_btn', passage: passage, article: passage.article %>
+    <%= render 'passages/insert_btn', passage: passage, article: passage.article %>
     <!--
+    解説があるとき、ここに解説ボタンを表示する。
     <button class="dropdown-item my-2" type="button">工事中</button>
     -->
   </div>

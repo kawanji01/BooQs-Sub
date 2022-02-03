@@ -4,7 +4,7 @@
     <% if translation.present? %>
       <%= render 'translations/translation', translation: translation %>
     <% elsif translation.blank? && passage.lang_code != @lang_code_of_translation %>
-      <%= render 'translations/new_translation_btn', passage: passage %>
+      <%= render 'translations/new_btn', passage: passage %>
     <% end %>
 
     <!-- 他のユーザーによる更新をリアルタイムで伝える。 -->

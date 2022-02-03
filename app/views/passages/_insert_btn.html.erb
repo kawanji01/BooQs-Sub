@@ -4,6 +4,7 @@
   <%= f.hidden_field :start_time_minutes, value: passage.end_time_minutes %>
   <%= f.hidden_field :start_time_seconds, value: passage.end_time_seconds %>
   <%= f.hidden_field :article_id, value: article.id %>
+  <%= f.hidden_field :lang_code_of_translation, value: @lang_code_of_translation %>
   <%= button_tag type: 'submit', class: 'dropdown-item main-loading-show-btn my-2' do %>
     <i class="far fa-plus mr-2"></i><%= t('passages.insert_passage') %>
   <% end %>

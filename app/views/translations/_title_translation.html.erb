@@ -25,7 +25,7 @@
 
       <!-- ユーザーの言語設定が記事のタイトルの言語と同じなら、翻訳追加ボタンを表示しない -->
     <% elsif article.lang_code != @lang_code_of_translation %>
-      <%= render 'translations/new_title_translation_btn', article: article %>
+      <%= render 'translations/new_title_btn', article: article %>
     <% end %>
 
     <!-- 他のユーザーによる更新をリアルタイムで伝える。 -->

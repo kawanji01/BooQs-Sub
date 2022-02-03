@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     get 'transcriber', to: 'static_pages#transcriber'
     get 'caption_downloader', to: 'static_pages#caption_downloader'
     post '/create-checkout-session', to: 'static_pages#create-checkout-session'
+    get '/preview', to: 'static_pages#preview'
     mount Sidekiq::Web => '/sidekiq'
     mount ActionCable.server => '/cable'
 

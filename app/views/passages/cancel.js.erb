@@ -1,0 +1,6 @@
+<% if @passage.present? %>
+$("#passage-<%= @passage.id %>-edit-form-uid-<%= @editor_token %>")
+    .replaceWith("<%= j(render 'passages/passage_with_translation', passage: @passage) %>");
+<% else %>
+$('.new-passage-form').remove();
+<% end %>

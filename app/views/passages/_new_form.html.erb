@@ -1,0 +1,68 @@
+<div class="box new-passage-form mb-4" id="new-passage-form-uid-<%= editor_token %>">
+  <!-- Cancel button -->
+  <div class="text-right">
+    <%= form_with url: cancel_passages_path, method: :get do |f| %>
+      <%= f.hidden_field :lang_code_of_translation, value: @lang_code_of_translation %>
+      <%= f.hidden_field :editor_token, value: editor_token %>
+      <%= f.hidden_field :article_id, value: article.id %>
+      <%= button_tag type: 'submit', class: 'btn btn-sm btn-gray-article py-2 loading-show-btn' do %>
+        <i class="far fa-times mr-2"></i><%= t('articles.cancel') %>
+      <% end %>
+      <div class="loading is-hide">
+        <div class="loading_icon"></div>
+      </div>
+    <% end %>
+  </div>
+
+  <h4 class="text-success my-3 font-weight-bold"><i class="fas fa-pen mr-2"></i><%= t 'passages.add_passage' %></h4>
+  <!-- Create button -->
+  <%= form_with model: passage do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+    <%= f.hidden_field :article_id, value: article.id %>
+
+    <%= hidden_field_tag :editor_token, editor_token %>
+    <%= hidden_field_tag :lang_code_of_translation, @lang_code_of_translation %>
+
+    <div class="text-preview-wrapper mb-3">
+      <%= f.text_area :text, class: 'form-control preview-target-text', placeholder: t('passages.please_write_passage'), rows: 5 %>
+      <%= render 'articles/lang_number_form', f: f %>
+      <div class="small text-left">
+        <a href="#" class="text-success text-preview-btn"><u><%= t('articles.text_preview') %></u></a></div>
+    </div>
+
+    <% if article.video? %>
+      <div class="playtime-preview-wrapper my-3">
+        <div class="d-flex flex-row justify-content-end align-items-baseline">
+          <h6 class="mr-2 text-nowrap"><%= t 'passages.start_time' %></h6>
+          <div><%= f.number_field :start_time_minutes, class: "form-control form-control-sm start-time-minutes", placeholder: t('passages.minutes_placeholder') %></div>
+          <h5 class="align-left font-weight-bold">：</h5>
+          <div><%= f.number_field :start_time_seconds, class: "form-control form-control-sm start-time-seconds", placeholder: t('passages.seconds_placeholder'), step: "any" %></div>
+        </div>
+
+        <div class="d-flex flex-row justify-content-end align-items-baseline">
+          <h6 class="text-nowrap mr-2"><%= t 'passages.end_time' %></h6>
+          <div><%= f.number_field :end_time_minutes, class: "form-control form-control-sm end-time-minutes", placeholder: t('passages.minutes_placeholder') %></div>
+          <h5 class="font-weight-bold align-left">：</h5>
+          <div><%= f.number_field :end_time_seconds, class: "form-control form-control-sm end-time-seconds", placeholder: t('passages.seconds_placeholder'), step: "any" %></div>
+        </div>
+        <div class="small text-right">
+          <a href="#" class="text-success playtime-preview-btn"><u><%= t('articles.playtime_preview') %></u></a>
+          <span class="preview-feedback-message"></span>
+        </div>
+      </div>
+    <% end %>
+
+
+
+    <%= button_tag type: 'submit', class: 'btn btn-solid loading-show-btn my-4 w-100' do %>
+      <%= t 'passages.create' %>
+    <% end %>
+
+    <div class="loading is-hide">
+      <div class="loading_icon"></div>
+    </div>
+
+  <% end %>
+
+</div>
+
