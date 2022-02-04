@@ -16,10 +16,8 @@ class StaticPagesController < ApplicationController
   end
 
   def preview
-    respond_to do |format|
-      format.html { redirect_to root_url }
-      format.js
-    end
+    @text = params[:text]
+    @lang_number = params[:lang_number].to_i
   end
 
 

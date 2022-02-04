@@ -1,0 +1,83 @@
+<div class="badge-modal-wrapper" id="text-preview-modal">
+
+  <div class="overlay close-text-preview-modal">
+    <div class="close-btn">
+      <i class="fal fa-times"></i>
+    </div>
+  </div>
+
+
+  <div class="modal-booqs" id="text-preview">
+
+    <h3 class="text-center text-success font-weight-bold mt-3 mb-4"><%= t('articles.text_preview') %></h3>
+
+    <div class="card text-left mb-5">
+      <div class="card-body">
+        <% if @text.present? %>
+          <%= render 'shared/text_with_dict', text: @text, lang_number: @lang_number %>
+        <% else %>
+          <p><%= t('articles.there_is_no_text') %></p>
+        <% end %>
+
+        <% if @lang_number != 0 %>
+          <p class="mt-4 text-secondary"><%= t 'lang.language_setting' %>
+            ：<b><%= lang_number_to_lang_name @lang_number %></b></p>
+        <% else %>
+          <p class="mt-4 text-secondary"><%= t 'lang.language_setting' %>
+            ：<b class="text-danger"><%= t('articles.undefined_lang_number') %></b></p>
+        <% end %>
+      </div>
+    </div>
+
+
+
+
+
+    <h3 class="text-left mt-5 mb-4 text-success font-weight-bold"><%= t('articles.booqs_notation') %></h3>
+
+    <% text_1 = "I’d like to move on if I may." %>
+    <div class="text-left">
+      <p class="text-secondary"><%= t('articles.notation_exp_1_html') %></p>
+      <div class="card w-100 mb-5">
+        <div class="card-header">
+          <%= t('articles.notation_example') %>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><%= render 'shared/text_with_dict', text: text_1, lang_number: 21 %></li>
+        </ul>
+      </div>
+
+
+      <p class="text-secondary"><%= t('articles.notation_exp_2_html') %></p>
+
+      <% text_2 = "I’d like to [[move on]] [[if I may]]." %>
+      <div class="card w-100 mb-5">
+        <div class="card-header">
+          <%= t('articles.notation_example') %>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><%= text_2 %></li>
+          <li class="list-group-item"><%= render 'shared/text_with_dict', text: text_2, lang_number: 21 %></li>
+        </ul>
+      </div>
+
+      <p class="text-secondary"><%= t('articles.notation_exp_3_html') %></p>
+      <% text_3 = "[[I’d like to|would like to]] move on if I may." %>
+      <div class="card w-100 mb-5">
+        <div class="card-header">
+          <%= t('articles.notation_example') %>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><%= text_3 %></li>
+          <li class="list-group-item"><%= render 'shared/text_with_dict', text: text_3, lang_number: 21 %></li>
+        </ul>
+      </div>
+
+
+
+
+    </div>
+
+
+  </div>
+</div>
