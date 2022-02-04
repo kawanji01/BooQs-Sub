@@ -37,7 +37,7 @@
     <%= link_to "https://www.booqs.net/ja/words/#{word['id']}", target: '_blank', rel: 'noopener' do %>
       <div class="emphasized-review-btn my-4">
         <div class="reminder btn btn-border-gray">
-          <i class="far fa-alarm-clock mr-2"></i>覚える
+          <i class="far fa-alarm-clock mr-2"></i><%= t('words.memorize') %>
         </div>
       </div>
     <% end %>
@@ -47,7 +47,7 @@
   <div class="my-3">
     <% if word['explanation'].present? %>
       <div class="text-center my-3">
-        <div class="item-label">解説</div>
+        <div class="item-label"><%=t('words.explanation') %></div>
       </div>
 
       <%= render 'words/explanation_text', text: word['explanation'], lang_number: word['lang_number_of_entry'] %>
@@ -57,7 +57,7 @@
 
     <% if (sentence = word['sentence']) %>
       <div class="text-center mt-4 mb-3">
-        <div class="item-label">例文</div>
+        <div class="item-label"><%= t('words.sentence') %></div>
       </div>
       <div class="text-center">
         <%= render "words/sentence", sentence: sentence %>
@@ -68,12 +68,12 @@
   <div class="d-flex my-4">
 
     <%= link_to "https://www.booqs.net/ja/words/#{word['id']}/edit", target: '_blank', rel: 'noopener', class: 'loading-show-btn text-secondary small' do %>
-      <u><i class="fal fa-edit"></i>この項目を改善する</u>
+      <u><i class="fal fa-edit"></i><%= t('words.edit_word') %></u>
     <% end %>
 
 
     <%= link_to "https://www.booqs.net/ja/words/#{word['id']}", target: '_blank', rel: 'noopener', class: 'ml-auto text-muted small align-self-end' do %>
-      <u><i class="fal fa-external-link mr-1"></i>詳細</u>
+      <u><i class="fal fa-external-link mr-1"></i><%= t('words.details') %></u>
     <% end %>
 
   </div>

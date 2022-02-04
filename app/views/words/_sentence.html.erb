@@ -9,7 +9,7 @@
       <%= simple_format sentence['translation'] %>
       <% if sentence['explanation'].present? %>
         <button class="btn btn-sm btn-border-gray" type="button" data-toggle="collapse" data-target=".collapse-sentence-explanation-<%= sentence['id'] %>" aria-expanded="false" aria-controls="collapseExample">
-          <i class="fal fa-lightbulb"></i>解説
+          <i class="fal fa-lightbulb"></i><%= t('words.explanation') %>
         </button>
 
         <div class="collapse py-3 collapse-sentence-explanation-<%= sentence['id'] %>">
@@ -22,18 +22,18 @@
     <%= link_to "https://www.booqs.net/ja/sentences/#{sentence['id']}", target: '_blank', rel: 'noopener' do %>
       <div class="emphasized-review-btn my-4">
         <div class="reminder btn btn-border-gray">
-          <i class="far fa-alarm-clock mr-2"></i>例文を覚える
+          <i class="far fa-alarm-clock mr-2"></i><%= t('sentences.memorize') %>
         </div>
       </div>
     <% end %>
 
     <div class="d-flex">
       <%= link_to "https://www.booqs.net/ja/sentences/#{sentence['id']}/edit", target: '_blank', rel: 'noopener', class: 'loading-show-btn text-secondary small' do %>
-        <u><i class="fal fa-edit"></i>この例文を改善する</u>
+        <u><i class="fal fa-edit"></i><%= t('sentences.edit_sentence') %></u>
       <% end %>
 
       <%= link_to "https://www.booqs.net/ja/sentences/#{sentence['id']}", target: '_blank', rel: 'noopener', class: 'ml-auto text-muted small align-self-end' do %>
-        <u><i class="fal fa-external-link mr-1"></i>詳細</u>
+        <u><i class="fal fa-external-link mr-1"></i><%= t('words.details') %></u>
       <% end %>
 
     </div>

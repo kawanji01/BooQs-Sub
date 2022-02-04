@@ -1,0 +1,16 @@
+en:
+  words:
+    entry: 'Entry'
+    meaning: 'Meaning'
+    explanation: 'Explanation'
+    memorize: 'Memorize'
+    sentence: 'Example'
+    edit_word: 'Edit this word'
+    details: 'details'
+  sentences:
+    memorize: 'Memorize'
+    edit_sentence: 'Edit this sentence'
+  dictionaries:
+    add_the_word_to_the_dictionary: 'Add to the dictionary'
+    search_results: 'Search results for "%{keyword}"'
+    keyword_doesnt_exists: "'%{keyword}' doesn't exists in the dictionary."

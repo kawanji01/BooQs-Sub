@@ -1,0 +1,16 @@
+ja:
+  words:
+    entry: '項目'
+    meaning: '意味'
+    explanation: '解説'
+    memorize: '覚える'
+    sentence: '例文'
+    edit_word: 'この項目を改善する'
+    details: '詳細'
+  sentences:
+    memorize: '例文を覚える'
+    edit_sentence: 'この例文を改善する'
+  dictionaries:
+    add_the_word_to_the_dictionary: '単語を辞書に追加する'
+    search_results: '"%{keyword}"の検索結果'
+    keyword_doesnt_exists:  "'%{keyword}'は辞書に登録されていません。"
