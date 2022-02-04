@@ -189,7 +189,7 @@ class ArticlesController < ApplicationController
     @article = Article.find_param(params[:id])
     @translated_lang_numbers = @article.translations.group(:lang_number).count.keys
     @lang_code_of_translation = params[:lang_code_of_translation]
-    @is_original = request.referer[/sub=(.+)/, 1].present?
+    @is_original = request.referer[/sub=(.+)/, 1].blank?
     respond_to do |format|
       format.html { redirect_to @article }
       format.js
