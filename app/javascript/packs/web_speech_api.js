@@ -54,45 +54,6 @@ $(document).on("click", ".speech-btn-nil", function () {
 });
 
 
-// GCPの text-to-speech APIを利用して読み上げる。
-// WebSpeechAPIでブラウザがクラッシュする問題（https://developer.apple.com/forums/thread/671863 ）の解決策として実装。
-$(document).on("click", ".speech-btn-en-gcp", function () {
-    var apiKey = "AIzaSyA5Bd1GPIwH7x2p1aMwUd8tQ6F9kcEwECo"
-    var text = $(this).prevAll('.speech-text').text();
-    var url = "https://texttospeech.googleapis.com/v1/text:synthesize?key=" + apiKey;
-    var data = {
-        "input": {
-            "text": text
-        },
-        "voice": {
-            "languageCode": "en-US",
-            "ssmlGender": "FEMALE"
-        },
-        "audioConfig": {
-            "audioEncoding": "MP3"
-        }
-    }
-    const otherparam = {
-        headers: {
-            "content-type": "application/json; charset=UTF-8"
-        },
-        body: JSON.stringify(data),
-        method: "POST"
-    }
-    fetch(url, otherparam)
-        .then(data => {
-            return data.json()
-        })
-        .then(res => {
-            // 音声再生
-            var blobUrl = base64ToBlobUrl(res.audioContent)
-            var audio = new Audio()
-            audio.src = blobUrl
-            audio.play()
-        })
-        .catch(error => alert(error))
-});
-
 // Base64 → BlobUrl
 function base64ToBlobUrl(base64) {
     var bin = atob(base64.replace(/^.*,/, ''))
@@ -109,59 +70,8 @@ function base64ToBlobUrl(base64) {
 //ブラウザ対応のvoice確認：https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis/getVoices
 $(document).on("click", ".speech-btn-en", function () {
 
-    /*
-    // WebSpeechAPIでブラウザがクラッシュする問題（https://developer.apple.com/forums/thread/671863 ）の解決策として実装。
-    // GCPのTTSで読み上げる
-    var apiKey = "AIzaSyA5Bd1GPIwH7x2p1aMwUd8tQ6F9kcEwECo"
-    var text = $(this).prevAll('.speech-text').text();
-    var url = "https://texttospeech.googleapis.com/v1/text:synthesize?key=" + apiKey;
-    var data = {
-        "input": {
-            "text": text
-        },
-        "voice": {
-            "languageCode": "en-US",
-            "ssmlGender": "FEMALE"
-        },
-        "audioConfig": {
-            "audioEncoding": "MP3"
-        }
-    }
-    const otherparam = {
-        headers: {
-            "content-type": "application/json; charset=UTF-8"
-        },
-        body: JSON.stringify(data),
-        method: "POST"
-    }
-    fetch(url, otherparam)
-        .then(data => {
-            return data.json()
-        })
-        .then(res => {
-            // 音声再生
-            var blobUrl = base64ToBlobUrl(res.audioContent)
-            var audio = new Audio()
-            audio.src = blobUrl
-            audio.play()
-        })
-        //.catch(error => alert(error))
 
 
-    // Base64 → BlobUrl
-    function base64ToBlobUrl(base64) {
-        var bin = atob(base64.replace(/^.*,/, ''))
-        var buffer = new Uint8Array(bin.length)
-        for (var i = 0; i < bin.length; i++) {
-            buffer[i] = bin.charCodeAt(i)
-        }
-        return window.URL.createObjectURL(new Blob([buffer.buffer], {type: "audio/wav"}))
-    }
-
-    // GCPを使う場合は、以下をコメントアウト
-
-
-     */
     // unsupported.
 
     if (!'SpeechSynthesisUtterance' in window) {
