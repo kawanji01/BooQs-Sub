@@ -1,0 +1,46 @@
+<div class="sentence-<%= sentence['id'] %>">
+  <div class="align-left">
+    <%= render 'shared/text_with_dict', text: sentence['original'], lang_number: sentence['lang_number_of_original'] %>
+
+    <div class="speech-text" style="display: none"><%= sentence['original'] %></div>
+    <div class="mx-auto speech-btn speech-btn-en"><i class="fas fa-volume-up"></i></div>
+
+    <div class="mt-3">
+      <%= simple_format sentence['translation'] %>
+      <% if sentence['explanation'].present? %>
+        <button class="btn btn-sm btn-border-gray" type="button" data-toggle="collapse" data-target=".collapse-sentence-explanation-<%= sentence['id'] %>" aria-expanded="false" aria-controls="collapseExample">
+          <i class="fal fa-lightbulb"></i><%= t('words.explanation') %>
+        </button>
+
+        <div class="collapse py-3 collapse-sentence-explanation-<%= sentence['id'] %>">
+          <%= render 'shared/text_with_dict', text: sentence['explanation'], lang_number: sentence['lang_number_of_original'] %>
+        </div>
+      <% end %>
+    </div>
+
+
+    <%= link_to "https://www.booqs.net/ja/sentences/#{sentence['id']}", target: '_blank', rel: 'noopener' do %>
+      <div class="emphasized-review-btn my-4">
+        <div class="reminder btn btn-border-gray">
+          <i class="far fa-alarm-clock mr-2"></i><%= t('sentences.memorize') %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="d-flex">
+      <%= link_to "https://www.booqs.net/ja/sentences/#{sentence['id']}/edit", target: '_blank', rel: 'noopener', class: 'loading-show-btn text-secondary small' do %>
+        <u><i class="fal fa-edit"></i><%= t('sentences.edit_sentence') %></u>
+      <% end %>
+
+      <%= link_to "https://www.booqs.net/ja/sentences/#{sentence['id']}", target: '_blank', rel: 'noopener', class: 'ml-auto text-muted small align-self-end' do %>
+        <u><i class="fal fa-external-link mr-1"></i><%= t('words.details') %></u>
+      <% end %>
+
+    </div>
+
+  </div>
+</div>
+
+
+
+

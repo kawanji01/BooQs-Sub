@@ -1,0 +1,46 @@
+<div class="badge-modal-wrapper search-dictionary-modal">
+  <div class="overlay close-search-dictionary-modal">
+    <div class="close-btn">
+      <i class="fal fa-times"></i>
+    </div>
+  </div>
+
+  <div class="modal-booqs" id="answer-badge-1">
+
+    <div class="small mt-3 mb-4 text-secondary text-center"><%= t('dictionaries.search_results', keyword: @query) %></div>
+
+    <% if error.present? %>
+      <p class="text-danger">Error</p>
+      <p class="text-danger"><%= @error %></p>
+    <% end %>
+
+    <% if words.present? %>
+      <%= render partial: "words/word_in_modal", collection: words, as: 'word', locals: {dictionary: dictionary} %>
+    <% end %>
+
+
+    <% if dictionary.present? && @query != words&.first&.[](:entry) %>
+      <div id="not-founded-entry">
+        <h5 class="text-left font-weight-bold"><%= t('dictionaries.keyword_doesnt_exists', keyword: @query) %></h5>
+        <% if @query.gsub(/[[:punct:]]/, '').present? %>
+          <!--
+          <p>「<#%= @query %>」を辞書に登録する。️</p>
+          -->
+
+          <%= link_to "https://www.booqs.net/ja/words/new?dict_uid=c6bbf748&text=#{@query}", target: '_blank', rel: 'noopener' do %>
+            <div class="btn btn-solid w-100 mt-3 mb-5">
+              <i class="fas fa-plus mr-2"></i><%= t('dictionaries.add_the_word_to_the_dictionary') %>
+            </div>
+          <% end %>
+
+        <% end %>
+      </div>
+    <% end %>
+
+  </div>
+
+
+</div>
+
+
+

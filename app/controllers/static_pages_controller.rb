@@ -15,6 +15,11 @@ class StaticPagesController < ApplicationController
                          t('subtitles.download_subtitles_on_youtube') => '' }
   end
 
+  def preview
+    @text = params[:text]
+    @lang_number = params[:lang_number].to_i
+  end
+
 
   private
   

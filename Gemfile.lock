@@ -1281,6 +1281,9 @@ GEM
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
     builder (3.2.4)
+    bullet (6.1.5)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
     byebug (11.0.1)
     capybara (3.28.0)
       addressable
@@ -1520,6 +1523,7 @@ GEM
       webrick (~> 1.7)
       webrobots (~> 0.1.2)
     memoist (0.16.2)
+    memory_profiler (1.0.0)
     meta-tags (2.16.0)
       actionpack (>= 3.2.0, < 7.1)
     metainspector (5.11.2)
@@ -1571,6 +1575,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3)
+    rack-mini-profiler (2.3.3)
+      rack (>= 1.2.0)
     rack-protection (2.1.0)
       rack
     rack-proxy (0.7.2)
@@ -1717,6 +1723,7 @@ GEM
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     ssrf_filter (1.0.7)
+    stackprof (0.2.17)
     stripe (5.43.0)
     thor (1.2.1)
     thread_safe (0.3.6)
@@ -1732,6 +1739,7 @@ GEM
       unf_ext
     unf_ext (0.0.8)
     unicode-display_width (2.1.0)
+    uniform_notifier (1.14.2)
     web-console (4.0.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -1762,6 +1770,7 @@ DEPENDENCIES
   aws-sdk
   bootsnap (= 1.4.5)
   bootstrap (~> 4.3.0)
+  bullet
   byebug (= 11.0.1)
   capybara (= 3.28.0)
   carrierwave (~> 2.0)
@@ -1781,11 +1790,13 @@ DEPENDENCIES
   kaminari
   listen (= 3.1.5)
   mechanize
+  memory_profiler
   meta-tags
   metainspector
   pg (~> 1.2.3)
   public_uid (~> 2.1.1)
   puma (= 4.3.6)
+  rack-mini-profiler
   rails (= 6.0.3)
   redis-namespace (~> 1.8.0)
   roo (~> 2.8.0)
@@ -1801,6 +1812,7 @@ DEPENDENCIES
   sinatra
   spring (= 2.1.0)
   spring-watcher-listen (= 2.0.1)
+  stackprof
   stripe
   turbolinks (= 5.2.0)
   tzinfo-data

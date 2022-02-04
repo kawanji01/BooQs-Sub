@@ -1,5 +1,5 @@
 <%= form_with model: passage, url: edit_passage_path(passage), method: :get, class: 'ml-2 d-inline' do %>
-  <%= hidden_field_tag :lang_code_of_translation, value: @lang_code_of_translation %>
+  <%= hidden_field_tag :lang_code_of_translation, @lang_code_of_translation %>
   <%= button_tag type: 'submit', class: 'btn btn-sm btn-gray-article loading-show-btn rounded-circle',
                  style: 'min-width: 34px; min-height: 34px;' do %>
     <span class="far fa-pen"></span>

@@ -28,6 +28,7 @@ require('jquery')
 import "./infinite-scroll_implementation"
 import "./video"
 import "./loading"
+import "./web_speech_api"
 
 
 

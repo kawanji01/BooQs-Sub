@@ -1,0 +1,13 @@
+$('.loading').addClass('is-hide');
+$("#main").append("<%= escape_javascript(render('static_pages/preview_modal') ) %>");
+//$("#text-preview").animate({'top': '56px'},400, 'easeOutExpo');
+
+$('body').addClass('overflow-hidden');
+
+// 閉じる処理
+$(document).on("click", ".close-text-preview-modal", function () {
+    $('#text-preview-modal').fadeOut().queue(function() {
+        $("#text-preview-modal").remove();
+    });
+    $('body').removeClass('overflow-hidden');
+});
