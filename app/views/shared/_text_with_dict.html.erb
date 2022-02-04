@@ -1,0 +1,8 @@
+<% color ||= nil %>
+<% text&.each_line do |line| %>
+
+  <!-- inline要素の謎の隙間を埋めるために、親要素の文字間を縮めて、子要素でletter-spacing: normalを指定する 参考：https://qiita.com/BEMU/items/0f500e0306471073ed63 -->
+  <div class="line-with-dict <%= color %> d-inline" style="letter-spacing: -.4em;">
+    <%= render 'shared/line_with_dict',  line: line, lang_number: lang_number %>
+  </div>
+<% end %>

@@ -1,1 +1,14 @@
 $('.loading').addClass('is-hide');
+$("#main").append("<%= escape_javascript(render('words/search_modal', words: @results, dictionary: @dictionary, error: @error) ) %>");
+//$("#answer-badge-1").animate({'top': '56px'},400, 'easeOutExpo');
+$('body').addClass('overflow-hidden');
+
+
+$(document).on("click", ".close-search-dictionary-modal", function () {
+    var $searchModal = $(this).parent(".search-dictionary-modal");
+    $searchModal.fadeOut().queue(function() {
+        $searchModal.remove();
+    });
+    $('body').removeClass('overflow-hidden');
+});
+

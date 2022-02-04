@@ -77,6 +77,16 @@ group :development, :test do
   gem 'capybara',           '3.28.0'
   gem 'selenium-webdriver', '3.142.4'
   gem 'webdrivers',         '4.1.2'
+
+  # N+1クエリを検出・解決するためのgem
+  gem 'bullet'
+  # 速度とメモリ消費を計測する
+  gem 'rack-mini-profiler', require: false
+  # For memory profiling / 上のgemのオプション。メモリ消費を計測できる。
+  gem 'memory_profiler'
+  # For call-stack profiling flamegraphs /
+  # gem 'flamegraph' # プロファイルをグラフにできる。
+  gem 'stackprof' # メソッドごとに計測できる。flamegraphと合わせて解説記事 https://qiita.com/kosuke_nishaya/items/21850f46929df3b4944d
   # Rubymineのデバッグ用gem
   gem 'debase'
   gem 'ruby-debug-ide', '~> 0.7.2'

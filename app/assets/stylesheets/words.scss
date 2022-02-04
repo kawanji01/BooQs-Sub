@@ -50,4 +50,46 @@ h2, h3 {
 
 }
 
+
+// 辞書の見出しのラベル
+.item-label {
+  display: inline-block;
+  font-size: 0.8em;
+  font-weight: bold;
+  color: $text-black;
+  border: 1.5px solid $text-black;
+  border-radius: 4px;
+  padding: 4px 8px;
+
+}
+
+// 大きな復習ボタン
+.emphasized-review-btn {
+  .btn {
+    font-size: 1em;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: solid 1px #27ae60;
+    border-radius: 25px;
+    width: 100%;
+  }
+
+
+  .btn-border-gray {
+    color: #27ae60;
+    box-shadow: 1px 1px lightgray;
+
+    &:hover {
+      color: #27ae60;
+      background-color: darken(white, 10%);
+      -webkit-transform: translate(1px, 1px);
+      transform: translate(1px, 1px);
+      box-shadow: none;
+    }
+  }
+
+}
+
+
+
 /* */

@@ -1,0 +1,35 @@
+<% if word['tags']&.split(',')&.include?('ngsl') %>
+  <%= link_to 'https://www.booqs.net/ja/chapters/c63ab6e5', target: '_blank', rel: 'noopener' do %>
+    <div class="btn btn-sm btn-light-green my-2 font-weight-bold"><i class="far fa-tag mr-2"></i>基礎英単語</div>
+  <% end %>
+<% end %>
+
+<% if word['tags']&.split(',')&.include?('nawl') %>
+  <%= link_to 'https://www.booqs.net/ja/chapters/5cedf1da', target: '_blank', rel: 'noopener' do %>
+    <div class="btn btn-sm btn-light-green font-weight-bold"><i class="far fa-tag mr-2"></i>学術頻出語</div>
+  <% end %>
+<% end %>
+
+<% if word['tags']&.split(',')&.include?('tsl') %>
+  <%= link_to 'https://www.booqs.net/ja/chapters/26c399f0', target: '_blank', rel: 'noopener' do %>
+    <div class="btn btn-sm btn-light-green font-weight-bold"><i class="far fa-tag mr-2"></i>TOEIC頻出語</div>
+  <% end %>
+<% end %>
+
+<% if word['tags']&.split(',')&.include?('bsl') %>
+  <%= link_to 'https://www.booqs.net/ja/chapters/4d46ce7f', target: '_blank', rel: 'noopener' do %>
+    <div class="btn btn-sm btn-light-green font-weight-bold"><i class="far fa-tag mr-2"></i>ビジネス頻出語</div>
+  <% end %>
+<% end %>
+
+<% if word['tags']&.split(',')&.include?('phrase') %>
+  <%= link_to 'https://www.booqs.net/ja/chapters/c112b566', target: '_blank', rel: 'noopener' do %>
+    <div class="btn btn-sm btn-light-green font-weight-bold"><i class="far fa-tag mr-2"></i>頻出英熟語</div>
+  <% end %>
+<% end %>
+
+<% if word['tags']&.split(',')&.include?('phave') %>
+  <%= link_to 'https://www.booqs.net/ja/chapters/3623e0d5', target: '_blank', rel: 'noopener' do %>
+    <div class="btn btn-sm btn-light-green font-weight-bold"><i class="far fa-tag mr-2"></i>頻出句動詞</div>
+  <% end %>
+<% end %>

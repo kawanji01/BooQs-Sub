@@ -1,0 +1,68 @@
+<!-- 現在は英語（21）と日本語（44）のみ辞書をつける。 -->
+<% if lang_number.present? && [21, 44].include?(lang_number) %>
+
+  <!-- [[text]]を検出する -->
+  <!-- .*?で最短マッチ -->
+  <% line.split(/(\[{2}.*?\]{2})/).each do |component| %>
+
+    <% if component.match?(/\[{2}.+\]{2}/) %>
+      <!-- [[]]記法のフレーズ -->
+      <% array = component.delete("[[,]]").split(/\|/, 2) %>
+
+      <% if array.second.present? %>
+
+        <% text = query = nil %>
+        <% if lang_number == 21 %>
+          <!-- 英語ならテキストの最後に半角スペースを追加する -->
+          <% text = "#{array.first} " %>
+          <% query = array.second %>
+        <% elsif lang_number == 44 %>
+          <!-- 日本語なら分かち書きに使った半角スペースを削除する。 -->
+          <% text = array.first.gsub(/\s/, '') %>
+          <% query = array.second.gsub(/\s/, '') %>
+        <% end %>
+
+        <!-- inline要素の謎の隙間を埋めるために、親要素の文字間を縮めて、子要素でletter-spacing: normalを指定する 参考：https://qiita.com/BEMU/items/0f500e0306471073ed63 -->
+        <%= link_to text, click_search_words_path(q: query, from: lang_number), remote: true,
+                    class: "loading-show-btn word-with-searching-dict phrase",
+                    style: 'letter-spacing: normal;'%>
+
+        <div class="loading is-hide">
+          <div class="loading_icon"></div>
+        </div>
+
+      <% else %>
+
+        <% text = query = nil %>
+        <% if lang_number == 21 %>
+          <!-- 英語ならテキストの最後に半角スペースを追加する -->
+          <% text = "#{array.first} " %>
+          <% query = array.first %>
+        <% elsif lang_number == 44 %>
+          <!-- 日本語なら分かち書きに使った半角スペースを削除する。 -->
+          <% text = query = array.first.gsub(/\s/, '') %>
+        <% end %>
+
+        <%= link_to text, click_search_words_path(q: query, from: lang_number), remote: true,
+                    class: "loading-show-btn word-with-searching-dict phrase",
+                    style: 'letter-spacing: normal;'%>
+
+        <div class="loading is-hide">
+          <div class="loading_icon"></div>
+        </div>
+
+
+      <% end %>
+
+    <% else %>
+      <!-- その他は普通のテキストとして表示  -->
+      <%= component %>
+    <% end %>
+
+  <% end %>
+
+<% else %>
+
+  <span style="letter-spacing: normal;"><%= line %></span>
+
+<% end %>

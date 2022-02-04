@@ -15,6 +15,13 @@ class StaticPagesController < ApplicationController
                          t('subtitles.download_subtitles_on_youtube') => '' }
   end
 
+  def preview
+    respond_to do |format|
+      format.html { redirect_to root_url }
+      format.js
+    end
+  end
+
 
   private
   

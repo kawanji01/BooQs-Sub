@@ -1,0 +1,44 @@
+<div class="badge-modal-wrapper search-dictionary-modal">
+  <div class="overlay close-search-dictionary-modal">
+    <div class="close-btn">
+      <i class="fal fa-times"></i>
+    </div>
+  </div>
+
+  <div class="modal-booqs" id="answer-badge-1">
+
+    <div class="small mt-3 mb-4 text-secondary text-center">『<%= @query %>』の検索結果</div>
+
+    <% if error.present? %>
+      <p class="text-danger">エラーが発生しました。</p>
+      <p class="text-danger"><%= @error %></p>
+    <% end %>
+
+    <% if words.present? %>
+      <%= render partial: "words/word_in_modal", collection: words, as: 'word', locals: {dictionary: dictionary} %>
+    <% end %>
+
+
+    <% if dictionary.present? && @query != words&.first['entry'] %>
+      <div id="not-founded-entry">
+        <h5 class="text-left font-weight-bold">「<%= @query %>」は辞書に登録されていません。</h5>
+        <% if @query.gsub(/[[:punct:]]/, '').present? %>
+          <p>「<%= @query %>」を辞書に登録する。️</p>
+
+          <%= link_to "#" do %>
+            <div class="btn btn-solid w-100 mt-3 mb-5">
+              <i class="far fa-atlas mr-2"></i>単語を辞書に追加する
+            </div>
+          <% end %>
+
+        <% end %>
+      </div>
+    <% end %>
+
+  </div>
+
+
+</div>
+
+
+
