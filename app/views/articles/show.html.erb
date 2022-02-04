@@ -27,8 +27,10 @@
 
 
           <div class="text-right d-xl-none">
-            <%= button_to select_translation_article_path(@article, sub: @lang_code_of_translation), class: 'btn btn-sm btn-border-gray main-loading-show-btn mb-3', remote: true, method: :get do %>
-              <i class="far fa-language"></i><%= lang_number_to_lang_name(@lang_number_of_translation) %>
+            <%= button_to translation_select_article_path(@article, lang_code_of_translation: @lang_code_of_translation),
+                          remote: true, method: :get,
+                          class: "btn btn-sm btn-border-gray main-loading-show-btn mb-3" do %>
+              <i class="far fa-language mr-2"></i><%= lang_code_to_lang_name(@lang_code_of_translation) %>
             <% end %>
           </div>
 
@@ -68,23 +70,22 @@
           <i class="far fa-closed-captioning mr-2"></i><%= t 'articles.displayed_captions' %>
         </h4>
 
-        <%= link_to article_path(@article) do %>
-          <div class="mx-1 my-1 font-weight-bold btn btn <%= params[:sub].blank? ? 'btn-light-green' : 'btn-border-gray' %>">
-            <%= t('articles.original') %>
-          </div>
+        <%= link_to article_path(@article), class: "mx-1 my-1 font-weight-bold btn btn #{params[:sub].blank? ? 'btn-light-green' : 'btn-border-gray'}" do %>
+          <%= t('articles.original') %>
         <% end %>
 
         <% @translated_lang_numbers.each do |i| %>
           <% lang_code = Lang.convert_number_to_code(i) %>
-          <%= link_to article_path(@article, sub: lang_code) do %>
-            <div class="mx-1 my-1 font-weight-bold btn btn <%= @lang_number_of_translation == i ? 'btn-light-green' : 'btn-border-gray' %>">
-              <%= lang_code_to_lang_name(lang_code) %>
-            </div>
+          <%= link_to article_path(@article, sub: lang_code), class: "mx-1 my-1 font-weight-bold btn btn #{@lang_number_of_translation == i ? 'btn-light-green' : 'btn-border-gray'}" do %>
+            <%= lang_code_to_lang_name(lang_code) %>
           <% end %>
         <% end %>
 
 
-        <%= link_to "他の翻訳を表示する", root_url, class: "text-success my-3 small d-block" %>
+        <%= link_to t('articles.display_another_language'),
+                    translation_select_article_path(@article, lang_code_of_translation: @lang_code_of_translation),
+                    remote: true,
+                    class: "text-success my-3 small d-block main-loading-show-btn" %>
 
 
         <div class="dropdown mt-4 mb-3">
@@ -135,10 +136,8 @@
               <i class="far fa-tags mr-2"></i><%= t 'tags.tags' %>
             </h4>
             <% @tags.each do |tag| %>
-              <%= link_to articles_tag_path(tag.id) do %>
-                <div class="btn btn-sm btn-light-green font-weight-bold">
-                  <i class="far fa-tag mr-2"></i><%= tag.name %>
-                </div>
+              <%= link_to articles_tag_path(tag.id), class: "btn btn-sm btn-light-green font-weight-bold" do %>
+                <i class="far fa-tag mr-2"></i><%= tag.name %>
               <% end %>
             <% end %>
 
@@ -306,7 +305,7 @@
     $(document).on("click", "button.timestamp", function () {
         var $timestamp = $(this).data('start');
         if (player.getPlayerState() !== 1) {
-            player.playVideo()
+            player.playVideo();
         }
         player.seekTo($timestamp);
     });
@@ -314,9 +313,9 @@
     //  停止ボタンを押した時に、動画を止める
     $(document).on('click', 'button.pause-button', function () {
         if (player.getPlayerState() !== 1) {
-            player.playVideo()
+            player.playVideo();
         } else {
-            player.pauseVideo()
+            player.pauseVideo();
         }
     });
 
