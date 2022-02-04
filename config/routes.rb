@@ -35,7 +35,7 @@ Rails.application.routes.draw do
         get :edit_title
         patch :update_title
         get :cancel
-        get :select_translation
+        get :translation_select
         get :download_subtitles
         get :download_translations
         # 翻訳
@@ -54,19 +54,6 @@ Rails.application.routes.draw do
         post :import_passage_file
         post :translation_file_importer
         post :import_translation_file
-        # patch :complete
-        # get :title_histories
-        # get :histories_of_user
-        # get :appraisals_of_user
-        # get :edit_exercise
-        # patch :update_exercise
-        # get :pending_requests
-        # get :accepted_requests
-        # get :request_setting
-        # get :new_passages_via_srt
-        # post :create_passages_via_srt
-        # get :new_translations_via_srt
-        # post :create_translations_via_srt
       end
       collection do
         get  :new_video

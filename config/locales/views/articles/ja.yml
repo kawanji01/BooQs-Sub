@@ -51,8 +51,9 @@ ja:
     download_translations: '翻訳をダウンロードする'
     download_not_to_permitted: "この記事では、ダウンロードが許可されていません。"
     nothing_to_download: 'ダウンロードできるファイルがありません。'
+    display_another_language: '他の言語を表示する'
     create_another_translation: '他言語の翻訳を作成'
-    select_language_to_translate: '翻訳する言語を選ぶ'
+    select_language: '言語を選ぶ'
     select_translation: '翻訳を選ぶ'
     translate_newly: '新しく翻訳する'
     import_file: 'SRTファイルを読み込む'

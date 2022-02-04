@@ -51,8 +51,9 @@ en:
     download_translations: 'Download Translations'
     download_not_to_permitted: "This article doesn't allow download by users."
     nothing_to_download: 'There is no file to be able to download.'
+    display_another_language: 'Display another language'
     create_another_translation: 'Create another translation'
-    select_language_to_translate: 'Select Language'
+    select_language: 'Select Language'
     select_translation: 'Select Translation'
     translate_newly: 'Translate Newly'
     import_file: 'Import SRT file'

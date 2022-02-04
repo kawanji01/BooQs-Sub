@@ -1,0 +1,9 @@
+$('.loading').addClass('is-hide');
+$('#main').append('<%= j(render 'articles/translation_select_modal') %>');
+
+$(document).on("click", ".close-translation-select-modal", function () {
+    $('#translation-select-modal').fadeOut().queue(function() {
+        $("#translation-select-modal").remove();
+    });
+});
+

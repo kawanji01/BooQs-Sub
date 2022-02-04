@@ -185,10 +185,11 @@ class ArticlesController < ApplicationController
   end
 
   # モバイルでの翻訳切り替えボタン
-  def select_translation
+  def translation_select
     @article = Article.find_param(params[:id])
     @translated_lang_numbers = @article.translations.group(:lang_number).count.keys
-    @current_lang_code = request.referer[/sub=(.+)/, 1].presence
+    @lang_code_of_translation = params[:lang_code_of_translation]
+    @is_original = request.referer[/sub=(.+)/, 1].present?
     respond_to do |format|
       format.html { redirect_to @article }
       format.js

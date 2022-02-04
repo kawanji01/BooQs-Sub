@@ -1,0 +1,44 @@
+<div class="badge-modal-wrapper" id="translation-select-modal">
+  <div class="overlay close-translation-select-modal">
+
+    <div class="close-btn">
+      <i class="fal fa-times"></i>
+    </div>
+
+  </div>
+  <div class="modal-booqs" id="translation-select">
+
+    <% if @translated_lang_numbers.present? %>
+      <h3 class="font-weight-bold my-3"><i class="far fa-language mr-2 mr-2"></i><%= t 'articles.select_language' %>
+      </h3>
+
+      <%= link_to article_path(@article), class: "mx-1 my-1 font-weight-bold btn btn #{@is_original ? 'btn-light-green' : 'btn-border-gray'}" do %>
+        <%= t('articles.original') %>
+      <% end %>
+
+      <% @translated_lang_numbers.each do |i| %>
+        <% lang_code = Lang.convert_number_to_code(i) %>
+        <%= link_to article_path(@article, sub: lang_code),
+                    class: "mx-1 my-1 font-weight-bold btn btn #{@lang_code_of_translation == lang_code ? 'btn-light-green' : 'btn-border-gray'}" do %>
+          <%= lang_code_to_lang_name(lang_code) %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+
+    <h3 class="font-weight-bold mt-5 mb-3"><i class="far fa-language mr-2"></i><%= t 'articles.translate_newly' %></h3>
+
+    <% 1.upto(109) do |i| %>
+      <% if @translated_lang_numbers.exclude?(i) %>
+        <% lang_code = Lang.convert_number_to_code(i) %>
+        <%= link_to article_path(@article, sub: lang_code), class: 'mx-1 my-1 btn btn btn-border-gray' do %>
+          <%= lang_code_to_lang_name(lang_code) %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+
+  </div>
+</div>
+
+
