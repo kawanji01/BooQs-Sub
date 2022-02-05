@@ -1,0 +1,15 @@
+<%= form_with model: article, url: update_tags_article_path(article), method: :patch do |f| %>
+
+  <%= f.text_area :tag_list, class: 'form-control', value: @article.tag_list&.join(','),
+                  placeholder: "タグを入力してください。", id: 'inlineFormInputGroup', rows: 5 %>
+  <!--
+  <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Username">
+  -->
+
+  <div class="text-left">
+    <span class="text-secondary small text-left"><%= t('articles.multiple_tags_setting') %></span>
+  </div>
+
+  <%= f.submit class: 'btn btn btn-success w-100 my-4 font-weight-bold' %>
+
+<% end %>

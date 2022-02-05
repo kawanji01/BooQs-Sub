@@ -143,21 +143,16 @@
 
 
 
-        <% if @tags.present? %>
+        <% if @article.tags.present? %>
           <div class="mt-5 mb-4">
             <h4 class="my-3 font-weight-bold">
               <i class="far fa-tags mr-2"></i><%= t 'tags.tags' %>
             </h4>
-            <% @tags.each do |tag| %>
-              <%= link_to articles_tag_path(tag.id), class: "btn btn-sm btn-light-green font-weight-bold" do %>
-                <i class="far fa-tag mr-2"></i><%= tag.name %>
-              <% end %>
-            <% end %>
 
-            <%= link_to "タグを編集する", root_url, class: "text-success my-3 small d-block" %>
-
+            <div id="article-tags-<%= @article.public_uid %>">
+              <%= render 'articles/tags', article: @article%>
+            </div>
           </div>
-
         <% end %>
 
 

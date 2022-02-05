@@ -16,7 +16,6 @@ class ArticlesController < ApplicationController
                 end
 
     @translated_lang_numbers = @article.translations.group(:lang_number).count.keys
-    @tags = @article.tags
 
     @video_id = Youtube.get_video_id(@article.reference_url)
     # assets_pipelineでprecompileしたjsだと、gonの変数が更新されない問題があるので、上記の変数でviewを通じてjsでvideoIDをとってくるようにした。
@@ -196,10 +195,18 @@ class ArticlesController < ApplicationController
     end
   end
 
-  # 「他の言語の翻訳を作成する」ボタンから表示するモーダル
-  def new_translation
+  def edit_tags
     @article = Article.find_param(params[:id])
-    @translated_lang_numbers = @article.translations.group(:lang_number).count.keys
+    respond_to do |format|
+      format.html { redirect_to @article }
+      format.js
+    end
+  end
+
+  def update_tags
+    @article = Article.find_param(params[:id])
+    @article.tag_list = params[:article][:tag_list]
+    @article.save
     respond_to do |format|
       format.html { redirect_to @article }
       format.js
