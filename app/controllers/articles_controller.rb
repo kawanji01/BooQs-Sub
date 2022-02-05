@@ -5,14 +5,10 @@ class ArticlesController < ApplicationController
 
   def show
     @article = Article.find_param(params[:id])
-    @related_articles = Article.all.sample(6)
+    @related_articles = @article.find_related_tags.limit(6)
     @title_translation = @article.find_title_translation(@lang_number_of_translation)
 
-    @passages = if @article.video?
-                  @article.passages.order(start_time: :asc).page(params[:page]).per(10)
-                else
-                  @article.passages.order(created_at: :asc).page(params[:page]).per(10)
-                end
+    @passages = @article.passages.order(start_time: :asc).limit(30)
 
     @video_id = Youtube.get_video_id(@article.reference_url)
     @translated_lang_numbers = @article.translations.group(:lang_number).count.keys

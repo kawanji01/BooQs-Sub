@@ -1,5 +1,5 @@
 <% set_meta_tags title: @article.title,
-                 og: {image: @article.scraped_image, description: @title_translation&.text },
+                 og: {image: @article.scraped_image, description: @title_translation&.text},
                  twitter: {card: 'summary_large_image'},
                  alternate: @alternate %>
 
@@ -154,7 +154,7 @@
             </h4>
 
             <div id="article-tags-<%= @article.public_uid %>">
-              <%= render 'articles/tags', article: @article%>
+              <%= render 'articles/tags', article: @article %>
             </div>
           </div>
         <% end %>
@@ -201,16 +201,15 @@
 
   <% if @related_articles.present? %>
     <div class="col-xl-9 my-3" id="related-contents">
-      <div class="box">
-        <div class="wrapper">
+      <div class="container bg-white pt-5 pb-5 my-5">
+        <div class="row justify-content-md-center">
+
           <h3 class="mb-4 text-center">
-            <b class="green"><i class="fad fa-newspaper"></i><%= t 'articles.and_more' %></b>
+            <b class="green"><i class="fad fa-newspaper mr-2"></i><%= t 'articles.and_more' %></b>
           </h3>
-          <!--
-          <div class="row">
-            <#%= render partial: 'articles/card_2_line', collection: @related_articles, as: 'article' %>
-          </div>
-          -->
+
+
+          <%= render 'articles/cards', articles: @related_articles %>
 
         </div>
       </div>
@@ -226,183 +225,181 @@
     // iframeがTurbolinksで読み込めない問題の解決法：　https://stackoverflow.com/questions/18751904/can-youtube-play-nicely-with-turbolinks
 
 
+    /* youtube callback */
+    var player;
 
-
-        /* youtube callback */
-        var player;
-
-        function reloadYoutube() {
-            /* if YT already initialized return */
-            if (typeof (YT) == 'undefined' || typeof (YT.Player) == 'undefined') {
-                // 2. This code loads the IFrame Player API code asynchronously.
-                var tag = document.createElement('script');
-                tag.src = "https://www.youtube.com/iframe_api";
-                var firstScriptTag = document.getElementsByTagName('script')[0];
-                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-                console.log('initialize');
-            }
+    function reloadYoutube() {
+        /* if YT already initialized return */
+        if (typeof (YT) == 'undefined' || typeof (YT.Player) == 'undefined') {
+            // 2. This code loads the IFrame Player API code asynchronously.
+            var tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            console.log('initialize');
         }
+    }
 
 
-        function onYouTubeIframeAPIReady() {
-            if (typeof (YT) == 'undefined' || typeof (YT.Player) == 'undefined') {
-                console.log('YT undefined');
-                reloadYoutube();
-            } else {
-                var $videoId = $('#videoId').text();
-                console.log('YT defined / videoId:' + $videoId);
-                player = new YT.Player('player', {
-                    height: '360',
-                    width: '640',
-                    videoId: $videoId,
-                    playerVars: {
-                        autoplay: 1,
-                        modestbranding: 1,
-                        playsinline: 1,
-                        rel: 0,
-                        loop: 1,
-                        origin: 'http://localhost:3000'
-                    },
-                    events: {
-                        'onReady': onPlayerReady,
-                        'onStateChange': onPlayerStateChange
-                    }
-                });
-            }
-        }
-
-
-        // onReady
-        function onPlayerReady(event) {
-            event.target.playVideo();
-        }
-
-        // onStateChange
-        function onPlayerStateChange(event) {
-            //if (player !== undefined) {
-            //    console.log("2");
-            //    console.log('player');
-            //    console.log(player);
-            //    console.log('getPlayerState: ');
-            //    console.log(player.getPlayerState());
-            //}
-
-            if (event.data === YT.PlayerState.PLAYING) {
-                var marking = setInterval(function () {
-                    var $passages = $('#passages-and-translations').find('.passage-component');
-                    // setIntervalを止めずにブラウザバックした場合に強制的にsetIntervalを止める処理
-                    if (player.i == null || player.getPlayerState === undefined) {
-                        clearInterval(marking);
-                    } else if (player.getPlayerState() === 1) {
-                        var currentTime = parseFloat(player.getCurrentTime());
-                        var readingPassage = $passages.filter(function () {
-                            var startTime = parseFloat($(this).data('start'));
-                            var endTime = parseFloat($(this).data('end'));
-                            return startTime < currentTime && endTime > currentTime
-                        })
-                        $passages.removeClass('reading');
-                        readingPassage.addClass('reading');
-
-                        if (readingPassage.length && $('#auto-scroll-passage').hasClass('enabled')) {
-                            var position = readingPassage.offset().top - 280;
-                            // stop()を入れることで前に実行したanimationをキャンセルする。これによってanimationが積み重なって動画を止めた後も動かなくなる問題を解決できる
-                            $('html, body').stop().animate({scrollTop: position}, 500);
-                            // console.log('移動' + position)
-                        }
-
-
-                    } else if (player.getPlayerState() === 0) {
-                        // 動画が終了した場合の処理
-                        // console.log('終了');
-                        player.pauseVideo()
-                        player.seekTo(0);
-                        clearInterval(marking);
-                    } else {
-                        clearInterval(marking);
-                    }
-                }, 500);
-            }
-        }
-
-        // タイムスタンプボタンを押したとき、その時間範囲の最初から再生する。
-        $(document).on("click", "button.timestamp", function () {
-            var $timestamp = $(this).data('start');
-            if (player.getPlayerState() !== 1) {
-                player.playVideo();
-            }
-            player.seekTo($timestamp);
-        });
-
-        //  停止ボタンを押した時に、動画を止める
-        $(document).on('click', 'button.pause-button', function () {
-            if (player.getPlayerState() !== 1) {
-                player.playVideo();
-            } else {
-                player.pauseVideo();
-            }
-        });
-
-        // 自動スクロールボタンのON/OFF切り替え
-        $(document).on("click", "#auto-scroll-passage", function () {
-            var $this = $(this);
-            if ($this.hasClass('enabled')) {
-                $this.removeClass('enabled');
-            } else {
-                $this.addClass('enabled');
-            }
-        });
-
-
-        // 再生箇所のプレビュー
-        $(document).on('click', '.playtime-preview-btn', function () {
-            var $this = $(this);
-            var $wrapper = $this.parents('.playtime-preview-wrapper');
-            var startTimeSeconds = $wrapper.find('.start-time-seconds').val();
-            var startTimeMinutes = $wrapper.find('.start-time-minutes').val();
-            var startTime = (parseFloat(startTimeMinutes) * 60.0) + parseFloat(startTimeSeconds);
-            var endTimeSeconds = $wrapper.find('.end-time-seconds').val();
-            var endTimeMinutes = $wrapper.find('.end-time-minutes').val();
-            var endTime = (parseFloat(endTimeMinutes) * 60.0) + parseFloat(endTimeSeconds);
-            var $feedbackMessage = $wrapper.find('.preview-feedback-message');
-            // 再生時間がendTimeまできちんと設定されていたらプレビューを開始する
-            if (startTime < endTime) {
-                $feedbackMessage.html('<div class="spinner-grow spinner-grow-sm text-success" role="status">\n' +
-                    '  <span class="sr-only">Loading...</span>\n' +
-                    '</div>');
-                if (player.getPlayerState() !== 1) {
-                    player.playVideo()
+    function onYouTubeIframeAPIReady() {
+        if (typeof (YT) == 'undefined' || typeof (YT.Player) == 'undefined') {
+            console.log('YT undefined');
+            reloadYoutube();
+        } else {
+            var $videoId = $('#videoId').text();
+            console.log('YT defined / videoId:' + $videoId);
+            player = new YT.Player('player', {
+                height: '360',
+                width: '640',
+                videoId: $videoId,
+                playerVars: {
+                    autoplay: 1,
+                    modestbranding: 1,
+                    playsinline: 1,
+                    rel: 0,
+                    loop: 1,
+                    origin: 'http://localhost:3000'
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
                 }
-                player.seekTo(startTime);
-                // endTimeまで再生して、停止する。
-                var marking = setInterval(function () {
-                    // setIntervalを止めずにブラウザバックした場合に強制的にsetIntervalを止める処理
-                    if (player.i == null) {
-                        clearInterval(marking);
-                    } else if (player.getPlayerState() === 1 || player.getPlayerState() === 3) {
-                        // 再生中かバッファリング中なら実行
-                        var currentTime = parseFloat(player.getCurrentTime());
-                        // 再生箇所がendTimeを超えたら動画を止める
-                        if (endTime < currentTime) {
-                            player.pauseVideo()
-                            $feedbackMessage.html('');
-                            clearInterval(marking);
-                        }
+            });
+        }
+    }
 
-                    } else if (player.getPlayerState() === 0) {
-                        // 動画がラストまで到達して終了した場合の処理
+
+    // onReady
+    function onPlayerReady(event) {
+        event.target.playVideo();
+    }
+
+    // onStateChange
+    function onPlayerStateChange(event) {
+        //if (player !== undefined) {
+        //    console.log("2");
+        //    console.log('player');
+        //    console.log(player);
+        //    console.log('getPlayerState: ');
+        //    console.log(player.getPlayerState());
+        //}
+
+        if (event.data === YT.PlayerState.PLAYING) {
+            var marking = setInterval(function () {
+                var $passages = $('#passages-and-translations').find('.passage-component');
+                // setIntervalを止めずにブラウザバックした場合に強制的にsetIntervalを止める処理
+                if (player.i == null || player.getPlayerState === undefined) {
+                    clearInterval(marking);
+                } else if (player.getPlayerState() === 1) {
+                    var currentTime = parseFloat(player.getCurrentTime());
+                    var readingPassage = $passages.filter(function () {
+                        var startTime = parseFloat($(this).data('start'));
+                        var endTime = parseFloat($(this).data('end'));
+                        return startTime < currentTime && endTime > currentTime
+                    })
+                    $passages.removeClass('reading');
+                    readingPassage.addClass('reading');
+
+                    if (readingPassage.length && $('#auto-scroll-passage').hasClass('enabled')) {
+                        var position = readingPassage.offset().top - 280;
+                        // stop()を入れることで前に実行したanimationをキャンセルする。これによってanimationが積み重なって動画を止めた後も動かなくなる問題を解決できる
+                        $('html, body').stop().animate({scrollTop: position}, 500);
+                        // console.log('移動' + position)
+                    }
+
+
+                } else if (player.getPlayerState() === 0) {
+                    // 動画が終了した場合の処理
+                    // console.log('終了');
+                    player.pauseVideo()
+                    player.seekTo(0);
+                    clearInterval(marking);
+                } else {
+                    clearInterval(marking);
+                }
+            }, 500);
+        }
+    }
+
+    // タイムスタンプボタンを押したとき、その時間範囲の最初から再生する。
+    $(document).on("click", "button.timestamp", function () {
+        var $timestamp = $(this).data('start');
+        if (player.getPlayerState() !== 1) {
+            player.playVideo();
+        }
+        player.seekTo($timestamp);
+    });
+
+    //  停止ボタンを押した時に、動画を止める
+    $(document).on('click', 'button.pause-button', function () {
+        if (player.getPlayerState() !== 1) {
+            player.playVideo();
+        } else {
+            player.pauseVideo();
+        }
+    });
+
+    // 自動スクロールボタンのON/OFF切り替え
+    $(document).on("click", "#auto-scroll-passage", function () {
+        var $this = $(this);
+        if ($this.hasClass('enabled')) {
+            $this.removeClass('enabled');
+        } else {
+            $this.addClass('enabled');
+        }
+    });
+
+
+    // 再生箇所のプレビュー
+    $(document).on('click', '.playtime-preview-btn', function () {
+        var $this = $(this);
+        var $wrapper = $this.parents('.playtime-preview-wrapper');
+        var startTimeSeconds = $wrapper.find('.start-time-seconds').val();
+        var startTimeMinutes = $wrapper.find('.start-time-minutes').val();
+        var startTime = (parseFloat(startTimeMinutes) * 60.0) + parseFloat(startTimeSeconds);
+        var endTimeSeconds = $wrapper.find('.end-time-seconds').val();
+        var endTimeMinutes = $wrapper.find('.end-time-minutes').val();
+        var endTime = (parseFloat(endTimeMinutes) * 60.0) + parseFloat(endTimeSeconds);
+        var $feedbackMessage = $wrapper.find('.preview-feedback-message');
+        // 再生時間がendTimeまできちんと設定されていたらプレビューを開始する
+        if (startTime < endTime) {
+            $feedbackMessage.html('<div class="spinner-grow spinner-grow-sm text-success" role="status">\n' +
+                '  <span class="sr-only">Loading...</span>\n' +
+                '</div>');
+            if (player.getPlayerState() !== 1) {
+                player.playVideo()
+            }
+            player.seekTo(startTime);
+            // endTimeまで再生して、停止する。
+            var marking = setInterval(function () {
+                // setIntervalを止めずにブラウザバックした場合に強制的にsetIntervalを止める処理
+                if (player.i == null) {
+                    clearInterval(marking);
+                } else if (player.getPlayerState() === 1 || player.getPlayerState() === 3) {
+                    // 再生中かバッファリング中なら実行
+                    var currentTime = parseFloat(player.getCurrentTime());
+                    // 再生箇所がendTimeを超えたら動画を止める
+                    if (endTime < currentTime) {
                         player.pauseVideo()
-                        player.seekTo(0);
-                        clearInterval(marking);
-                    } else {
+                        $feedbackMessage.html('');
                         clearInterval(marking);
                     }
-                }, 100);
-            } else {
-                $feedbackMessage.html('<span class="text-danger">EndTime Error</span>');
-            }
-            // 画面遷移をキャンセルする
-            return false;
-        });
+
+                } else if (player.getPlayerState() === 0) {
+                    // 動画がラストまで到達して終了した場合の処理
+                    player.pauseVideo()
+                    player.seekTo(0);
+                    clearInterval(marking);
+                } else {
+                    clearInterval(marking);
+                }
+            }, 100);
+        } else {
+            $feedbackMessage.html('<span class="text-danger">EndTime Error</span>');
+        }
+        // 画面遷移をキャンセルする
+        return false;
+    });
 
     document.addEventListener("turbolinks:load", function () {
         var $videoId = $('#videoId').text();
