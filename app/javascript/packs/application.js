@@ -25,7 +25,7 @@ require('jquery')
 //= require popper
 //= require bootstrap
 
-//import "./infinite-scroll_implementation"
+import "./infinite-scroll_implementation"
 import "./video"
 import "./loading"
 import "./web_speech_api"

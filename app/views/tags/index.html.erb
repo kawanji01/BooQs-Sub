@@ -1,1 +1,28 @@
+<% set_meta_tags title: t('tags.tags'),
+                 canonical: tags_url,
+                 twitter: { card: 'summary_large_image' },
+                 alternate: { "en" => tags_url(locale: 'en'),
+                              "ja" => tags_url(locale: 'ja'), } %>
+
+
+
 <%= render 'layouts/navbar' %>
+
+<%= render 'layouts/breadcrumb', items_hash: @breadcrumb_hash %>
+
+<div class="container bg-white pt-5 pb-5 my-5">
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-10">
+      <h1 class="font-weight-bold mb-4"><%= title t('tags.tags') %></h1>
+
+
+      <% @tags.each do |tag| %>
+        <%= link_to articles_tag_path(tag), class: 'btn btn-sm btn-light-green font-weight-bold' do %>
+          <i class="far fa-tag mr-2"></i><%= tag.name %>
+        <% end %>
+      <% end %>
+
+
+    </div>
+  </div>
+</div>

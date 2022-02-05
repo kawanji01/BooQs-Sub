@@ -1,5 +1,6 @@
 en:
   articles:
+    create: 'Create'
     articles: 'Articles'
     video_select: 'Video Select'
     lang_number: 'Language Setting'

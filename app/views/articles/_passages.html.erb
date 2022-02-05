@@ -3,14 +3,16 @@
   <% article.video? ? passages = article.passages.order(start_time: :asc) : passages = article.passages.order(created_at: :asc) %>
 <% end %>
 
+
+
 <div id="infinite-scroll">
   <div class="append-content" id="passage-list-wrapper">
     <%= render partial: 'passages/passage_with_translation', collection: passages, as: "passage" %>
   </div>
 </div>
-<% if passages.size > 9 %>
-  <%= render "shared/infinite_scroll_normal", contents: passages %>
-<% end %>
+<%= render "shared/infinite_scroll_normal", contents: passages %>
+
+
 
 
 <div id="passage-form" class="my-5">

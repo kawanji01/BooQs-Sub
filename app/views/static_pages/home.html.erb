@@ -1,13 +1,10 @@
-<!-- ?ref=starsaas によるホームページが重複してindexされてる問題の解決　-->
-<!-- localize: https://developers.google.com/search/docs/advanced/crawling/localized-versions?hl=ja -->
-<!--
-<#% set_meta_tags title: t('subtitles.download_subtitles_on_youtube'),
+<% set_meta_tags title: t('subtitles.download_subtitles_on_youtube'),
                  description: t('subtitles.description'),
                  canonical: root_url(locale: @locale),
-                 twitter: { card: 'summary_large_image' },
-                 alternate: { "en" => root_url(locale: 'en'),
-                              "ja" => root_url(locale: 'ja') } %>
--->
+                 twitter: {card: 'summary_large_image'},
+                 alternate: {"en" => root_url(locale: 'en'),
+                             "ja" => root_url(locale: 'ja')} %>
+
 
 
 <%= render 'layouts/navbar' %>
@@ -17,10 +14,18 @@
 <div class="container bg-white pt-5 pb-5 my-5">
   <div class="row justify-content-md-center">
     <div class="col col-lg-10">
-      <h1 class="font-weight-bold mb-4"><%= t 'articles.articles' %></h1>
+      <h1 class="font-weight-bold mb-4"><%= title t 'articles.articles' %></h1>
 
-
-      <%= render 'articles/cards', articles: @articles %>
+      <% if @articles_count > 10 %>
+        <div id="infinite-scroll">
+          <div class="append-content">
+            <%= render 'articles/cards', articles: @articles %>
+          </div>
+          <%= render "shared/infinite_scroll_normal", contents: @articles %>
+        </div>
+      <% else %>
+        <%= render 'articles/cards', articles: @articles %>
+      <% end %>
 
 
     </div>
