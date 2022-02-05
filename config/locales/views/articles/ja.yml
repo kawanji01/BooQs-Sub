@@ -1,5 +1,6 @@
 ja:
   articles:
+    create: '投稿する'
     articles: '記事'
     video_select: '動画を選択する'
     lang_number: '言語設定'

@@ -1,6 +1,7 @@
-<% set_meta_tags title: @article.display_title(@lang_number_of_locale),
-                 og: {image: @article.scraped_image, description: @article.display_lead(@lang_number_of_locale)},
-                 twitter: {card: 'summary_large_image'} %>
+<% set_meta_tags title: @article.title,
+                 og: {image: @article.scraped_image, description: @title_translation&.text },
+                 twitter: {card: 'summary_large_image'},
+                 alternate: @alternate %>
 
 <!-- Turobolinksの無効化。詳しくはapplication.html.erbを参照。 -->
 <!-- TurbolinksがONになっていると、YouTube iframe APIのinitializeに問題が起きるらしく、player.getPlayerStateがundefinedになる。-->
@@ -10,9 +11,7 @@
 
 <div class="row main-column" id="article-<%= @article.public_uid %>">
 
-
   <div class="col-xl-9 my-3">
-
 
     <% if @processing.present? %>
       <div class="container bg-white pt-5 pb-5 my-5">

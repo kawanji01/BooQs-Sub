@@ -6,7 +6,6 @@ class ArticlesController < ApplicationController
   def show
     @article = Article.find_param(params[:id])
     @related_articles = Article.all.sample(6)
-    # passage_idがnilなら、そのtranslationは消去法でarticeのtitleの翻訳
     @title_translation = @article.find_title_translation(@lang_number_of_translation)
 
     @passages = if @article.video?
@@ -15,16 +14,13 @@ class ArticlesController < ApplicationController
                   @article.passages.order(created_at: :asc).page(params[:page]).per(10)
                 end
 
-    @translated_lang_numbers = @article.translations.group(:lang_number).count.keys
-
     @video_id = Youtube.get_video_id(@article.reference_url)
-    # assets_pipelineでprecompileしたjsだと、gonの変数が更新されない問題があるので、上記の変数でviewを通じてjsでvideoIDをとってくるようにした。
-    # gon.videoId = Youtube.get_video_id(@article.reference_url)
-    @processing = params[:processing] if params[:processing].present?
-
-    @breadcrumb_hash = {t('articles.articles') => root_path,
-                        @article.title => ''}
-
+    @translated_lang_numbers = @article.translations.group(:lang_number).count.keys
+    # metatagの@alternate設定
+    @alternate = @translated_lang_numbers.unshift(@article.lang_number).uniq
+                     .map {|number| { Lang.convert_number_to_code(number) => article_url(@article, locale: Lang.convert_number_to_code(number)) } }
+    @breadcrumb_hash = { t('articles.articles') => root_path,
+                        @article.title => '' }
   end
 
   def new
@@ -168,7 +164,7 @@ class ArticlesController < ApplicationController
     # @article.update_width_and_height_of_image
     # user_icon = ApplicationController.helpers.icon_for(request.user)
     ActionCable.server.broadcast 'title_modification_channel',
-                                 html: render(partial: 'articles/article_title', locals: {article: @article}),
+                                 html: render(partial: 'articles/article_title', locals: { article: @article }),
                                  article: @article,
                                  message: @message,
                                  editor_token: @editor_token
@@ -529,7 +525,8 @@ class ArticlesController < ApplicationController
     @article.translations&.where(lang_number: lang_number, title: false)&.delete_all
     # workerの書き込みとの競合を防ぐために、workerの処理まで３秒開ける。
     sleep(3)
-    TranslationFileImportWorker.perform_async(uploaded_file_url, file_name, lang_number, @article_uid, @user_uid, @locale)
+    TranslationFileImportWorker.perform_async(uploaded_file_url, file_name, lang_number, @article_uid, @user_uid, 
+@locale)
     flash[:success] = t 'articles.translations_updated'
     respond_to do |format|
       format.html { redirect_to @article }

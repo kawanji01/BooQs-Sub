@@ -6,28 +6,12 @@
     <% end %>
 
     <%= link_to new_article_path, class: 'ml-auto' do %>
-      <div class="btn btn-sm btn-info font-weight-bold">
-        <i class="far fa-video-plus mr-2"></i>投稿する
+      <div class="btn btn-sm btn-light-green font-weight-bold">
+        <i class="far fa-video-plus mr-2"></i><%= t('articles.create') %>
       </div>
     <% end %>
   </div>
 </header>
 
-
-
-<div class="modal-wrapper" id="display-modal-1">
-  <div class="overlay close-modal">
-    <div class="close-btn">
-      <i class="fal fa-times"></i>
-    </div>
-  </div>
-
-  <div class="modal-booqs">
-    <div id="create-video-captions">
-      <#%= render 'articles/input_youtube_url', article: @article, chapter: @chapter %>
-    </div>
-  </div>
-
-</div>
 
 
