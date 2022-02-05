@@ -38,15 +38,25 @@ module LangHelper
   end
 
 
-  #
-  def import_select_form_creator(code)
+  # 字幕の取り込み用のセレクトフォームを作成する
+  def caption_import_select_form_creator(code)
     if code.nil?
-      ["#{t("lang.none")}", nil]
+      [t('lang.none').to_s, nil]
     elsif code.include?('auto-')
       lang_code = code.sub('auto-', '')
       ["#{t("articles.auto_sub")}：#{t("lang.#{lang_code}")}", code]
     else
-      ["#{t("lang.#{code}")}", code]
+      [t("lang.#{code}").to_s, code]
+    end
+  end
+  
+  
+  # 字幕のダウンロード用のセレクトフォームを作成する。
+  def caption_download_select_form_creator(code)
+    if code == 'original'
+      [t('articles.originals').to_s, 'original']
+    else
+      [t("lang.#{code}").to_s, code]
     end
   end
 

@@ -16,13 +16,14 @@
     <%= form_with model: @article, url: import_translations_article_path(@article), method: :post do |f| %>
       <% if @sub_lang_codes.present? %>
 
-        <%= f.select :sub_lang_code, options_for_select(@sub_lang_codes.map { |code| import_select_form_creator(code) }),
+        <%= f.select :sub_lang_code, options_for_select(@sub_lang_codes.map { |code| caption_import_select_form_creator(code) }),
                      {},
                      {class: 'form-control form-control my-3 w-100'} %>
 
         <%= button_tag type: 'submit', class: "btn btn-solid loading-show-btn mt-4 w-100" do %>
           <%= t 'articles.execute' %>
         <% end %>
+
         <div class="loading is-hide">
           <div class="loading_icon"></div>
         </div>

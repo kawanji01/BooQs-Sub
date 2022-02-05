@@ -100,9 +100,9 @@ class Article < ApplicationRecord
     end
   end
 
-  # title_translationよりもget_translationのほうが理解しやすいので、こちらに置き換える
+  # タイトルの翻訳のレコードを取得する
   def find_title_translation(lang_number)
-    translations&.find_by(passage_id: nil, lang_number: lang_number)
+    translations&.find_by(passage_id: nil, lang_number: lang_number, title: true)
   end
 
   # 翻訳されたタイトルを取得する

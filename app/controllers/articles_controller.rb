@@ -225,6 +225,41 @@ class ArticlesController < ApplicationController
     end
   end
 
+  def caption_downloader
+    @article = Article.find_param(params[:id])
+    @available_captions = @article.translations.group(:lang_number).count.keys
+                                  .map { |number| Lang.convert_number_to_code(number) }
+    @available_captions.unshift('original')
+    @lang_code_of_translation = params[:lang_code_of_translation]
+    @value = if request.referer[/sub=(.+)/, 1].blank?
+               'original'
+             else
+               @lang_code_of_translation
+             end
+    respond_to do |format|
+      format.html { redirect_to @article }
+      format.js
+    end
+  end
+
+  def download_caption
+    @article = Article.find_param(params[:id])
+    caption = params[:article][:caption]
+    if caption == 'original'
+      data = @article.create_subtitles_srt
+      file_name = @article.title
+    else
+      lang_number = Lang.convert_code_to_number(caption)
+      data = @article.create_translations_srt(lang_number)
+      file_name = if (title = @article&.find_title_translation(lang_number))
+                    title.text
+                  else
+                    "#{@article.title}_#{Lang.convert_number_to_code(lang_number)}"
+                  end
+    end
+    send_data(data, filename: "#{file_name}.srt")
+  end
+
   def download_subtitles
     data = @article.create_subtitles_srt
     file_name = @article.title
