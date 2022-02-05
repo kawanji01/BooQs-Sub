@@ -2,6 +2,11 @@
                  og: {image: @article.scraped_image, description: @article.display_lead(@lang_number_of_locale)},
                  twitter: {card: 'summary_large_image'} %>
 
+<!-- Turobolinksの無効化。詳しくはapplication.html.erbを参照。 -->
+<!-- TurbolinksがONになっていると、YouTube iframe APIのinitializeに問題が起きるらしく、player.getPlayerStateがundefinedになる。-->
+<% content_for(:body_attributes) do %>
+  data-turbolinks="false"
+<% end %>
 
 <div class="row main-column" id="article-<%= @article.public_uid %>">
 
@@ -220,30 +225,33 @@
     // iframe Player APIについて： https://developers.google.com/youtube/iframe_api_reference?hl=ja
     // playerVarsについて： https://developers.google.com/youtube/player_parameters.html?playerVersion=HTML5&hl=ja
     // iframeがTurbolinksで読み込めない問題の解決法：　https://stackoverflow.com/questions/18751904/can-youtube-play-nicely-with-turbolinks
-    document.addEventListener("turbolinks:load", function() {
 
-        var reloadYoutube = function () {
+
+
+
+        /* youtube callback */
+        var player;
+
+        function reloadYoutube() {
             /* if YT already initialized return */
-            if (window.YT === undefined) {
-                console.log('reloadYoutube')
+            if (typeof (YT) == 'undefined' || typeof (YT.Player) == 'undefined') {
                 // 2. This code loads the IFrame Player API code asynchronously.
                 var tag = document.createElement('script');
                 tag.src = "https://www.youtube.com/iframe_api";
                 var firstScriptTag = document.getElementsByTagName('script')[0];
                 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+                console.log('initialize');
             }
-        };
+        }
 
-
-        /* youtube callback */
-        var player = null;
 
         function onYouTubeIframeAPIReady() {
-            if (window.YT === undefined) {
+            if (typeof (YT) == 'undefined' || typeof (YT.Player) == 'undefined') {
+                console.log('YT undefined');
                 reloadYoutube();
             } else {
                 var $videoId = $('#videoId').text();
-                console.log('videoId:' + $videoId);
+                console.log('YT defined / videoId:' + $videoId);
                 player = new YT.Player('player', {
                     height: '360',
                     width: '640',
@@ -253,7 +261,8 @@
                         modestbranding: 1,
                         playsinline: 1,
                         rel: 0,
-                        loop: 1
+                        loop: 1,
+                        origin: 'http://localhost:3000'
                     },
                     events: {
                         'onReady': onPlayerReady,
@@ -271,11 +280,19 @@
 
         // onStateChange
         function onPlayerStateChange(event) {
+            //if (player !== undefined) {
+            //    console.log("2");
+            //    console.log('player');
+            //    console.log(player);
+            //    console.log('getPlayerState: ');
+            //    console.log(player.getPlayerState());
+            //}
+
             if (event.data === YT.PlayerState.PLAYING) {
                 var marking = setInterval(function () {
                     var $passages = $('#passages-and-translations').find('.passage-component');
                     // setIntervalを止めずにブラウザバックした場合に強制的にsetIntervalを止める処理
-                    if (player.i == null) {
+                    if (player.i == null || player.getPlayerState === undefined) {
                         clearInterval(marking);
                     } else if (player.getPlayerState() === 1) {
                         var currentTime = parseFloat(player.getCurrentTime());
@@ -291,13 +308,13 @@
                             var position = readingPassage.offset().top - 280;
                             // stop()を入れることで前に実行したanimationをキャンセルする。これによってanimationが積み重なって動画を止めた後も動かなくなる問題を解決できる
                             $('html, body').stop().animate({scrollTop: position}, 500);
-                            console.log('移動' + position)
+                            // console.log('移動' + position)
                         }
 
 
                     } else if (player.getPlayerState() === 0) {
                         // 動画が終了した場合の処理
-                        console.log('終了');
+                        // console.log('終了');
                         player.pauseVideo()
                         player.seekTo(0);
                         clearInterval(marking);
@@ -388,11 +405,14 @@
             return false;
         });
 
-
-        document.addEventListener("turbolinks:load", function () {
+    document.addEventListener("turbolinks:load", function () {
+        var $videoId = $('#videoId').text();
+        if ($videoId.length) {
             reloadYoutube();
             onYouTubeIframeAPIReady();
-        });
+        } else {
+            console.log('Video does not exists')
+        }
 
     });
 

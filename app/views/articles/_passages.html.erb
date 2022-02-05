@@ -8,7 +8,9 @@
     <%= render partial: 'passages/passage_with_translation', collection: passages, as: "passage" %>
   </div>
 </div>
-<%= render "shared/infinite_scroll_normal", contents: passages %>
+<% if passages.size > 9 %>
+  <%= render "shared/infinite_scroll_normal", contents: passages %>
+<% end %>
 
 
 <div id="passage-form" class="my-5">
