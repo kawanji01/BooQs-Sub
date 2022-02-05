@@ -1,4 +1,5 @@
 <% set_meta_tags title: @article.title,
+                 canonical: article_url(@article),
                  og: {image: @article.scraped_image, description: @title_translation&.text},
                  twitter: {card: 'summary_large_image'},
                  alternate: @alternate %>

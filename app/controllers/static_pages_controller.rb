@@ -2,7 +2,8 @@ class StaticPagesController < ApplicationController
   before_action :extract_user_language
 
   def home
-    @articles = Article.all.order(created_at: :desc)
+    @articles_count = Article.all.size
+    @articles = Article.all.order(created_at: :desc).page(params[:page]).per(10)
   end
   
   def transcriber

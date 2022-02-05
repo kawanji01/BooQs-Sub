@@ -1,9 +1,8 @@
 <% set_meta_tags title: t('tags.tags'),
-                 description: t('tags.tags'),
-                 canonical: tags_url(locale: @locale),
+                 canonical: tags_url,
                  twitter: { card: 'summary_large_image' },
-                 alternate: { "en" => root_url(locale: 'en'),
-                              "ja" => root_url(locale: 'ja') } %>
+                 alternate: { "en" => tags_url(locale: 'en'),
+                              "ja" => tags_url(locale: 'ja'), } %>
 
 
 

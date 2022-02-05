@@ -1,14 +1,11 @@
 class ArticlesController < ApplicationController
-  def index
-    @articles = Article.all.order(created_at: :desc)
-  end
 
   def show
     @article = Article.find_param(params[:id])
     @related_articles = @article.find_related_tags.limit(6)
     @title_translation = @article.find_title_translation(@lang_number_of_translation)
 
-    @passages = @article.passages.order(start_time: :asc).limit(30)
+    @passages = @article.passages.order(start_time: :asc).page(params[:page]).per(10)
 
     @video_id = Youtube.get_video_id(@article.reference_url)
     @translated_lang_numbers = @article.translations.group(:lang_number).count.keys

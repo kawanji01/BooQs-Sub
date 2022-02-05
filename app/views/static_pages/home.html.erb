@@ -1,10 +1,9 @@
-
 <% set_meta_tags title: t('subtitles.download_subtitles_on_youtube'),
                  description: t('subtitles.description'),
                  canonical: root_url(locale: @locale),
-                 twitter: { card: 'summary_large_image' },
-                 alternate: { "en" => root_url(locale: 'en'),
-                              "ja" => root_url(locale: 'ja') } %>
+                 twitter: {card: 'summary_large_image'},
+                 alternate: {"en" => root_url(locale: 'en'),
+                             "ja" => root_url(locale: 'ja')} %>
 
 
 
@@ -17,8 +16,16 @@
     <div class="col col-lg-10">
       <h1 class="font-weight-bold mb-4"><%= title t 'articles.articles' %></h1>
 
-
-      <%= render 'articles/cards', articles: @articles %>
+      <% if @articles_count > 10 %>
+        <div id="infinite-scroll">
+          <div class="append-content">
+            <%= render 'articles/cards', articles: @articles %>
+          </div>
+          <%= render "shared/infinite_scroll_normal", contents: @articles %>
+        </div>
+      <% else %>
+        <%= render 'articles/cards', articles: @articles %>
+      <% end %>
 
 
     </div>
