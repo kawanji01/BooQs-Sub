@@ -45,8 +45,9 @@ en:
     edit_all_originals: 'Edit all originals'
     edit_all_translations: 'Edit all translations'
     download: 'Download'
-    caption_download: 'Download Captions'
-    download_explanation: 'You can download the SRT file to use as video subtitles.'
+    download_captions: 'Download Captions'
+    explanation_of_download_captions: 'You can download the SRT file to use as video subtitles.'
+    originals: 'Originals'
     download_subtitles: 'Download Originals'
     download_translations: 'Download Translations'
     download_not_to_permitted: "This article doesn't allow download by users."

@@ -45,8 +45,9 @@ ja:
     update_succeeded: '記事の設定を更新しました。'
     update_failed: '記事の設定の更新に失敗しました。'
     download: 'ダウンロード'
-    caption_download: '字幕のダウンロード'
-    download_explanation: '動画の字幕として利用できるSRTファイルをダウンロードできます。'
+    download_captions: '字幕のダウンロード'
+    explanation_of_download_captions: '動画の字幕として利用できるSRTファイルをダウンロードできます。'
+    originals: '原文'
     download_subtitles: '原文をダウンロードする'
     download_translations: '翻訳をダウンロードする'
     download_not_to_permitted: "この記事では、ダウンロードが許可されていません。"

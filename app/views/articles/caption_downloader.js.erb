@@ -1,0 +1,12 @@
+$('.loading').addClass('is-hide');
+$('body').addClass('overflow-hidden');
+$('#main').append('<%= j(render 'articles/caption_downloader_modal') %>');
+//$("#translation-importer").animate({'top': '56px'}, 400, 'easeOutExpo');
+
+$('.close-caption-downloader-modal').on('click', function() {
+    $('#caption-downloader-modal').fadeOut().queue(function() {
+        $("#caption-downloader-modal").remove();
+        $('body').removeClass('overflow-hidden');
+    });
+});
+

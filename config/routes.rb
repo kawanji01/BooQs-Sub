@@ -39,9 +39,9 @@ Rails.application.routes.draw do
         # タグの編集
         get   :edit_tags
         patch :update_tags
-        # ダウンロード
-        get :download_subtitles
-        get :download_translations
+        # 字幕のダウンロード
+        get :caption_downloader
+        get :download_caption
         # 翻訳
         post :batch_translation
         post :translate_in_bulk

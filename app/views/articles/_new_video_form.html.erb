@@ -48,7 +48,7 @@
   <p><%= t 'articles.please_select_transcript' %></p>
 
 
-  <%= f.select :sub_lang_code, options_for_select(@sub_lang_codes.map { |code| import_select_form_creator(code) }, @audio_lang),
+  <%= f.select :sub_lang_code, options_for_select(@sub_lang_codes.map { |code| caption_import_select_form_creator(code) }, @audio_lang),
                {},
                {class: 'form-control form-control my-3 w-100'} %>
 
