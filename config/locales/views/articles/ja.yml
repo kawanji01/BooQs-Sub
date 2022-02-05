@@ -9,7 +9,7 @@ ja:
     created_at: '作成'
     updated_at: '更新'
     displayed_captions: '表示する字幕'
-    displayed_translations: '表示する文章'
+    edit_tags: 'タグを編集する'
     original: '原文'
     author: '著者'
     contributors: '貢献者'

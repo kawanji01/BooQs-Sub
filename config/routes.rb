@@ -36,6 +36,10 @@ Rails.application.routes.draw do
         patch :update_title
         get :cancel
         get :translation_select
+        # タグの編集
+        get   :edit_tags
+        patch :update_tags
+        # ダウンロード
         get :download_subtitles
         get :download_translations
         # 翻訳

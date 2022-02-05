@@ -1,0 +1,7 @@
+
+<% article.tags&.each do |tag| %>
+  <%= link_to articles_tag_path(tag.id), class: "btn btn-sm btn-light-green font-weight-bold" do %>
+    <i class="far fa-tag mr-2"></i><%= tag.name %>
+  <% end %>
+<% end %>
+<%= link_to t('articles.edit_tags'), edit_tags_article_path(article), remote: true, class: "text-success my-3 small d-block main-loading-show-btn" %>

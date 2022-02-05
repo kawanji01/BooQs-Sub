@@ -1,0 +1,2 @@
+$('.loading').addClass('is-hide');
+$('#article-tags-<%= @article.public_uid %>').html("<%= j(render "articles/tags", article: @article) %>");
