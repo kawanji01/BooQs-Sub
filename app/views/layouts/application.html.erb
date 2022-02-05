@@ -10,25 +10,36 @@
 </head>
 
 <body>
-<%= render "layouts/header" %>
+<!-- 一部ページでのturobolinksの無効化 / START  / 参考：　https://qiita.com/Jackson123/items/981d6362bcf9d2a136c3　-->
+<div
+  <% if content_for?(:body_attributes) %>
+  <%= yield(:body_attributes) %>
+  <% end %>
+  >
 
-<div class="main" id="main">
 
-  <div class="feedback_message w-100 text-center">
-    <% flash.each do |message_type, message| %>
-      <%= content_tag(:div, message, class: "alert alert-#{message_type}") %>
-    <% end %>
+  <%= render "layouts/header" %>
+
+
+  <div class="main" id="main">
+
+    <div class="feedback_message w-100 text-center">
+      <% flash.each do |message_type, message| %>
+        <%= content_tag(:div, message, class: "alert alert-#{message_type}") %>
+      <% end %>
+    </div>
+    <%= yield %>
   </div>
-  <%= yield %>
+
+  <!-- 特定のボタンを押した時に表示されるloading -->
+  <div class="loading is-hide" id="loading">
+    <div class="loading_icon"></div>
+  </div>
+
+
+  <%= render 'layouts/footer' %>
+
 </div>
-
-<!-- 特定のボタンを押した時に表示されるloading -->
-<div class="loading is-hide" id="loading">
-  <div class="loading_icon"></div>
-</div>
-
-
-<%= render 'layouts/footer' %>
-
+<!-- Turbolinksの一部ページでの無効化 / END-->
 </body>
 </html>
