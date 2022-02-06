@@ -1,0 +1,9 @@
+<div class="page-load-status text-center">
+  <div class="infinite-scroll-request">
+    <h4 class="text-success font-weight-bold">loading!!</h4>
+    <img src="https://kawanji.s3.ap-northeast-1.amazonaws.com/assets/loading.gif" alt="loading">
+    <%= paginate contents %>
+  </div>
+  <h4 class="infinite-scroll-last font-weight-bold"><!--<#%= t 'infiniteScroll.all_loaded' %>--></h4>
+  <h4 class="infinite-scroll-error">Error</h4>
+</div>
