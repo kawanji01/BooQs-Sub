@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_01_062635) do
+ActiveRecord::Schema.define(version: 2022_02_06_015812) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,9 +27,11 @@ ActiveRecord::Schema.define(version: 2022_02_01_062635) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "lang_number_of_audio"
+    t.string "youtube_id"
     t.index ["lang_number"], name: "index_articles_on_lang_number"
     t.index ["lang_number_of_audio"], name: "index_articles_on_lang_number_of_audio"
     t.index ["public_uid"], name: "index_articles_on_public_uid"
+    t.index ["youtube_id"], name: "index_articles_on_youtube_id"
   end
 
   create_table "passages", force: :cascade do |t|

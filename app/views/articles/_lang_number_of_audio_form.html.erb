@@ -1,0 +1,8 @@
+<div class="input-group my-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text" for="articleAudioLanguage"><%= t('articles.language_of_audio') %></label>
+  </div>
+  <%= f.select :lang_number_of_audio, lang_form_array,
+               {},
+               {class: 'custom-select form-control', id: 'articleAudioLanguage'} %>
+</div>

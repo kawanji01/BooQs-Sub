@@ -2,6 +2,7 @@ class TagsController < ApplicationController
 
   def index
     @tags = ActsAsTaggableOn::Tag.most_used(100).order(created_at: :desc)
+    @navbar_displayed = true
     @breadcrumb_hash = { t('articles.articles') => root_path,
                          t('tags.tags') => '' }
   end

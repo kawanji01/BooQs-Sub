@@ -8,27 +8,16 @@
 
   <%= image_tag article&.scraped_image, class: 'img-fluid w-25 mb-2' %>
 
-  <%= f.text_field :title, class: 'form-control form-control-lg font-weight-bold' %>
+  <h3 class="font-weight-bold my-3"><%= article.title %></h3>
+  <%= f.hidden_field :title, value: article.title %>
+  <!-- ユーザーの認知負荷削減のために、ここではタイトルは編集できないようにする。
+  <#%= f.text_field :title, class: 'form-control form-control-lg font-weight-bold' %>
+  -->
 
 
-  <div class="input-group my-3">
-    <div class="input-group-prepend">
-      <label class="input-group-text" for="articleTitleLanguage"><%= t('articles.language_of_title') %></label>
-    </div>
-    <%= f.select :lang_number, lang_form_and_auto_configure,
-                 {},
-                 {class: 'custom-select form-control', id: 'articleTitleLanguage'} %>
-  </div>
+  <%= render "articles/lang_number_form", f: f %>
 
-  <div class="input-group my-3">
-    <div class="input-group-prepend">
-      <label class="input-group-text" for="articleAudioLanguage"><%= t('articles.language_of_audio') %></label>
-    </div>
-    <%= f.select :lang_number_of_audio, lang_form_array,
-                 {},
-                 {class: 'custom-select form-control', id: 'articleAudioLanguage'} %>
-  </div>
-
+  <%= render "articles/lang_number_of_audio_form", f: f %>
 
 
   <div class="input-group mt-4 mb-2">

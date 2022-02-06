@@ -1,11 +1,13 @@
-<a class="dropdown-item my-2" href="#top" id="scrollTop"><i class="far fa-arrow-to-top mr-2"></i>最上部に移動する</a>
-<a class="dropdown-item my-2" href="#bottom" id="scrollBottom"><i class="far fa-arrow-to-bottom mr-2"></i>最下部に移動する</a>
-
 <%= link_to translation_select_article_path(@article, lang_code_of_translation: @lang_code_of_translation),
             remote: true,
             class: "dropdown-item my-2" do %>
   <i class="far fa-language mr-2"></i><%= t('articles.display_another_language') %>
 <% end %>
+
+<a class="dropdown-item my-2" href="#top" id="scrollTop"><i class="far fa-arrow-to-top mr-2"></i><%= t('articles.move_to_the_top') %></a>
+<a class="dropdown-item my-2" href="#bottom" id="scrollBottom"><i class="far fa-arrow-to-bottom mr-2"></i><%= t('articles.move_to_the_bottom') %></a>
+
+
 
 <!--
 <a href="http://twitter.com/share?url=<#%= article_url(@article, locale: @locale, sub: params[:sub]) %>&text=<#%= @article.display_title(@lang_number_of_translation) %> %20%23BooQs%20" target="_blank" rel="noopener"

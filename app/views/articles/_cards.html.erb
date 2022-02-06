@@ -12,7 +12,7 @@
               <%= article.translated_title(@locale) %>
             </p>
             <p class="card-text">
-              <small class="text-muted"><i class="fas fa-video"></i><%= return_play_time(article.video_duration) %><i class="fas fa-eye"></i><%= article.view_count&.to_s(:delimited, delimiter: ',') %><%= t('articles.video_views') %></small></p>
+              <small class="text-muted"><i class="fas fa-video"></i><%= return_play_time(article.video_duration) %><i class="fas fa-volume-up"></i><%= t("lang.#{article.lang_code_of_audio}") %><br><i class="fas fa-eye"></i><%= article.view_count&.to_s(:delimited, delimiter: ',') %><%= t('articles.video_views') %></small></p>
           </div>
         </a>
       </div>

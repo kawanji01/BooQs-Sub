@@ -3,7 +3,8 @@ class StaticPagesController < ApplicationController
 
   def home
     @articles_count = Article.all.size
-    @articles = Article.all.order(created_at: :desc).page(params[:page]).per(10)
+    @navbar_displayed = true
+    @articles = Article.all.order(created_at: :desc).page(params[:page]).per(12)
   end
   
   def transcriber
