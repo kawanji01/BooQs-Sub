@@ -4,13 +4,18 @@
 <% end %>
 
 
-
-<div id="infinite-scroll">
-  <div class="append-content" id="passage-list-wrapper">
+<% if article.passages.size > 30 %>
+  <div id="infinite-scroll-passages">
+    <div class="append-content" id="passage-list-wrapper">
+      <%= render partial: 'passages/passage_with_translation', collection: passages, as: "passage" %>
+    </div>
+  </div>
+  <%= render "shared/infinite_scroll_passages", contents: passages %>
+<% else %>
+  <div id="passage-list-wrapper">
     <%= render partial: 'passages/passage_with_translation', collection: passages, as: "passage" %>
   </div>
-</div>
-<%= render "shared/infinite_scroll_normal", contents: passages %>
+<% end %>
 
 
 
