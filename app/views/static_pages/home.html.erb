@@ -7,8 +7,6 @@
 
 
 
-<%= render 'layouts/navbar' %>
-
 
 
 <div class="container bg-white pt-5 pb-5 my-5">
@@ -16,7 +14,7 @@
     <div class="col col-lg-10">
       <h1 class="font-weight-bold mb-4"><%= title t 'articles.articles' %></h1>
 
-      <% if @articles_count > 10 %>
+      <% if @articles_count > 12 %>
         <div id="infinite-scroll">
           <div class="append-content">
             <%= render 'articles/cards', articles: @articles %>

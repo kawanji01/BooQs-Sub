@@ -1,16 +1,19 @@
 // loading画面を消す
 //document.querySelector('#loading').classList.add("is-hide");
 $('.loading').addClass('is-hide');
-<% if @valid %>
-
-var $createVideo = $('#create-video');
-$createVideo.html("<%= j(render 'articles/new_video_form', article: @article) %>");
-//$createVideo.remove();
-//console.log($createVideo);
-
-
-<% else %>
-
+<% if @is_youtube_url == false %>
+// URLにエラーがあるならエラーメッセージを表示する。
 $('#reference-url-form').addClass('is-invalid');
 $('#reference-url-invalid-message').text('<%= t('articles.please_input_youtube_url') %>')
+
+<% elsif @predecessor.present? %>
+// すでに指定された動画の記事が存在する場合、その記事にリダイレクトする。
+var articlePath = "<%= article_path(@predecessor)%>";
+window.location.href = articlePath;
+
+<% else %>
+// URLも問題なく、全く新しい動画が指定されていれば次の処理に進む。
+var $createVideo = $('#create-video');
+$createVideo.html("<%= j(render 'articles/new_video_form', article: @article) %>");
+
 <% end %>

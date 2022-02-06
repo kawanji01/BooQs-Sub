@@ -11,48 +11,58 @@ class ArticlesController < ApplicationController
     @translated_lang_numbers = @article.translations.group(:lang_number).count.keys
     # metatagの@alternate設定
     @alternate = @translated_lang_numbers.unshift(@article.lang_number).uniq
-                     .map {|number| { Lang.convert_number_to_code(number) => article_url(@article, locale: Lang.convert_number_to_code(number)) } }
-    @breadcrumb_hash = { t('articles.articles') => root_path,
-                        @article.title => '' }
+                     .map { |number| {Lang.convert_number_to_code(number) => article_url(@article, locale: Lang.convert_number_to_code(number))} }
+    @breadcrumb_hash = {t('articles.articles') => root_path,
+                        @article.title => ''}
   end
 
   def new
     @article = Article.new
   end
 
-  def create
-    @user = current_user
-    @article = current_user.articles.build(article_params)
-    @article.set_attributes_for_create
-    @article.chapter = @chapter if @chapter.present?
-    @article.separate_all_text if @article.valid?
+  #def create
+  #  @user = current_user
+  #  @article = current_user.articles.build(article_params)
+  #  @article.set_attributes_for_create
+  #  @article.chapter = @chapter if @chapter.present?
+  #  @article.separate_all_text if @article.valid?
 
-    if @article.save_and_create_addition_request(request.remote_ip)
-      @article.notify_subscribers_of_posting
-      flash[:success] = t('articles.article_created')
-      redirect_to @article
-    else
-      flash[:danger] = t('articles.article_failed_to_create')
-      render 'articles/new'
-    end
-  end
+  #  if @article.save_and_create_addition_request(request.remote_ip)
+  #    @article.notify_subscribers_of_posting
+  #    flash[:success] = t('articles.article_created')
+  #    redirect_to @article
+  #  else
+  #    flash[:danger] = t('articles.article_failed_to_create')
+  #    render 'articles/new'
+  #  end
+  #end
 
   def new_video
     @article = Article.new(reference_url: params[:article][:reference_url])
-    @valid = Youtube.youtube_url?(@article.reference_url)
-    return if @valid == false
+    @is_youtube_url = Youtube.youtube_url?(@article.reference_url)
+    return if @is_youtube_url == false
 
+    if (@predecessor = Article.find_by(youtube_id: Youtube.get_video_id(@article.reference_url)))
+      flash[:warning] = t('articles.the_article_already_exists')
+      return
+    end
+
+    # DATA APIへの接続を節約するためにsnippetで取得できる情報をここですべて取得しておく。
     snippet = Youtube.get_snippet(@article.reference_url)
     @article.title = Youtube.get_title(snippet)
     @article.scraped_image = Youtube.get_thumbnail(snippet)
     @tags = Youtube.get_tags(snippet)
+    # タイトルの言語
     lang_code_of_title = Youtube.get_default_language(snippet)
     @article.lang_number = Lang.convert_code_to_number(lang_code_of_title)
+    # 音声の言語
     @audio_lang = Youtube.get_default_audio_language(snippet)
     @article.lang_number_of_audio = Lang.convert_code_to_number(@audio_lang)
+    # まれにAPI側に言語が設定されていない場合があるので、自前でも設定する。
+    @article.set_lang_number
     # APIからタイトルとサムネを取得できなかった場合はmetainscpectorを使ってスクレイピングする。
     @article.scrape_youtube_url if @article.title.blank? || @article.scraped_image.blank?
-    @article.set_attributes_for_create
+    # @article.set_attributes_for_create
     @sub_lang_list = Youtube.importable_sub_lang_list(@article.reference_url, @audio_lang)
 
     # 手動字幕がないか、手動字幕にオーディオ言語の字幕がない場合、自動字幕をデフォルトのインポート対象にする。
@@ -80,10 +90,8 @@ class ArticlesController < ApplicationController
     @article.video = true
     @user_uid = SecureRandom.uuid
     @article.set_attributes_for_create
-    # @article.tag_list = params[:article][:tag_list]
     # @article.separate_all_text if @article.valid?
     if @article.save
-      # @article.notify_subscribers_of_posting
       flash[:success] = t('articles.creating_video_succeeded')
       @article_uid = @article.public_uid
     else
@@ -105,7 +113,7 @@ class ArticlesController < ApplicationController
       PassageCreationWorker.perform_async(@article_uid, 'manual-sub', lang_code, @locale, @user_uid)
     else
       # ユーザーが取り込む字幕に「なし」を選んだ場合。
-      @error = "not importing any caption"
+      @error = "not to import any caption"
     end
 
     respond_to do |format|
@@ -157,7 +165,7 @@ class ArticlesController < ApplicationController
     # @article.update_width_and_height_of_image
     # user_icon = ApplicationController.helpers.icon_for(request.user)
     ActionCable.server.broadcast 'title_modification_channel',
-                                 html: render(partial: 'articles/article_title', locals: { article: @article }),
+                                 html: render(partial: 'articles/article_title', locals: {article: @article}),
                                  article: @article,
                                  message: @message,
                                  editor_token: @editor_token
@@ -217,7 +225,7 @@ class ArticlesController < ApplicationController
   def caption_downloader
     @article = Article.find_param(params[:id])
     @available_captions = @article.translations.group(:lang_number).count.keys
-                                  .map { |number| Lang.convert_number_to_code(number) }
+                              .map { |number| Lang.convert_number_to_code(number) }
     @available_captions.unshift('original')
     @lang_code_of_translation = params[:lang_code_of_translation]
     @value = if request.referer[/sub=(.+)/, 1].blank?
@@ -518,8 +526,8 @@ class ArticlesController < ApplicationController
     @article.translations&.where(lang_number: lang_number, title: false)&.delete_all
     # workerの書き込みとの競合を防ぐために、workerの処理まで３秒開ける。
     sleep(3)
-    TranslationFileImportWorker.perform_async(uploaded_file_url, file_name, lang_number, @article_uid, @user_uid, 
-@locale)
+    TranslationFileImportWorker.perform_async(uploaded_file_url, file_name, lang_number, @article_uid, @user_uid,
+                                              @locale)
     flash[:success] = t 'articles.translations_updated'
     respond_to do |format|
       format.html { redirect_to @article }

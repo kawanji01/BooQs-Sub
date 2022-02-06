@@ -30,15 +30,6 @@ module ApplicationHelper
     }
   end
 
-
-
-
-
-  # Youtubeの動画のidを返す / Return Youtube's movie ID
-  def return_youtube_id(url)
-    Youtube.get_video_id(url)
-  end
-
   # 引数の秒数を、シークバーの再生時間と同じフォーマットの文字列に変換して返す。
   def return_play_time(time)
     hours = time.to_i / 3600

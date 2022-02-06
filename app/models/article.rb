@@ -10,7 +10,7 @@ class Article < ApplicationRecord
   acts_as_taggable_on :tags
   # urlのidをランダムな数字にする /gem public_uid
   generate_public_uid generator: PublicUid::Generators::HexStringSecureRandom.new
-  
+
   def lang_number_set
     errors.add(:lang_number, I18n.t('articles.lang_number_error')) if lang_number.blank?
   end
@@ -20,7 +20,6 @@ class Article < ApplicationRecord
   ##### 便利メソッド START #####
 
   # 記事の文字数を取得
-  # 原文の文字数を返す。
   def characters_count
     title_characters = title.size
     passage_characters = (passages.present? ? passages.sum(:characters_count) : 0)
@@ -30,6 +29,11 @@ class Article < ApplicationRecord
   # 言語コードを返す
   def lang_code
     Lang.convert_number_to_code(lang_number)
+  end
+
+  # 音声の言語コードを返す
+  def lang_code_of_audio
+    Lang.convert_number_to_code(lang_number_of_audio)
   end
 
   # １つでも引数の言語の翻訳があるか？
@@ -127,42 +131,53 @@ class Article < ApplicationRecord
   ##### 便利メソッド END #####
 
 
-  
+
   ##### 値の設定処理  START #####
   def set_attributes
     set_lang_number if lang_number.nil?
   end
 
   def set_attributes_for_create
-    associate_with_children
+    # associate_with_children
     set_lang_number
-    set_children_lang_number
-    set_start_time
+    # set_children_lang_number
+    # set_start_time
     set_video_duration
     set_view_count
+    set_youtube_id
   end
 
-  def associate_with_children
-    passages.each do |p|
-      p.article = self
-      p.translations.each do |t|
-        t.article = self
-      end
-    end
-  end
+  #def associate_with_children
+  #  passages.each do |p|
+  #    p.article = self
+  #    p.translations.each do |t|
+  #      t.article = self
+  #    end
+  #  end
+  #end
 
   def set_lang_number
+    # タイトルの言語
     self.lang_number = Lang.return_lang_number(title) if lang_number.nil?
-  end
-
-  def set_children_lang_number
-    title_translations&.each(&:set_lang_number)
-    passages.each do |p|
-      p.set_lang_number
-      p.translations.each(&:set_lang_number)
+    # 音声の言語
+    if lang_number_of_audio.nil?
+      snippet = Youtube.get_snippet(reference_url)
+      audio_lang = Youtube.get_default_audio_language(snippet)
+      self.lang_number_of_audio = Lang.convert_code_to_number(audio_lang)
+      # それでも言語が設定されなければ、titleの言語を設定する。
+      self.lang_number_of_audio = self.lang_number if lang_number_of_audio.blank?
     end
   end
 
+  #def set_children_lang_number
+  #  title_translations&.each(&:set_lang_number)
+  #  passages.each do |p|
+  #    p.set_lang_number
+  #    p.translations.each(&:set_lang_number)
+  #  end
+  #end
+
+  # 日本語の分かち書き
   def separate_text
     return if Lang.text_to_be_separated?(lang_number) == false
 
@@ -179,22 +194,31 @@ class Article < ApplicationRecord
     end
   end
 
-  def set_start_time
-    return if video? == false
+  #def set_start_time
+  #  return if video? == false
 
-    passages.each(&:set_start_time)
-  end
+  #  passages.each(&:set_start_time)
+  #end
 
+  # 再生時間の設定
   def set_video_duration
     return if video? == false
 
     self.video_duration = Youtube.get_duration(reference_url)
   end
 
+  # 視聴回数の設定
   def set_view_count
     return if video? == false
 
     self.view_count = Youtube.get_view_count(reference_url)
+  end
+
+  # Youtubeのvideo IDを設定する
+  def set_youtube_id
+    return if video? == false
+
+    self.youtube_id = Youtube.get_video_id(reference_url)
   end
 
   def scrape_reference_url

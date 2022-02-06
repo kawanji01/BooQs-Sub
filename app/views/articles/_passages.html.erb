@@ -10,14 +10,12 @@
       <%= render partial: 'passages/passage_with_translation', collection: passages, as: "passage" %>
     </div>
   </div>
-  <%= render "shared/infinite_scroll_passages", contents: passages %>
+  <%= render "shared/infinite_scroll_normal", contents: passages %>
 <% else %>
   <div id="passage-list-wrapper">
     <%= render partial: 'passages/passage_with_translation', collection: passages, as: "passage" %>
   </div>
 <% end %>
-
-
 
 
 <div id="passage-form" class="my-5">

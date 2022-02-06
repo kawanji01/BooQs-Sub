@@ -39,7 +39,7 @@
   </div>
 
 </div>
-<p class="text-secondary text-center mt-3"><%= @article.view_count&.to_s(:delimited, delimiter: ',') %><%= t('articles.video_views') %></p>
+<p class="text-secondary text-center mt-3"><%= t("lang.#{@article.lang_code_of_audio}") %> / <%= @article.view_count&.to_s(:delimited, delimiter: ',') %><%= t('articles.video_views') %></p>
 
 
 
@@ -47,14 +47,5 @@
 
 
 <div id="auto-scroll-padding"></div>
-<!--
-<#% video_id = return_youtube_id(@article.reference_url) %>
-<div id="movie-wrap">
-  <div class="movie-wrap" id="youtube-video">
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/<#%= video_id %>?playsinline=1&autoplay=1&mute=0&start=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  </div>
-</div>
-<div id="auto-scroll-padding"></div>
--->
 <p>　</p>
 <p>　</p>

@@ -19,7 +19,7 @@ class Youtube < ApplicationRecord
     url.include?('https://youtu.be/')
   end
 
-  # Youtubeのvideo_idを取得する。
+  # Youtubeの動画のidを返す / Return Youtube's movie ID
   def self.get_video_id(url)
     return if Youtube.youtube_url?(url) == false
 
