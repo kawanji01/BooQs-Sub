@@ -2,7 +2,7 @@ module ApplicationHelper
 
   def default_meta_tags
     {
-      site: 'BooQs Sub',
+      site: 'DiqtSub',
       title: t('layouts.title'),
       reverse: true,
       charset: 'utf-8',
@@ -20,12 +20,12 @@ module ApplicationHelper
         description: :description,
         type: 'website',
         url: request.original_url,
-        image: image_url('OGP_BooQs.png'),
+        image: image_url('OGP_diqt.png'),
         locale: @locale
       },
       twitter: {
         card: 'summary',
-        site: '@BooQs_net'
+        site: '@diqtsub_net'
       }
     }
   end
