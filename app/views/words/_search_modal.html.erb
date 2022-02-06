@@ -19,7 +19,8 @@
     <% end %>
 
 
-    <% if dictionary.present? && @query != words&.first&.[](:entry) %>
+    <% if words&.first.blank? || @query.downcase != words&.first['entry'] %>
+
       <div id="not-founded-entry">
         <h5 class="text-left font-weight-bold"><%= t('dictionaries.keyword_doesnt_exists', keyword: @query) %></h5>
         <% if @query.gsub(/[[:punct:]]/, '').present? %>
