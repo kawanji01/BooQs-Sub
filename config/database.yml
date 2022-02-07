@@ -6,9 +6,13 @@
 #
 default: &default
   adapter: postgresql
-  encoding: utf8
+  encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  database: booqs_sub_development
   timeout: 5000
+
+development:
+  <<: *default
   # hostにデータベースのコンテナ名であるdbを指定することでDockerのconnection errorを解決する。/ https://qiita.com/kenz-dev/items/b9e716204e0cd0cea447
   # もしDockerを利用しないなら、hostをdbからlocalhostに変更する。
   host: localhost
@@ -21,9 +25,6 @@ default: &default
   # ローカル環境なら、database.ymlのusernameを各々のrollに書き換える。
   username: <%= ENV['SU_ROLE'] %>
   password: password
-development:
-  <<: *default
-  database: booqs_sub_development
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -34,7 +35,6 @@ test:
 
 production:
   <<: *default
-  url: <%= ENV['HEROKU_POSTGRESQL_COBALT_URL'] %>
-  database: booqs_sub_production
+  database: diqt_sub_production
   # productionではまだDockerを導入していないので、portは5432に指定しておく。
   port: 5432
