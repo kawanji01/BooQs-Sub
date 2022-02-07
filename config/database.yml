@@ -34,6 +34,7 @@ test:
 
 production:
   <<: *default
+  url: <%= ENV['HEROKU_POSTGRESQL_COBALT_URL'] %>
   database: booqs_sub_production
   # productionではまだDockerを導入していないので、portは5432に指定しておく。
   port: 5432
