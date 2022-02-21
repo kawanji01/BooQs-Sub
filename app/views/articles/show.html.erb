@@ -251,8 +251,9 @@
                 height: '360',
                 width: '640',
                 videoId: $videoId,
+                // パラメーターについてはref: https://developers.google.com/youtube/player_parameters.html?playerVersion=HTML5
                 playerVars: {
-                    autoplay: 1,
+                    autoplay: 0,
                     modestbranding: 1,
                     playsinline: 1,
                     rel: 0,
@@ -270,7 +271,8 @@
 
     // onReady
     function onPlayerReady(event) {
-        event.target.playVideo();
+        // 画面遷移時の自動再生をOFFにする。
+        // event.target.playVideo();
     }
 
     // onStateChange
