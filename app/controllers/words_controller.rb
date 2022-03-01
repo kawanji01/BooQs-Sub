@@ -13,8 +13,9 @@ class WordsController < ApplicationController
     # uri.port   => 4567
     # uri.path   => ''
     # uri.query  => 'param1=foo&param2=bar+baz&param3=%E3%81%82'
-    uri = URI.parse("https://www.booqs.net/#{@locale}/api/v1/extensions/words/search?#{params}")
     params = {dictionary_id: '1', keyword: @query}
+    uri = URI.parse("https://www.booqs.net/#{@locale}/api/v1/extensions/words/search")
+
 
     begin
       response = Net::HTTP.post_form(uri, params)
