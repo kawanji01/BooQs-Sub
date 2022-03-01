@@ -228,7 +228,7 @@ class ArticlesController < ApplicationController
                               .map { |number| Lang.convert_number_to_code(number) }
     @available_captions.unshift('original')
     @lang_code_of_translation = params[:lang_code_of_translation]
-    @value = if request.referer[/sub=(.+)/, 1].blank?
+    @value = if request.referer.present? && request.referer[/sub=(.+)/, 1].blank?
                'original'
              else
                @lang_code_of_translation
