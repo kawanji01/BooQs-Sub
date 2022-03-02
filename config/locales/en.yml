@@ -105,7 +105,7 @@ en:
   mn: 'Mongolian'
   my: 'Myanmar (Burmese)'
   ne: 'Nepali'
-  no: 'Norwegian'
+  'no': 'Norwegian' # ''で指定しないとNoで表示されてしまう。
   ny: 'Nyanja (Chichewa)'
   or: 'Odia (Oriya)'
   ps: 'Pashto'
