@@ -12,6 +12,10 @@ Rails.application.routes.draw do
     # APIとサービスの「認証情報」の設定
     get '/auth/google_oauth2/callback', to: 'static_pages#home'
 
+
+    # sitemap
+    get 'sitemap', to: redirect('https://s3-ap-northeast-1.amazonaws.com/kawanji/diqtsub_sitemaps/sitemap.xml.gz')
+
     resources :subtitles do
       collection do
         get  :select_captions
