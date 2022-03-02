@@ -64,6 +64,8 @@ gem 'google-cloud-translate', '~> 2.1.1'
 gem 'deepl-rb', require: 'deepl'
 # 決済
 gem 'stripe'
+# sitemapの作成 ref: https://github.com/kjvarga/sitemap_generator
+gem 'sitemap_generator'
 
 group :development, :test do
   # gem 'sqlite3', '1.4.1'
