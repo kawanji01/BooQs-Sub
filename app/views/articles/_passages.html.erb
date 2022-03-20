@@ -4,19 +4,23 @@
 <% end %>
 
 
-<% if article.passages.size > 30 %>
-  <div id="infinite-scroll-passages">
+<!--
+<#% if article.passages.size > 30 %>
+  <div id="infinite-scroll-passages-disabled">
     <div class="append-content" id="passage-list-wrapper">
-      <%= render partial: 'passages/passage_with_translation', collection: passages, as: "passage" %>
+      <#%= render partial: 'passages/passage_with_translation', collection: passages, as: "passage" %>
     </div>
   </div>
-  <%= render "shared/infinite_scroll_normal", contents: passages %>
-<% else %>
+  <#%= render "shared/infinite_scroll_normal", contents: passages %>
+<#% else %>
   <div id="passage-list-wrapper">
-    <%= render partial: 'passages/passage_with_translation', collection: passages, as: "passage" %>
+    <#%= render partial: 'passages/passage_with_translation', collection: passages, as: "passage" %>
   </div>
-<% end %>
-
+<#% end %>
+-->
+<div id="passage-list-wrapper">
+  <%= render partial: 'passages/passage_with_translation', collection: passages, as: "passage" %>
+</div>
 
 <div id="passage-form" class="my-5">
   <%= render 'passages/new_btn', article: article %>
