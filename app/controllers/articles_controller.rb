@@ -5,7 +5,7 @@ class ArticlesController < ApplicationController
     @related_articles = @article.find_related_tags.limit(6)
     @title_translation = @article.find_title_translation(@lang_number_of_translation)
 
-    @passages = @article.passages.order(start_time: :asc).page(params[:page]).per(30)
+    @passages = @article.passages.order(start_time: :asc)
 
     @video_id = Youtube.get_video_id(@article.reference_url)
     @translated_lang_numbers = @article.translations.group(:lang_number).count.keys
