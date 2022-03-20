@@ -15,7 +15,7 @@ Rails.application.routes.draw do
 
     # sitemap
     get 'sitemap', to: redirect('https://s3-ap-northeast-1.amazonaws.com/kawanji/diqtsub_sitemaps/sitemap.xml.gz')
-    get 'ads.txt', to: redirect('https://s3-ap-northeast-1.amazonaws.com/kawanji/diqtsub/ads.txt')
+    get 'ads.txt', to: redirect('https://s3-ap-northeast-1.amazonaws.com/kawanji/ads.txt')
 
     resources :subtitles do
       collection do
