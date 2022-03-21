@@ -109,13 +109,19 @@ class Youtube < ApplicationRecord
 
       srt_file.each_line(rs = '') do |paragraph|
         timestamp = paragraph.lines.second
+        next if timestamp.blank?
+
         start_time_srt = timestamp.split(' ').first
-        start_time_seconds = start_time_srt.to_time.strftime('%S.%L')
-        start_time_minutes = start_time_srt.to_time.strftime('%M')
+        next if start_time_srt.blank?
+
+        start_time_seconds = start_time_srt.to_time&.strftime('%S.%L')
+        start_time_minutes = start_time_srt.to_time&.strftime('%M')
         start_time = (start_time_seconds.to_d + (start_time_minutes.to_i * 60).to_d).round(3)
         end_time_srt = timestamp.split(' ').last
-        end_time_seconds = end_time_srt.to_time.strftime('%S.%L')
-        end_time_minutes = end_time_srt.to_time.strftime('%M')
+        next if end_time_srt.blank?
+
+        end_time_seconds = end_time_srt.to_time&.strftime('%S.%L')
+        end_time_minutes = end_time_srt.to_time&.strftime('%M')
         end_time = (end_time_seconds.to_d + (end_time_minutes.to_i * 60).to_d).round(3)
         # １行目と２行目を取り除いたtextをつくる
         delete_list = [paragraph.lines.first, paragraph.lines.second]
