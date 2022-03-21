@@ -4,6 +4,7 @@ class PassageCreationWorker
 
   # transcript_typeは'auto-generated'かlang_code（enやjaなど）のどちらか。
   def perform(article_uid, transcript_type, lang_code, locale, user_id)
+    p 'perform'
     article = Article.find_param(article_uid)
     file_name = "transcript-#{transcript_type}_#{article_uid}"
     lang_number = Lang.convert_code_to_number(lang_code)
@@ -11,6 +12,7 @@ class PassageCreationWorker
     is_auto = transcript_type == 'auto-generated'
     # 字幕のSRTをダウンロードする。
     file, error = Youtube.download_sub_srt(file_name, article.reference_url, lang_code, is_auto)
+    p error if error.present?
     return if error.present?
 
     # SRTをpassageに取り込めるようにCSVに変換する。その際、SRTの重複表現を消す。
@@ -19,7 +21,7 @@ class PassageCreationWorker
     #p "#{transcript_type}"
     #csv = article.scrape_caption_csv(article.reference_url, lang_code)
     #end
-
+    p 'csv.blank' if csv.blank?
     return if csv.blank?
 
     # CSVをs3にアップロードして、ファイルのpathを手に入れる。
@@ -28,7 +30,8 @@ class PassageCreationWorker
 
     # CSV.parseについて。https://docs.ruby-lang.org/ja/latest/method/CSV/s/parse.html
     # S3のCSVを開く方法 https://qiita.com/ironsand/items/0211ad6773d22cbc1263
-    passages_csv = CSV.parse(open(uploaded_file_url).read, headers: true)
+    # passages_csv = CSV.parse(open(uploaded_file_url).read, headers: true)
+    passages_csv = CSV.parse(csv, headers: true)
     passages_count = passages_csv.length
     passages_csv.each_with_index do |row, i|
       text = row['text']

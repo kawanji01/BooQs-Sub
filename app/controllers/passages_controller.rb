@@ -17,7 +17,8 @@ class PassagesController < ApplicationController
   end
 
   def create
-    @passage = Passage.new(passage_params)
+    @passage = Passage.new
+    @passage.assign_attributes(passage_params)
     @article = @passage.article
     @lang_code_of_translation = params[:lang_code_of_translation]
     @editor_token = params[:editor_token]
@@ -98,8 +99,7 @@ class PassagesController < ApplicationController
   def passage_params
     params.require(:passage).permit(:id, :_destroy, :user_id, :article_id, :text, :lang_number,
                                     :start_time, :start_time_minutes, :start_time_seconds,
-                                    :end_time, :end_time_minutes, :end_time_seconds,
-    )
+                                    :end_time, :end_time_minutes, :end_time_seconds)
   end
 
 end
