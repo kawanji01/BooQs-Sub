@@ -55,13 +55,11 @@ class TranslationCreationWorker
     #              icon_url: 'https://kawanji.s3.amazonaws.com/uploads/user/icon/1/diqt_icon.png',
     #              attachments: [a_ok_note]
     translations_count = translations_csv.length
-    SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{translations_count}", "fetch csv with url")
     translations_csv.each_with_index do |row, i|
-      SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{row['text'].force_encoding("UTF-8")}", "row[text]") if i % 20 == 0 && row['text'].present?
+      # SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{row['text'].force_encoding("UTF-8")}", "row[text]") if i % 20 == 0 && row['text'].present?
       # htmlタグ＆末尾の不要な改行を取り除く。
       text = Sanitize.clean(row['text']).strip
       next if text.blank?
-      # SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{text}", "#{text.encoding}") if i % 20 == 0
 
       start_time = row['start_time'].to_d
       end_time = row['end_time'].to_d

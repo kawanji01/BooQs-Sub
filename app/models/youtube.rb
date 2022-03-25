@@ -105,7 +105,7 @@ class Youtube < ApplicationRecord
   def self.convert_srt_into_csv(srt_file, lang_number = nil, duplication_removed = false)
     previous_text_array = []
 
-    file = CSV.generate do |csv|
+    CSV.generate do |csv|
       # 　Rubyの%記法。%w(A B)は、[a,b]と同じ。注意点は「,」はいらないこと。
       header = %w[text start_time start_time_minutes start_time_seconds end_time end_time_minutes end_time_seconds lang_number]
       csv << header
@@ -147,7 +147,7 @@ class Youtube < ApplicationRecord
       end
     end
     #SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{file}", "convert_srt_into_csv")
-    file
+    #file
   end
 
   def self.convert_csv_into_srt(csv_str)
