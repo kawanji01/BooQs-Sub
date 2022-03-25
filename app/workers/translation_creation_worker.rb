@@ -1,3 +1,4 @@
+# Youtubeの字幕を翻訳として読み込むWorker
 class TranslationCreationWorker
   include Sidekiq::Worker
   sidekiq_options queue: :often
@@ -37,8 +38,9 @@ class TranslationCreationWorker
     translations_count = translations_csv.length
     translations_csv.each_with_index do |row, i|
       # htmlタグ＆末尾の不要な改行を取り除く。
-      text = Sanitize.clean(row['text']).strip&.force_encoding('UTF-8')
+      text = Sanitize.clean(row['text']).strip
       next if text.blank?
+      SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{text}", "#{text.encoding}") if i % 20 == 0
 
       start_time = row['start_time'].to_d
       end_time = row['end_time'].to_d
@@ -72,7 +74,7 @@ class TranslationCreationWorker
     end
 
     if article.save && Rails.env.production?
-      # 使い終わったCSVをS３から消す
+      # 使い終わったCSVをS3から消す
       FileUtility.delete_s3_tmp_file(file_name_csv)
     else
       Open3.capture3("rm tmp/#{file_name_csv}")
