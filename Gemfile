@@ -66,6 +66,9 @@ gem 'deepl-rb', require: 'deepl'
 gem 'stripe'
 # sitemapの作成 ref: https://github.com/kjvarga/sitemap_generator
 gem 'sitemap_generator'
+# 本番環境の特定の処理のログを確認するために利用
+gem 'slack-notifier', '~> 2.3.2'
+
 
 group :development, :test do
   # gem 'sqlite3', '1.4.1'

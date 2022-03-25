@@ -6,7 +6,7 @@ class PassageFileImportWorker
     article = Article.find_param(article_uid)
     # CSV.parseについて。https://docs.ruby-lang.org/ja/latest/method/CSV/s/parse.html
     # S3のCSVを開く方法 https://qiita.com/ironsand/items/0211ad6773d22cbc1263
-    sleep(5)
+    sleep(3)
     passages_csv = CSV.parse(open(uploaded_file_url).read, headers: true)
     passages_count = passages_csv.length
     passages_csv.each_with_index do |row, i|

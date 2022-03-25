@@ -12,6 +12,7 @@ class TranslationFileImportWorker
     translations_count = translations_csv.length
     translations_csv.each_with_index do |row, i|
       text = row['text'].strip
+      p text
       # lang_numberがわかっているなら、それを引数で渡して設定したほうがいい。
       lang_number = row['lang_number'].to_i if lang_number.blank?
       lang_number = Lang.return_lang_number(text) if lang_number.blank?

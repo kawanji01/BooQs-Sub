@@ -37,7 +37,7 @@ class TranslationCreationWorker
     translations_count = translations_csv.length
     translations_csv.each_with_index do |row, i|
       # htmlタグ＆末尾の不要な改行を取り除く。
-      text = Sanitize.clean(row['text']).strip
+      text = Sanitize.clean(row['text']).strip&.force_encoding('UTF-8')
       next if text.blank?
 
       start_time = row['start_time'].to_d
