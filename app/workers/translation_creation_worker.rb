@@ -56,7 +56,7 @@ class TranslationCreationWorker
     translations_count = translations_csv.length
     SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{translations_count}", "fetch csv with url")
     translations_csv.each_with_index do |row, i|
-      SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{row['text']}", "row[text]") if i % 20 == 0
+      SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{row['text']}", "row[text]") if i % 20 == 0 && row['text'].present?
       # htmlタグ＆末尾の不要な改行を取り除く。
       text = Sanitize.clean(row['text']).strip
       next if text.blank?
