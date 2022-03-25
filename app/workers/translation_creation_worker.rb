@@ -30,19 +30,19 @@ class TranslationCreationWorker
     return if csv.blank?
 
     file_name_csv = "translation-#{lang_code}_#{article_uid}_#{user_uid}.csv"
-    uploaded_file_url = FileUtility.upload_file_and_get_s3_path(csv, file_name_csv)
+    # uploaded_file_url = FileUtility.upload_file_and_get_s3_path(csv, file_name_csv)
 
     # CSV.parseについて。https://docs.ruby-lang.org/ja/latest/method/CSV/s/parse.html
     # S3のCSVを開く方法 https://qiita.com/ironsand/items/0211ad6773d22cbc1263
-    translations_csv = CSV.parse(open(uploaded_file_url).read, headers: true)
-    #translations_csv = CSV.parse(csv, headers: true)
+    # translations_csv = CSV.parse(open(uploaded_file_url).read, headers: true)
+    translations_csv = CSV.parse(csv, headers: true)
     translations_count = translations_csv.length
     translations_csv.each_with_index do |row, i|
-      SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{row['text'].force_encoding("UTF-8")}", "row[text]") if i % 20 == 0 && row['text'].present?
-      text_utf8 = row['text'].force_encoding("UTF-8")
+      # SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{row['text'].force_encoding("UTF-8")}", "row[text]") if i % 20 == 0 && row['text'].present?
+      # text_utf8 = row['text'].force_encoding("UTF-8")
       # htmlタグ＆末尾の不要な改行を取り除く。
-      # text = Sanitize.clean(row['text']).strip
-      text = Sanitize.clean(text_utf8).strip
+      text = Sanitize.clean(row['text']).strip
+      # text = Sanitize.clean(text_utf8).strip
       next if text.blank?
 
       start_time = row['start_time'].to_d
