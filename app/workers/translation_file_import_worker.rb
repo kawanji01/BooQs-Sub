@@ -1,3 +1,4 @@
+# ユーザーの用意したSTRファイルを翻訳として読み込むWorker
 class TranslationFileImportWorker
   include Sidekiq::Worker
   sidekiq_options queue: :often

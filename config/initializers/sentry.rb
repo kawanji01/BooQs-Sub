@@ -6,7 +6,6 @@ Sentry.init do |config|
   # 本番環境でだけ動かす / https://blog.solunita.net/posts/set-up-sentry-for-rails-by-sentry-rails/
   config.enabled_environments = %w[production]
   config.environment = Rails.env
-
   # Set tracesSampleRate to 1.0 to capture 100%
   # of transactions for performance monitoring.
   # We recommend adjusting this value in production
