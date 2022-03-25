@@ -71,6 +71,9 @@ class Youtube < ApplicationRecord
     error = 'SRT file not found.' if system("test -e ./tmp/#{file_name}.srt") == false
     return file, error if error.present?
 
+    file_1 = File.open("./tmp/#{file_name}.srt", 'r')
+    file_text = file_1.read.slice(0..400)
+    SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{file_text}", "#{file_text.encoding}")
     file = File.open("./tmp/#{file_name}.srt", 'r')
     [file, error]
   end
