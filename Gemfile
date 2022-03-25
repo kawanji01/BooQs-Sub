@@ -68,7 +68,9 @@ gem 'stripe'
 gem 'sitemap_generator'
 # 本番環境の特定の処理のログを確認するために利用
 gem 'slack-notifier', '~> 2.3.2'
-
+# sentry
+gem "sentry-ruby"
+gem "sentry-rails"
 
 group :development, :test do
   # gem 'sqlite3', '1.4.1'
