@@ -42,19 +42,21 @@ class TranslationCreationWorker
     # S3のCSVを開く方法 https://qiita.com/ironsand/items/0211ad6773d22cbc1263
     translations_csv = CSV.parse(open(uploaded_file_url).read, headers: true)
     #SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{translations_csv}", "fetch csv with url")
-    notifier = Slack::Notifier.new(
-      ENV['WEBHOOK_URL'],
-      channel: '#webhook-test',
-      username: "encode error",
-      )
-    a_ok_note = {
-      title: "fetch csv with url",
-    }
-    notifier.post text: "#{translations_csv[0..10].join("\n")}",
-                  icon_url: 'https://kawanji.s3.amazonaws.com/uploads/user/icon/1/diqt_icon.png',
-                  attachments: [a_ok_note]
+    #notifier = Slack::Notifier.new(
+    #  ENV['WEBHOOK_URL'],
+    #  channel: '#webhook-test',
+    #  username: "encode error",
+    #  )
+    #a_ok_note = {
+    #  title: "fetch csv with url",
+    #}
+    #notifier.post text: "#{translations_csv[0..10].join("\n")}",
+    #              icon_url: 'https://kawanji.s3.amazonaws.com/uploads/user/icon/1/diqt_icon.png',
+    #              attachments: [a_ok_note]
     translations_count = translations_csv.length
+    SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{translations_count}", "fetch csv with url")
     translations_csv.each_with_index do |row, i|
+      SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{row['text']}", "row[text]") if i % 20 == 0
       # htmlタグ＆末尾の不要な改行を取り除く。
       text = Sanitize.clean(row['text']).strip
       next if text.blank?
