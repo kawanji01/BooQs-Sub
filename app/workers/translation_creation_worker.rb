@@ -50,7 +50,7 @@ class TranslationCreationWorker
     a_ok_note = {
       title: "fetch csv with url",
     }
-    notifier.post text: "#{translations_csv}",
+    notifier.post text: "#{translations_csv[0..10].join("\n")}",
                   icon_url: 'https://kawanji.s3.amazonaws.com/uploads/user/icon/1/diqt_icon.png',
                   attachments: [a_ok_note]
     translations_count = translations_csv.length

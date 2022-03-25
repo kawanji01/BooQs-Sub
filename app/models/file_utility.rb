@@ -5,8 +5,6 @@ class FileUtility < ApplicationRecord
   # ファイルと拡張子含めたファイルネームを渡すことで、S3にファイルをアップロードして、ファイルのpathを取得する。
   def self.upload_file_and_get_s3_path(file, file_name_with_ext)
     file_path = "./tmp/#{file_name_with_ext}"
-    p file_path
-    p file
     File.write(file_path, file)
     # sidekiqで非同期で処理するために、CSVをS3にアップロードする
     uploader = TmpUploader.new
