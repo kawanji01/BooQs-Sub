@@ -40,7 +40,8 @@ class TranslationCreationWorker
 
     # CSV.parseについて。https://docs.ruby-lang.org/ja/latest/method/CSV/s/parse.html
     # S3のCSVを開く方法 https://qiita.com/ironsand/items/0211ad6773d22cbc1263
-    translations_csv = CSV.parse(open(uploaded_file_url).read, headers: true)
+    #translations_csv = CSV.parse(open(uploaded_file_url).read, headers: true)
+    translations_csv = CSV.parse(csv, headers: true)
     #SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{translations_csv}", "fetch csv with url")
     #notifier = Slack::Notifier.new(
     #  ENV['WEBHOOK_URL'],
@@ -56,7 +57,7 @@ class TranslationCreationWorker
     translations_count = translations_csv.length
     SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{translations_count}", "fetch csv with url")
     translations_csv.each_with_index do |row, i|
-      SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{row['text']}", "row[text]") if i % 20 == 0 && row['text'].present?
+      SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{row['text'].force_encoding("UTF-8")}", "row[text]") if i % 20 == 0 && row['text'].present?
       # htmlタグ＆末尾の不要な改行を取り除く。
       text = Sanitize.clean(row['text']).strip
       next if text.blank?
