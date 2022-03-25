@@ -28,7 +28,7 @@ class TranslationCreationWorker
     #file_2 = file
     #file_text = file_2.read.slice(0..400)
     #p file_text
-    #SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{file_text}", "#{file_text.encoding}")
+    # SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{file_text}", "#{file_text.encoding}")
 
 
     # SRTをpassageに取り込めるようにCSVに変換する。その際、SRTの重複表現を消す。
@@ -41,6 +41,18 @@ class TranslationCreationWorker
     # CSV.parseについて。https://docs.ruby-lang.org/ja/latest/method/CSV/s/parse.html
     # S3のCSVを開く方法 https://qiita.com/ironsand/items/0211ad6773d22cbc1263
     translations_csv = CSV.parse(open(uploaded_file_url).read, headers: true)
+    #SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{translations_csv}", "fetch csv with url")
+    notifier = Slack::Notifier.new(
+      ENV['WEBHOOK_URL'],
+      channel: '#webhook-test',
+      username: "encode error",
+      )
+    a_ok_note = {
+      title: "fetch csv with url",
+    }
+    notifier.post text: "#{translations_csv}",
+                  icon_url: 'https://kawanji.s3.amazonaws.com/uploads/user/icon/1/diqt_icon.png',
+                  attachments: [a_ok_note]
     translations_count = translations_csv.length
     translations_csv.each_with_index do |row, i|
       # htmlタグ＆末尾の不要な改行を取り除く。

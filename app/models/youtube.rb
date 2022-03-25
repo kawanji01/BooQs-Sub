@@ -72,7 +72,7 @@ class Youtube < ApplicationRecord
     return file, error if error.present?
 
     file_1 = File.open("./tmp/#{file_name}.srt", 'r')
-    file_text = file_1.read.slice(0..400)
+    file_text = file_1.read.slice(0..200)
     SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{file_text}", "#{file_text.encoding}")
     file = File.open("./tmp/#{file_name}.srt", 'r')
     [file, error]
@@ -105,7 +105,7 @@ class Youtube < ApplicationRecord
   def self.convert_srt_into_csv(srt_file, lang_number = nil, duplication_removed = false)
     previous_text_array = []
 
-    CSV.generate do |csv|
+    file = CSV.generate do |csv|
       # 　Rubyの%記法。%w(A B)は、[a,b]と同じ。注意点は「,」はいらないこと。
       header = %w[text start_time start_time_minutes start_time_seconds end_time end_time_minutes end_time_seconds lang_number]
       csv << header
@@ -131,6 +131,7 @@ class Youtube < ApplicationRecord
         text_array = paragraph.lines.delete_if { |line| delete_list.include?(line) }
         # youtubeのvvtをsrtに変換したときに発生する、直前のtextとの重複文章を削除する。
         # 重複をきちんと削除できるようにするために、\r\nをすべて\nに統一する。 参考：https://qiita.com/QUANON/items/7c27f4970a2c9063669e
+        # text_array = text_array.map { |text| text.gsub(/\R/, "\n") }
         text_array = text_array.map { |text| text.gsub(/\R/, "\n") }
         text_array = text_array.delete_if { |line| previous_text_array.include?(line) } if duplication_removed
         text = text_array&.join("\n")
@@ -145,6 +146,8 @@ class Youtube < ApplicationRecord
         csv << values
       end
     end
+    SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{file}", "convert_srt_into_csv")
+    file
   end
 
   def self.convert_csv_into_srt(csv_str)
