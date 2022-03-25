@@ -71,9 +71,6 @@ class Youtube < ApplicationRecord
     error = 'SRT file not found.' if system("test -e ./tmp/#{file_name}.srt") == false
     return file, error if error.present?
 
-    # file_1 = File.open("./tmp/#{file_name}.srt", 'r')
-    #file_text = file_1.read.slice(0..200)
-    # SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{file_text}", "#{file_text.encoding}")
     file = File.open("./tmp/#{file_name}.srt", 'r')
     [file, error]
   end
@@ -146,8 +143,6 @@ class Youtube < ApplicationRecord
         csv << values
       end
     end
-    #SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{file}", "convert_srt_into_csv")
-    #file
   end
 
   def self.convert_csv_into_srt(csv_str)

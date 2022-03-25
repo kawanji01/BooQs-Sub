@@ -25,12 +25,6 @@ class TranslationCreationWorker
     file, error = Youtube.download_sub_srt(file_name, article.reference_url, lang_code, is_auto)
     return if error.present?
 
-    #file_2 = file
-    #file_text = file_2.read.slice(0..400)
-    #p file_text
-    # SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{file_text}", "#{file_text.encoding}")
-
-
     # SRTをpassageに取り込めるようにCSVに変換する。その際、SRTの重複表現を消す。
     csv = Youtube.convert_srt_into_csv(file, lang_number, true)
     return if csv.blank?
@@ -40,23 +34,10 @@ class TranslationCreationWorker
 
     # CSV.parseについて。https://docs.ruby-lang.org/ja/latest/method/CSV/s/parse.html
     # S3のCSVを開く方法 https://qiita.com/ironsand/items/0211ad6773d22cbc1263
-    #translations_csv = CSV.parse(open(uploaded_file_url).read, headers: true)
-    translations_csv = CSV.parse(csv, headers: true)
-    #SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{translations_csv}", "fetch csv with url")
-    #notifier = Slack::Notifier.new(
-    #  ENV['WEBHOOK_URL'],
-    #  channel: '#webhook-test',
-    #  username: "encode error",
-    #  )
-    #a_ok_note = {
-    #  title: "fetch csv with url",
-    #}
-    #notifier.post text: "#{translations_csv[0..10].join("\n")}",
-    #              icon_url: 'https://kawanji.s3.amazonaws.com/uploads/user/icon/1/diqt_icon.png',
-    #              attachments: [a_ok_note]
+    translations_csv = CSV.parse(open(uploaded_file_url).read, headers: true)
+    #translations_csv = CSV.parse(csv, headers: true)
     translations_count = translations_csv.length
     translations_csv.each_with_index do |row, i|
-      # SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{row['text'].force_encoding("UTF-8")}", "row[text]") if i % 20 == 0 && row['text'].present?
       # htmlタグ＆末尾の不要な改行を取り除く。
       text = Sanitize.clean(row['text']).strip
       next if text.blank?
