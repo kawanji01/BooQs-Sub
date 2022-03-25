@@ -25,10 +25,10 @@ class TranslationCreationWorker
     file, error = Youtube.download_sub_srt(file_name, article.reference_url, lang_code, is_auto)
     return if error.present?
 
-    file_2 = file
-    file_text = file_2.read.slice(0..400)
-    p file_text
-    SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{file_text}", "#{file_text.encoding}")
+    #file_2 = file
+    #file_text = file_2.read.slice(0..400)
+    #p file_text
+    #SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{file_text}", "#{file_text.encoding}")
 
 
     # SRTをpassageに取り込めるようにCSVに変換する。その際、SRTの重複表現を消す。
