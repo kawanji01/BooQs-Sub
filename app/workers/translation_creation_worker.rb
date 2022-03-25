@@ -38,6 +38,7 @@ class TranslationCreationWorker
     #translations_csv = CSV.parse(csv, headers: true)
     translations_count = translations_csv.length
     translations_csv.each_with_index do |row, i|
+      SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{row['text'].force_encoding("UTF-8")}", "row[text]") if i % 20 == 0 && row['text'].present?
       # htmlタグ＆末尾の不要な改行を取り除く。
       text = Sanitize.clean(row['text']).strip
       next if text.blank?
