@@ -72,7 +72,7 @@ en:
     passages_updated: 'Originals Updated'
     translations_updated: 'Translations Updated'
     please_input_youtube_url: 'Please input URL of Youtube.'
-    import_caption: 'Import Transcript'
+    import_caption: 'Import Caption'
     please_select_transcript: 'Please select language as transcript to import.'
     auto_generated_transcript: 'Auto-generated Transcript'
     auto_sub: 'Auto-generated'

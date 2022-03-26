@@ -78,7 +78,7 @@ ja:
     auto_sub: '自動字幕'
     import_translation: '翻訳を読み込む'
     please_select_translation: '翻訳として読み込む言語を選択してください。'
-    import_captions: 'YouTubeから字幕を読み込む'
+    import_captions: '字幕を読み込む'
     import_passages: 'YouTubeから原文を読み込む'
     import_translations: 'YouTubeから翻訳を読み込む'
     explanation_for_importing_passages: 'YouTubeに設定されている字幕を、原文として読み込みます。'
