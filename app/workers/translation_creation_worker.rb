@@ -79,7 +79,8 @@ class TranslationCreationWorker
 
     if article.save && Rails.env.production?
       # 使い終わったCSVをS3から消す
-      FileUtility.delete_s3_tmp_file(file_name_csv)
+      #FileUtility.delete_s3_tmp_file(file_name_csv)
+      Open3.capture3("rm tmp/#{file_name_csv}")
     else
       Open3.capture3("rm tmp/#{file_name_csv}")
     end

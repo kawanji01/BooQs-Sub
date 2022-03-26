@@ -3,6 +3,7 @@ ja:
     modify_passage: '原文を修正する'
     add_passage: '原文を追加する'
     please_write_passage: '【必須】文章を入力してください。'
+    language: '言語'
     separate_text: '保存時に分かち書きする'
     start_time: '開始時間'
     end_time: '終了時間'

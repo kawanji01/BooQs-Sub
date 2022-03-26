@@ -30,7 +30,7 @@
 
       <div class="text-preview-wrapper mb-3">
         <%= f.text_area :text, class: 'form-control preview-target-text', placeholder: t('translations.text_placeholder') , rows: 3 %>
-        <%= render 'translations/lang_form', f: f, lang_number: f.object.lang_number %>
+        <%= render 'translations/lang_number_form', f: f, lang_number: f.object.lang_number %>
         <div class="small text-left">
           <a href="#" class="text-success text-preview-btn"><u><%= t('articles.text_preview') %></u></a></div>
       </div>
