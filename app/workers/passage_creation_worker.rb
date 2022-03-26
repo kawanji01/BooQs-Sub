@@ -19,7 +19,7 @@ class PassageCreationWorker
     return if csv.blank?
 
     # CSVをs3にアップロードして、ファイルのpathを手に入れる。
-    file_name_csv = "#{file_name}.csv"
+    # file_name_csv = "#{file_name}.csv"
     # uploaded_file_url = FileUtility.upload_file_and_get_s3_path(csv, file_name_csv)
 
     # CSV.parseについて。https://docs.ruby-lang.org/ja/latest/method/CSV/s/parse.html
@@ -28,7 +28,8 @@ class PassageCreationWorker
     passages_csv = CSV.parse(csv, headers: true)
     passages_count = passages_csv.length
     passages_csv.each_with_index do |row, i|
-      text = row['text']
+      # htmlタグ＆末尾の不要な改行を取り除く。
+      text = Sanitize.clean(row['text']).strip
       # CSVにlang_numberが設定されているならそれを採用し、設定されていないならテキストから言語を調査して設定する。
       lang_number = row['lang_number'] if lang_number.blank?
       lang_number = Lang.return_lang_number(text) if lang_number.blank?
@@ -68,3 +69,6 @@ class PassageCreationWorker
                                  redirect_url: "/#{locale}/articles/#{article_uid}"
   end
 end
+
+# Translation_creation_workerと同じく、日本語の文字化けの解決ができなかったので、S3に一度アップロードするのはやめた。
+# 考えてみれば、一度アップロードする必要もない。
