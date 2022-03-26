@@ -30,6 +30,7 @@ class TranslationCreationWorker
     return if csv.blank?
 
     file_name_csv = "translation-#{lang_code}_#{article_uid}_#{user_uid}.csv"
+    # URL経由で読み込むと文字化けする。 row['text'].force_encoding("UTF-8") をしても途中で処理が止まる。
     # uploaded_file_url = FileUtility.upload_file_and_get_s3_path(csv, file_name_csv)
 
     # CSV.parseについて。https://docs.ruby-lang.org/ja/latest/method/CSV/s/parse.html

@@ -8,10 +8,10 @@ class TagsController < ApplicationController
   end
 
   def article_tags
-
   end
 
   def articles
+    @navbar_displayed = true
     @tag = ActsAsTaggableOn::Tag.find(params[:id])
     articles = Article.tagged_with(@tag.name)
     @articles_count = articles.size
