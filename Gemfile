@@ -14,7 +14,6 @@ gem 'bootsnap',   '1.4.5', require: false
 gem 'bootstrap', '~> 4.3.0'
 gem 'jquery-rails'
 
-
 # metaタグに特化したパーサ/ https://github.com/metainspector/metainspector
 # mechanizeを導入したので削除予定。→ Too Many Requests とかエラーが頻出したのでtitleとogpの取得には引き続きmetainspectorも利用する。
 gem 'metainspector'
