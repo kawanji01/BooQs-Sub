@@ -1,0 +1,8 @@
+<div class="input-group my-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text" for="passageLanguage"><%= t('passages.language') %></label>
+  </div>
+  <%= f.select :lang_number, lang_form_and_auto_configure,
+               {},
+               {class: 'custom-select form-control preview-target-lang-number', id: 'passageLanguage'} %>
+</div>

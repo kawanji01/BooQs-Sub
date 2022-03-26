@@ -29,7 +29,7 @@
       <%= f.hidden_field :article_id, value: article.id %>
       <div class="text-preview-wrapper mb-3">
         <%= f.text_field :text, value: @translation_text, class: 'form-control form-control-lg preview-target-text', placeholder: t('translations.text_placeholder') %>
-        <%= render 'translations/lang_form', f: f, lang_number: Lang.convert_code_to_number(@lang_code_of_translation) %>
+        <%= render 'translations/lang_number_form', f: f, lang_number: Lang.convert_code_to_number(@lang_code_of_translation) %>
         <div class="small text-left">
           <a href="#" class="text-success text-preview-btn"><u><%= t('articles.text_preview') %></u></a></div>
       </div>

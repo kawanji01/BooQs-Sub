@@ -3,6 +3,7 @@ en:
     modify_passage: 'Modify Passage'
     add_passage: 'Add Passage'
     please_write_passage: 'Please write a passage'
+    language: 'Language'
     start_time: 'Start Time'
     end_time: 'End Time'
     minutes_placeholder: 'Minutes'
