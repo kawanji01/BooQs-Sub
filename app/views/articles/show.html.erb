@@ -111,10 +111,10 @@
           <!-- https://stackoverflow.com/questions/17904862/bootstrap-position-of-dropdown-menu-relative-to-navbar-item/19253730#19253730 -->
           <div class="dropdown-menu dropdown-menu-right">
             <%= link_to passage_importer_article_path(@article), remote: true, method: :post, class: 'dropdown-item my-2 main-loading-show-btn' do %>
-              <%= t 'articles.import_passages' %>
+              <i class="fal fa-closed-captioning mr-2"></i><%= t 'articles.import_caption' %>
             <% end %>
             <%= link_to passage_file_importer_article_path(@article), remote: true, method: :post, class: 'dropdown-item my-2 main-loading-show-btn' do %>
-              <%= t('articles.import_file') %>
+              <i class="fal fa-file-import mr-2"></i><%= t('articles.import_file') %>
             <% end %>
           </div>
         </div>
@@ -128,16 +128,16 @@
           <div class="dropdown-menu dropdown-menu-right">
 
             <%= link_to translation_importer_article_path(@article), remote: true, method: :post, class: 'dropdown-item my-2 main-loading-show-btn' do %>
-              <%= t 'articles.import_translation' %>
+              <i class="fal fa-closed-captioning mr-2"></i><%= t 'articles.import_caption' %>
             <% end %>
 
 
             <%= link_to translation_file_importer_article_path(@article), remote: true, method: :post, class: 'dropdown-item my-2 main-loading-show-btn' do %>
-              <%= t('articles.import_file') %>
+              <i class="fal fa-file-import mr-2"></i><%= t('articles.import_file') %>
             <% end %>
 
             <%= link_to batch_translation_article_path(@article), remote: true, method: :post, class: 'dropdown-item my-2 main-loading-show-btn' do %>
-              <%= t 'articles.batch_translation' %>
+              <i class="fal fa-language mr-2"></i><%= t 'articles.batch_translation' %>
             <% end %>
 
           </div>

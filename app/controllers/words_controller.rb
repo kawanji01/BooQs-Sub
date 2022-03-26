@@ -14,7 +14,7 @@ class WordsController < ApplicationController
     # uri.path   => ''
     # uri.query  => 'param1=foo&param2=bar+baz&param3=%E3%81%82'
     params = {dictionary_id: '1', keyword: @query}
-    uri = URI.parse("https://www.booqs.net/#{@locale}/api/v1/extensions/words/search")
+    uri = URI.parse("https://www.diqt.net/#{@locale}/api/v1/extensions/words/search")
 
 
     begin
