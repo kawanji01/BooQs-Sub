@@ -4,7 +4,6 @@ class PassageCreationWorker
 
   # transcript_typeは'auto-generated'かlang_code（enやjaなど）のどちらか。
   def perform(article_uid, transcript_type, lang_code, locale, user_id)
-    p 'perform'
     article = Article.find_param(article_uid)
     file_name = "transcript-#{transcript_type}_#{article_uid}"
     lang_number = Lang.convert_code_to_number(lang_code)
@@ -17,16 +16,11 @@ class PassageCreationWorker
 
     # SRTをpassageに取り込めるようにCSVに変換する。その際、SRTの重複表現を消す。
     csv = Youtube.convert_srt_into_csv(file, lang_number, true)
-    #else
-    #p "#{transcript_type}"
-    #csv = article.scrape_caption_csv(article.reference_url, lang_code)
-    #end
-    p 'csv.blank' if csv.blank?
     return if csv.blank?
 
     # CSVをs3にアップロードして、ファイルのpathを手に入れる。
     file_name_csv = "#{file_name}.csv"
-    uploaded_file_url = FileUtility.upload_file_and_get_s3_path(csv, file_name_csv)
+    # uploaded_file_url = FileUtility.upload_file_and_get_s3_path(csv, file_name_csv)
 
     # CSV.parseについて。https://docs.ruby-lang.org/ja/latest/method/CSV/s/parse.html
     # S3のCSVを開く方法 https://qiita.com/ironsand/items/0211ad6773d22cbc1263
@@ -49,9 +43,7 @@ class PassageCreationWorker
                              end_time: row['end_time'].to_d,
                              end_time_minutes: row['end_time_minutes'].to_i,
                              end_time_seconds: row['end_time_seconds'].to_d)
-      # passage.save
-      # p 'passage-save'
-      # passage.separate_text
+
       ActionCable.server.broadcast 'progress_bar_channel',
                                    content_id: article_uid,
                                    user_id: user_id,
@@ -62,7 +54,8 @@ class PassageCreationWorker
 
     if article.save && Rails.env.production?
       # 使い終わったCSVをS３から消す
-      FileUtility.delete_s3_tmp_file(file_name_csv)
+      # FileUtility.delete_s3_tmp_file(file_name_csv)
+      Open3.capture3("rm tmp/#{file_name}*")
     else
       Open3.capture3("rm tmp/#{file_name}*")
     end
