@@ -1,5 +1,5 @@
 <nav id="nav-menu" class="mb-5">
-  <ul class="nav-menu-inner container">
+  <ul class="nav-menu-inner container" style="min-width: 720px;">
 
     <li class="<%= "active" if request.path == root_path %>">
       <a href="<%= root_path %>">
@@ -14,5 +14,29 @@
     </li>
 
 
+    <li class="<%= "active" if request.path == articles_tag_path(48) %>">
+      <a href="<%= articles_tag_path(48) %>">
+        <i class="far fa-tags mr-2"></i>flutter
+      </a>
+    </li>
+
+
+    <li class="<%= "active" if request.path == articles_tag_path(2) %>">
+      <a href="<%= articles_tag_path(2) %>">
+        <i class="far fa-tags mr-2"></i>hololive
+      </a>
+    </li>
+
+    <li class="<%= "active" if request.path == caption_downloader_path %>">
+      <a href="<%= caption_downloader_path %>">
+        <i class="far fa-closed-captioning mr-2"></i><%= t('subtitles.caption_download') %>
+      </a>
+    </li>
+
+    <li class="<%= "active" if request.path == transcriber_path %>">
+      <a href="<%= transcriber_path %>">
+        <i class="far fa-file-video mr-2"></i><%= t('subtitles.transcription') %>
+      </a>
+    </li>
   </ul>
 </nav>

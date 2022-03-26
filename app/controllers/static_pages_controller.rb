@@ -8,13 +8,15 @@ class StaticPagesController < ApplicationController
   end
   
   def transcriber
+    @navbar_displayed = true
     @breadcrumb_hash = { t('static_pages.home') => root_path,
                          t('subtitles.transcribe_videos_on_youtube') => '' }
   end
 
   def caption_downloader
+    @navbar_displayed = true
     @breadcrumb_hash = { t('static_pages.home') => root_path,
-                         t('subtitles.download_subtitles_on_youtube') => '' }
+                         t('subtitles.download_captions_on_youtube') => '' }
   end
 
   def preview
