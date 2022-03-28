@@ -29,7 +29,9 @@ class PassageCreationWorker
     passages_count = passages_csv.length
     passages_csv.each_with_index do |row, i|
       # htmlタグ＆末尾の不要な改行を取り除く。
-      text = Sanitize.clean(row['text']).strip
+      #text = Sanitize.clean(row['text']).strip
+      sanitizer = Sanitizer.call(row['text'])
+      text = sanitizer.text
       # CSVにlang_numberが設定されているならそれを採用し、設定されていないならテキストから言語を調査して設定する。
       lang_number = row['lang_number'] if lang_number.blank?
       lang_number = Lang.return_lang_number(text) if lang_number.blank?
@@ -71,4 +73,4 @@ class PassageCreationWorker
 end
 
 # Translation_creation_workerと同じく、日本語の文字化けの解決ができなかったので、S3に一度アップロードするのはやめた。
-# 考えてみれば、一度アップロードする必要もない。
+# 考えてみれば、わざわざ一度アップロードする必要はない。

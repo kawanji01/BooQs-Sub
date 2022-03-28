@@ -41,9 +41,9 @@ class TranslationCreationWorker
     translations_csv.each_with_index do |row, i|
       # SlackNotificationWorker.perform_async('#webhook-test', "encode error", "#{row['text'].force_encoding("UTF-8")}", "row[text]") if i % 20 == 0 && row['text'].present?
       # text_utf8 = row['text'].force_encoding("UTF-8")
-      # htmlタグ＆末尾の不要な改行を取り除く。
-      text = Sanitize.clean(row['text']).strip
-      # text = Sanitize.clean(text_utf8).strip
+      # htmlタグや末尾の不要な改行を取り除く。
+      sanitizer = Sanitizer.call(row['text'])
+      text = sanitizer.text
       next if text.blank?
 
       start_time = row['start_time'].to_d

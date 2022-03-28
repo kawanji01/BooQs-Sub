@@ -2,6 +2,9 @@ class Lang < ApplicationRecord
   # GoogleTranslationAPIや言語関係の便利メソッドをまとめたもの
   # 絶対もっと良いやり方があるはずだけど、わからないのでとりあえずモデルで対処する。
   # このモデルは手動で作成したので、migrationファイルなどは作成されていない。
+  # こうしたモデルをサービスクラスと呼ぶらしい。
+  # そしてサービスクラスとしては、このようないくつもメソッドが集まっている実装はよくないらしいので、
+  # servicable.rbとsanitizer.rbを参考に、「スタティックファクトリーメソッドパターン」に直したい。
 
   # 言語コードを言語番号に変換して返す / convert lang_code into lang_number and return lang_number
   # 言語コードを言語番号に変換する処理は、すべて必ずこのメソッドを使うこと！ / You have to use it in all processes to convert lang_code to lang_number.
