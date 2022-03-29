@@ -3,8 +3,12 @@ class TranslationCreationWorker
   include Sidekiq::Worker
   sidekiq_options queue: :often
 
-  def perform(article_uid, translation_type, lang_code, locale, user_uid)
+  # lang_valueは、yt-dlp で　--sub-lang として指定する値。
+  # 自動字幕なら"en" のような普通のlang_codeだが、
+  # 手動字幕だと場合によっては "en-j3PyPqV-e1s" のような不規則な値が設定されている。
+  def perform(article_uid, translation_type, lang_value, locale, user_uid)
     article = Article.find_param(article_uid)
+    lang_code = Lang.convert_value_to_code(lang_value)
     lang_number = Lang.convert_code_to_number(lang_code)
     # タイトルに指定の言語の翻訳がついておらず、かつ、タイトルの言語と翻訳の言語が異なるなら、YouTubeからタイトルの翻訳も取得する。
     if article.find_title_translation(lang_number).blank? && article.lang_number != lang_number
@@ -22,12 +26,13 @@ class TranslationCreationWorker
     # translationに取り込むためのCSVを作成する。
     is_auto = translation_type == 'auto-generated'
     # 字幕のSRTをダウンロードする。
-    file, error = Youtube.download_sub_srt(file_name, article.reference_url, lang_code, is_auto)
-    return if error.present?
+    # ダウンロードでは、lang_code（en）ではなく、lang_value（en-j3PyPqV-e1s）を引数に渡す。
+    file, error = Youtube.download_sub_srt(file_name, article.reference_url, lang_value, is_auto)
+    return p error if error.present?
 
     # SRTをpassageに取り込めるようにCSVに変換する。その際、SRTの重複表現を消す。
     csv = Youtube.convert_srt_into_csv(file, lang_number, true)
-    return if csv.blank?
+    return p 'CSV blank' if csv.blank?
 
     file_name_csv = "translation-#{lang_code}_#{article_uid}_#{user_uid}.csv"
     # URL経由で読み込むと文字化けする。 row['text'].force_encoding("UTF-8") をしても途中で処理が止まる。

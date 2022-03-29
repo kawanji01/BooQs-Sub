@@ -4,6 +4,7 @@ class PassageCreationWorker
 
   # transcript_typeは'auto-generated'かlang_code（enやjaなど）のどちらか。
   def perform(article_uid, transcript_type, lang_code, locale, user_id)
+    p 'passage creation'
     article = Article.find_param(article_uid)
     file_name = "transcript-#{transcript_type}_#{article_uid}"
     lang_number = Lang.convert_code_to_number(lang_code)
