@@ -1,10 +1,11 @@
 class Lang < ApplicationRecord
   # GoogleTranslationAPIや言語関係の便利メソッドをまとめたもの
-  # 絶対もっと良いやり方があるはずだけど、わからないのでとりあえずモデルで対処する。
+  # 絶対もっと良いやり方があるはずだけど、わからないのでとりあえずモデルで対処した。
   # このモデルは手動で作成したので、migrationファイルなどは作成されていない。
   # こうしたモデルをサービスクラスと呼ぶらしい。
-  # そしてサービスクラスとしては、このようないくつもメソッドが集まっている実装はよくないらしいので、
+  # そしてサービスクラスとしては、このようないくつもパブリックなメソッドを集めた実装はよくないらしいので、
   # servicable.rbとsanitizer.rbを参考に、「スタティックファクトリーメソッドパターン」に直したい。
+  # TODO： Google翻訳とDeepL翻訳の処理は、translator.rb として独立したサービスクラスに切り分ける。
 
   # 言語コードを言語番号に変換して返す / convert lang_code into lang_number and return lang_number
   # 言語コードを言語番号に変換する処理は、すべて必ずこのメソッドを使うこと！ / You have to use it in all processes to convert lang_code to lang_number.
@@ -40,7 +41,7 @@ class Lang < ApplicationRecord
     JSON.parse(json)['data']['detections'][0][0]['language']
   end
 
-  # 引数のテキストが何語か、BooQs全体で統一している言語番号で返す。
+  # 引数のテキストの言語が何であるか、DiQt全体で統一している言語番号で返す。
   def self.return_lang_number(text)
     convert_code_to_number return_lang_data(text)
   end

@@ -1,4 +1,4 @@
-class PassageCreationWorker
+git class PassageCreationWorker
   include Sidekiq::Worker
   sidekiq_options queue: :often
 
