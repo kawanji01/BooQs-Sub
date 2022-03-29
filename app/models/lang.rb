@@ -26,6 +26,30 @@ class Lang < ApplicationRecord
   end
 
 
+  # "en-j3PyPqV-e1s"とか"zh-Hans-419"といった値（主に手動字幕で用いられる）を、DiQtで扱えるlang_codeに変換する。
+  def self.convert_value_to_code(value)
+    lang_code = nil
+    if Lang.lang_code_supported?(value)
+      # 一度言語コードを番号に変換してからコードに再変換することで、DiQt の対応している言語コードに変換する。
+      lang_number = Lang.convert_code_to_number(value)
+      lang_code = Lang.convert_number_to_code(lang_number)
+    elsif Lang.lang_code_supported?(value.sub('auto-', ''))
+      lang_code = value.sub('auto-', '')
+    elsif Lang.lang_code_supported?(value.sub(/-.*/, ''))
+      #  "en-j3PyPqV-e1s" のような言語コードがあった場合に、enとして扱う。問題が起きた動画: https://www.youtube.com/watch?v=cyFM2emjbQ8&list=PLjxrf2q8roU3wk7CDw4RfV3mEwOJbjx1k&index=7
+      code = value.sub(/-.*/, '')
+      lang_number = Lang.convert_code_to_number(code)
+      lang_code = Lang.convert_number_to_code(lang_number)
+    elsif Lang.lang_code_supported?(value.match(/^[^-]+-[^-]+/)[0])
+      # "zh-Hans-419" のような言語コードがあった場合に、zh-Hans として扱う。
+      code = value.match(/^[^-]+-[^-]+/)[0]
+      lang_number = Lang.convert_code_to_number(code)
+      lang_code = Lang.convert_number_to_code(lang_number)
+    end
+    lang_code
+  end
+
+
 
   # 引数のテキストの言語コードを返す
   def self.return_lang_data(text)

@@ -97,18 +97,18 @@ class ArticlesController < ApplicationController
       redirect_to new_video_articles_url
     end
 
+    lang_value = params[:article][:sub_lang_code]
+
     # 自動字幕読み込み
-    if params[:article][:sub_lang_code].include?('auto-')
+    if lang_value.include?('auto-')
       # 自動字幕の言語コード
-      lang_code = params[:article][:sub_lang_code].sub('auto-', '')
-      return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
-
+      lang_code = Lang.convert_value_to_code(lang_value)
+      # 自動字幕では、lang_valueとしてlang_codeを渡す。
       PassageCreationWorker.perform_async(@article_uid, 'auto-generated', lang_code, @locale, @user_uid)
-    elsif params[:article][:sub_lang_code].present?
-      lang_code = params[:article][:sub_lang_code]
-      return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
-
-      PassageCreationWorker.perform_async(@article_uid, 'manual-sub', lang_code, @locale, @user_uid)
+    elsif lang_value.present?
+      #lang_code = params[:article][:sub_lang_code]
+      #return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
+      PassageCreationWorker.perform_async(@article_uid, 'manual-sub', lang_value, @locale, @user_uid)
     else
       # ユーザーが取り込む字幕に「なし」を選んだ場合。
       @error = "not to import any caption"
@@ -391,25 +391,24 @@ class ArticlesController < ApplicationController
     @article = Article.find_param(params[:id])
     @article_uid = @article.public_uid
     @user_uid = SecureRandom.uuid
+    # ユーザーが指定した言語の値（"auto-en"とか"en-j3PyPqV-e1s"とか）
+    lang_value = params[:article][:sub_lang_code]
 
     # 自動字幕読み込み
-    if params[:article][:sub_lang_code].include?('auto-')
+    if lang_value.include?('auto-')
       # 自動字幕の言語コード
-      lang_code = params[:article][:sub_lang_code].sub('auto-', '')
-      return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
-
+      lang_code = lang_value.sub('auto-', '')
       # 原文の重複や乱れを防ぐために、インポートする前にすべての原文（と翻訳）を削除する。
       @article.delete_all_passages
       # workerの書き込みとの競合を防ぐために、workerの処理まで３秒開ける。
       sleep(3)
+      # 自動字幕の場合は、lang_valueとしてlang_valueを渡す。
       PassageCreationWorker.perform_async(@article_uid, 'auto-generated', lang_code, @locale, @user_uid)
-    elsif params[:article][:sub_lang_code].present?
-      lang_code = params[:article][:sub_lang_code]
-      return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
-
+    elsif lang_value.present?
+      # 手動字幕の読み込み
       @article.delete_all_passages
       sleep(3)
-      PassageCreationWorker.perform_async(@article_uid, 'manual-sub', lang_code, @locale, @user_uid)
+      PassageCreationWorker.perform_async(@article_uid, 'manual-sub', lang_value, @locale, @user_uid)
     end
     flash[:success] = t('articles.creating_caption_succeeded')
 
@@ -441,26 +440,25 @@ class ArticlesController < ApplicationController
     @article = Article.find_param(params[:id])
     @article_uid = @article.public_uid
     @user_uid = SecureRandom.uuid
-
+    # ユーザーが指定した言語の値（"auto-en"とか"en-j3PyPqV-e1s"とか）
+    lang_value = params[:article][:sub_lang_code]
 
     # 自動字幕読み込み
-    if params[:article][:sub_lang_code].include?('auto-')
+    if lang_value.include?('auto-')
       # 自動字幕の言語コード
-      lang_code = params[:article][:sub_lang_code].sub('auto-', '')
-      return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
-
+      lang_code = Lang.convert_value_to_code(lang_value)
       # 重複を防ぐために、インポートする前に指定言語の翻訳をすべて削除する。
       @article.translations&.where(lang_number: Lang.convert_code_to_number(lang_code))&.delete_all
       # workerの書き込みとの競合を防ぐために、workerの処理まで３秒開ける。
       sleep(3)
+      # 自動字幕では、lang_valueとしてlang_codeを渡す。
       TranslationCreationWorker.perform_async(@article_uid, 'auto-generated', lang_code, @locale, @user_uid)
-    elsif params[:article][:sub_lang_code].present?
-      lang_code = params[:article][:sub_lang_code]
-      return @error = 'Language unsupported' if Lang.lang_code_unsupported?(lang_code)
-
+    elsif lang_value.present?
+      # 手動字幕の値は、"en-j3PyPqV-e1s"や"es-419"のような形をとっているので、DiQtで扱えるlang_codeに変換する必要がある。
+      lang_code = Lang.convert_value_to_code(lang_value)
       @article.translations&.where(lang_number: Lang.convert_code_to_number(lang_code))&.delete_all
       sleep(3)
-      TranslationCreationWorker.perform_async(@article_uid, 'manual-sub', lang_code, @locale, @user_uid)
+      TranslationCreationWorker.perform_async(@article_uid, 'manual-sub', lang_value, @locale, @user_uid)
     end
     flash[:success] = t('articles.creating_caption_succeeded')
 

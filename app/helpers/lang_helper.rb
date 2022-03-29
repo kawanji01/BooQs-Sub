@@ -37,20 +37,20 @@ module LangHelper
     lang_array
   end
 
-
   # 字幕の取り込み用のセレクトフォームを作成する
-  def caption_import_select_form_creator(code)
-    if code.nil?
+  def caption_import_select_form_creator(value)
+    if value.nil?
       [t('lang.none').to_s, nil]
-    elsif code.include?('auto-')
-      lang_code = code.sub('auto-', '')
-      ["#{t("articles.auto_sub")}：#{t("lang.#{lang_code}")}", code]
+    elsif value.include?('auto-')
+      lang_code = value.sub('auto-', '')
+      ["#{t("articles.auto_sub")}：#{t("lang.#{lang_code}")}", value]
     else
-      [t("lang.#{code}").to_s, code]
+      lang_code = Lang.convert_value_to_code(value)
+      [t("lang.#{lang_code}").to_s, value]
     end
   end
-  
-  
+
+
   # 字幕のダウンロード用のセレクトフォームを作成する。
   def caption_download_select_form_creator(code)
     if code == 'original'
@@ -59,7 +59,6 @@ module LangHelper
       [t("lang.#{code}").to_s, code]
     end
   end
-
 
   # javascripts/answer.js.erb, models/Langと数字と言語の対応を揃える。
   def speech_btn(lang_number)
@@ -92,6 +91,5 @@ module LangHelper
       'speech-btn-en'
     end
   end
-
 
 end
