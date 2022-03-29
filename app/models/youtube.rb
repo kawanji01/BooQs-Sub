@@ -50,17 +50,16 @@ class Youtube < ApplicationRecord
     lang_code
   end
 
-
   # 字幕のVTTをダウンロードしてからSRTに変換する。
   def self.download_sub_srt(file_name, url, lang_code, auto_generated = true)
     file = nil
     error = nil
-    # 順番に処理が終わるのを待って実行するために、systemではなく、Open3,capture3を使う。https://doloopwhile.hatenablog.com/entry/2014/02/04/213641
+    # 順番に処理が終わるのを待って実行するために、systemではなく、Open3,capture3を使う。ref: https://doloopwhile.hatenablog.com/entry/2014/02/04/213641
     if auto_generated
-      stdout, stderr, status = Open3.capture3("youtube-dl --write-auto-sub --sub-lang #{lang_code} --skip-download --output ./tmp/#{file_name} #{url}")
+      stdout, stderr, status = Open3.capture3("yt-dlp --write-auto-sub --sub-lang #{lang_code} --skip-download --output ./tmp/#{file_name} #{url}")
       error = "Getting auto-sub failed / #{stderr}" if stderr.present?
     else
-      stdout, stderr, status = Open3.capture3("youtube-dl --write-sub --sub-lang #{lang_code} --skip-download --output ./tmp/#{file_name} #{url}")
+      stdout, stderr, status = Open3.capture3("yt-dlp --write-sub --sub-lang #{lang_code} --skip-download --output ./tmp/#{file_name} #{url}")
       error = "Getting manual-sub failed / #{stderr}" if stderr.present?
     end
     return file, error if error.present?
@@ -82,7 +81,7 @@ class Youtube < ApplicationRecord
     #file_full_name = "#{file_name}_#{article_uid}_#{user_uid}"
     # 順番に処理が終わるのを待って実行するために、systemではなく、Open3,capture3を使う。https://doloopwhile.hatenablog.com/entry/2014/02/04/213641
     #Open3.capture3("youtube-dl --write-auto-sub --sub-lang #{lang_code} --skip-download --output ./tmp/#{file_name} #{url}")
-    stdout, stderr, status = Open3.capture3("youtube-dl --write-auto-sub --sub-lang #{lang_code} --skip-download --output ./tmp/#{file_name} #{url}")
+    stdout, stderr, status = Open3.capture3("yt-dlp --write-auto-sub --sub-lang #{lang_code} --skip-download --output ./tmp/#{file_name} #{url}")
     error = "Getting auto-sub failed / #{stderr}" if stderr.present?
     return file, error if error.present?
 
@@ -226,7 +225,6 @@ class Youtube < ApplicationRecord
     response.items.first&.statistics&.view_count
   end
 
-
   # snippetを取得する。
   def self.get_snippet(url)
     Youtube.get_video_data(url, 'snippet')
@@ -281,7 +279,6 @@ class Youtube < ApplicationRecord
     snippet.items.first.snippet.default_language
   end
 
-
   # Youtube DATA APIで動画情報を取得する。
   # partには決まった形式を指定する /
   # 参考： https://developers.google.com/youtube/v3/docs/videos?hl=ja / https://developers.google.com/youtube/v3/docs/videos/list?hl=ja
@@ -292,7 +289,7 @@ class Youtube < ApplicationRecord
     youtube = Google::Apis::YoutubeV3::YouTubeService.new
     youtube.key = ENV['GOOGLE_CLOUD_API_KEY']
     options = {
-        id: video_id
+      id: video_id
     }
     youtube.list_videos(part, options)
   end
@@ -302,14 +299,13 @@ class Youtube < ApplicationRecord
     file_name = "./tmp/downloaded_flac_#{id}"
     # メモ： --extract-audioと--outputを同時に使う場合は、-xや-oのように省略して記述してはいけない。
     # また拡張子は.flacではなく%(ext)sの形で指定しないとダウンロードしたファイルが壊れる。
-    stdout, stderr, status = Open3.capture3("youtube-dl --extract-audio --audio-format flac --output '#{file_name}.%(ext)s' #{url}")
+    stdout, stderr, status = Open3.capture3("yt-dlp --extract-audio --audio-format flac --output '#{file_name}.%(ext)s' #{url}")
     p "1:#{stdout}:#{stderr}:#{status}"
     # yotuubeの音声はステレオなので、文字起こしの精度を上げるためにモノラルに分割する / 参考： https://cloud.google.com/solutions/media-entertainment/optimizing-audio-files-for-speech-to-text?hl=ja
     stdout, stderr, status = Open3.capture3("ffmpeg -i #{file_name}.flac -filter_complex '[0:a]channelsplit=channel_layout=stereo[left][right]' -map '[left]' #{file_name}_FL.flac -map '[right]' #{file_name}_FR.flac")
     p "2:#{stdout}:#{stderr}:#{status}"
     file_name + '_FL.flac'
   end
-
 
   # youtubeから音声をダウンロードして、文字起こしに最適化されたモノラルファイルに変換してからGCSにアップロードする。
   def self.upload_mono_audio_to_gcs(url, file_name, token, bucket)
@@ -321,89 +317,97 @@ class Youtube < ApplicationRecord
   end
 
   # ダウンロード可能なyoutubeの自動文字起こし（自動翻訳を含む）の言語コードを取得する。
-  def self.importable_auto_sub_lang_list(url)
-    list = Open3.capture3("youtube-dl --ignore-config --list-subs #{url}")
-    lines = list.first.split("\n")
-    lang_codes = []
-    is_auto_sub = true
+  #def self.importable_auto_sub_lang_list(url)
+  #  list = Open3.capture3("yt-dlp --ignore-config --list-subs #{url}")
+  #  lines = list.first.split("\n")
+  #  lang_codes = []
+  #  is_auto_sub = true
     # ３行目からauto_subの情報
-    i = 3
-    while is_auto_sub
+  #  i = 3
+  #  while is_auto_sub
       # 字幕が一つもなかった場合
-      code = lines[i]&.split&.first
-      if Lang.lang_code_supported?(code)
+  #   code = lines[i]&.split&.first
+  #    if Lang.lang_code_supported?(code)
         # 一度言語コードを番号に変換してからコードに再変換することで、booqsの対応している言語コードに変換する。
-        lang_number = Lang.convert_code_to_number(code)
-        lang_code_for_booqs = Lang.convert_number_to_code(lang_number)
-        lang_codes << lang_code_for_booqs
-        i += 1
-      else
-        is_auto_sub = false
-      end
-    end
-    lang_codes
-  end
+  #      lang_number = Lang.convert_code_to_number(code)
+  #      lang_code_for_booqs = Lang.convert_number_to_code(lang_number)
+  #      lang_codes << lang_code_for_booqs
+  #      i += 1
+  #    else
+  #      is_auto_sub = false
+  #    end
+  #  end
+  #  lang_codes
+  #end
 
-  def self.importable_sub_lang_list(url, audio_lang)
-    outputs = Open3.capture3("youtube-dl --ignore-config --list-subs #{url}")
+  # ダウンロード可能な（手動＆自動）字幕の言語コードを取得する
+  def self.importable_sub_lang_list(url)
+    outputs = Open3.capture3("yt-dlp --ignore-config --list-subs #{url}")
+    # p outputs
     list_subs = outputs.first
-    auto_sub_lang_array = if list_subs.include?('Available automatic captions')
-                            Youtube.auto_sub_lang_code_array(list_subs, audio_lang)
+    auto_sub_lang_code = if list_subs.include?('Available automatic captions')
+                           Youtube.auto_sub_lang_code(list_subs)
+                         end
+    sub_lang_code_array = if list_subs.include?('Available subtitles')
+                            Youtube.sub_lang_code_array(list_subs)
                           else
                             []
                           end
-    sub_lang_array = if list_subs.include?('Available subtitles')
-                       Youtube.sub_lang_code_array(list_subs)
-                     else
-                       []
-                     end
-    lang_codes = (sub_lang_array + auto_sub_lang_array).compact
-    { auto_sub_codes: auto_sub_lang_array, manual_sub_codes: sub_lang_array, lang_codes: lang_codes }
+    lang_codes = (sub_lang_code_array << auto_sub_lang_code).compact
+    { auto_sub_code: auto_sub_lang_code, manual_sub_codes: auto_sub_lang_code, lang_codes: lang_codes }
   end
 
-  # 自動字幕の言語コードの配列を取得する
-  def self.auto_sub_lang_code_array(list_subs, audio_lang)
+  # オリジナルの自動字幕の言語コードを取得する
+  def self.auto_sub_lang_code(list_subs)
+    # フォーマットを確認するために利用した
+    # file = File.open("tmp/sample.txt", "w")
+    # file.write(list_subs)
+    # file.close
     lines = list_subs.split("\n")
-    lang_codes = []
+    # 自動字幕についての記載が始まる最初の行を調べる
+    first_line_index = lines.index { |l| l.include?('Available automatic captions') }
+    # 自動字幕の言語コードが記載されているのは、Available automatic captions から二行目
+    index = first_line_index + 2
+    auto_lang_code = nil
     is_auto_sub = true
-    # auto_subの情報は常に３行目から。
-    index = 3
+    # リストから自動字幕の言語コードを探し出す。
     while is_auto_sub
-      # 言語コードだけ抜き出す。
+      # リストから言語コードだけ抜き出す。
       code = lines[index]&.split&.first
-      if Lang.lang_code_supported?(code)
-        # 一度言語コードを番号に変換してからコードに再変換することで、booqsの対応している言語コードに変換する。
+      # 機械翻訳ではない、オリジナルの自動字幕は en-orig のようになっている。
+      if code.include?('-orig')
+        code = code.delete('-orig')
+        # DiQtのサポート言語か検証する
+        return if Lang.lang_code_supported?(code) == false
+        # 一度言語コードを番号に変換してからコードに再変換することで、DiQt の対応している言語コードに変換する。
         lang_number = Lang.convert_code_to_number(code)
         valid_lang_code = Lang.convert_number_to_code(lang_number)
-        lang_codes << "auto-#{valid_lang_code}"
-        index += 1
-      else
+        auto_lang_code = "auto-#{valid_lang_code}"
         is_auto_sub = false
+      elsif code.blank? || code.include?('[info]')
+        is_auto_sub = false
+      else
+        index += 1
       end
     end
-    # lang_codesには機械翻訳された大量の字幕が含まれているので、audio_langの自動字幕が存在する場合には、機械翻訳を取り除く。
-    if audio_lang.present? && lang_codes.include?("auto-#{audio_lang}")
-      ["auto-#{audio_lang}"]
-    else
-      lang_codes
-    end
-
+    auto_lang_code
   end
 
-  # 手動字幕の言語コードを抜き出す。
+  # 手動字幕の言語コードの配列を取得する
   def self.sub_lang_code_array(list_subs)
     lines = list_subs.split("\n")
     # 手動字幕についての記載が始まる最初の行を調べる。
     first_line_index = lines.index { |l| l.include?('Available subtitles') }
-    # 手動字幕の言語コードが記載されているのは、最初の行の二行先。
+    # 手動字幕の言語コードが記載されているのは、Available subtitles の二行先
     index = first_line_index + 2
     lang_codes = []
     is_auto_sub = true
     while is_auto_sub
       # 言語コードだけ抜き出す。
       code = lines[index]&.split&.first
+      # DiQtの対応言語か？
       if Lang.lang_code_supported?(code)
-        # 一度言語コードを番号に変換してからコードに再変換することで、booqsの対応している言語コードに変換する。
+        # 一度言語コードを番号に変換してからコードに再変換することで、DiQt の対応している言語コードに変換する。
         lang_number = Lang.convert_code_to_number(code)
         valid_lang_code = Lang.convert_number_to_code(lang_number)
         lang_codes << valid_lang_code
