@@ -13,7 +13,7 @@ class SubtitlesController < ApplicationController
     @title = Youtube.get_title(snippet)
     @image = Youtube.get_thumbnail(snippet)
     @audio_lang = Youtube.get_default_audio_language(snippet)
-    @sub_lang_list = Youtube.importable_sub_lang_list(@url, @audio_lang)
+    @sub_lang_list = Youtube.importable_sub_lang_list(@url)
 
     # 手動字幕がないか、手動字幕にオーディオ言語の字幕がない場合、自動字幕をデフォルトのインポート対象にする。
     if @sub_lang_list[:manual_sub_codes].blank? || @sub_lang_list[:manual_sub_codes].exclude?(@audio_lang)

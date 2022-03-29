@@ -4,9 +4,7 @@ class ArticlesController < ApplicationController
     @article = Article.find_param(params[:id])
     @related_articles = @article.find_related_tags.limit(6)
     @title_translation = @article.find_title_translation(@lang_number_of_translation)
-
     @passages = @article.passages.order(start_time: :asc)
-
     @video_id = Youtube.get_video_id(@article.reference_url)
     @translated_lang_numbers = @article.translations.group(:lang_number).count.keys
     # metatagの@alternate設定
@@ -63,7 +61,7 @@ class ArticlesController < ApplicationController
     # APIからタイトルとサムネを取得できなかった場合はmetainscpectorを使ってスクレイピングする。
     @article.scrape_youtube_url if @article.title.blank? || @article.scraped_image.blank?
     # @article.set_attributes_for_create
-    @sub_lang_list = Youtube.importable_sub_lang_list(@article.reference_url, @audio_lang)
+    @sub_lang_list = Youtube.importable_sub_lang_list(@article.reference_url)
 
     # 手動字幕がないか、手動字幕にオーディオ言語の字幕がない場合、自動字幕をデフォルトのインポート対象にする。
     if @sub_lang_list[:manual_sub_codes].blank? || @sub_lang_list[:manual_sub_codes].exclude?(@audio_lang)
@@ -374,7 +372,7 @@ class ArticlesController < ApplicationController
   def passage_importer
     @article = Article.find_param(params[:id])
     @audio_lang = Lang.convert_number_to_code(@article.lang_number_of_audio)
-    @sub_lang_list = Youtube.importable_sub_lang_list(@article.reference_url, @audio_lang)
+    @sub_lang_list = Youtube.importable_sub_lang_list(@article.reference_url)
     # 手動字幕がないか、手動字幕にオーディオ言語の字幕がない場合、自動字幕をデフォルトのインポート対象にする。
     if @sub_lang_list[:manual_sub_codes].blank? || @sub_lang_list[:manual_sub_codes].exclude?(@audio_lang)
       @audio_lang = "auto-#{@audio_lang}"
@@ -424,7 +422,7 @@ class ArticlesController < ApplicationController
   def translation_importer
     @article = Article.find_param(params[:id])
     @audio_lang = Lang.convert_number_to_code(@article.lang_number_of_audio)
-    @sub_lang_list = Youtube.importable_sub_lang_list(@article.reference_url, @audio_lang)
+    @sub_lang_list = Youtube.importable_sub_lang_list(@article.reference_url)
     # 手動字幕がないか、手動字幕にオーディオ言語の字幕がない場合、自動字幕をデフォルトのインポート対象にする。
     if @sub_lang_list[:manual_sub_codes].blank? || @sub_lang_list[:manual_sub_codes].exclude?(@audio_lang)
       @audio_lang = "auto-#{@audio_lang}"
