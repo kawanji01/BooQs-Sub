@@ -2,7 +2,7 @@ module ApplicationHelper
 
   def default_meta_tags
     {
-      site: 'DiqtSub',
+      site: 'DiQt Sub',
       title: t('layouts.title'),
       reverse: true,
       charset: 'utf-8',
