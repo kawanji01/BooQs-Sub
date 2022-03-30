@@ -56,13 +56,16 @@ class TranslationCreationWorker
 
       # start_timeとend_timeの平均から、翻訳の参照元のpassageを決定する。
       average_time = (start_time + end_time) * 0.5
-      passage = article.passages.find { |p| p.start_time <= average_time && p.end_time >= average_time }
+      # passage = article.passages.find { |p| p.start_time.to_d <= average_time && p.end_time.to_d >= average_time }
+      # passage = article.passages.order(start_time: :asc).find { |p|  p.end_time.to_d >= average_time }
+      # 上の二つの処理ではうまく翻訳の字幕がpassageに対応できなかった。上の処理だと翻訳の読み込みに失敗する動画 ref: https://www.youtube.com/watch?v=_M-6lkoi6L4
+      passage = article.passages.order(start_time: :desc).find { |p| p.start_time.to_d <= average_time }
       next if passage.blank?
       # passageと同じ言語の翻訳は作らない。
       next if passage.lang_number == lang_number
 
-      # whereではなくfindで検索しているのは、前回のイテレーションでsaveしたtranslationも確実に検索結果に含めたいから。
-      if (translation = passage.translations&.find { |t| t&.lang_number == lang_number && t.article_id == article.id })
+      # whereではなくfindで検索しているのは、前回のイテレーションでsaveしたtranslationも確実に検索結果に含めるため。
+      if (translation = passage.translations&.find { |t| t&.lang_number == lang_number })
         # 参照元候補のpassageに、対象言語の翻訳がすでについているなら、参照元候補のpassageの翻訳に、翻訳をマージする。
         text = [translation.text, text].join("\n")
         translation.text = text.strip
@@ -72,6 +75,7 @@ class TranslationCreationWorker
                                                  lang_number: lang_number)
       end
       translation.save
+      p translation.text
 
       # translation.separate_text
       ActionCable.server.broadcast 'progress_bar_channel',

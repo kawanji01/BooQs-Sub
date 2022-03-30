@@ -101,7 +101,7 @@ class Youtube < ApplicationRecord
   def self.convert_srt_into_csv(srt_file, lang_number = nil, duplication_removed = false)
     previous_text_array = []
 
-    CSV.generate do |csv|
+    csv_file = CSV.generate do |csv|
       # 　Rubyの%記法。%w(A B)は、[a,b]と同じ。注意点は「,」はいらないこと。
       header = %w[text start_time start_time_minutes start_time_seconds end_time end_time_minutes end_time_seconds lang_number]
       csv << header
@@ -142,6 +142,11 @@ class Youtube < ApplicationRecord
         csv << values
       end
     end
+    # フォーマットを確認するために利用した
+    file = File.open("tmp/sample.csv", "w")
+    file.write(csv_file)
+    file.close
+    csv_file
   end
 
   def self.convert_csv_into_srt(csv_str)
@@ -360,9 +365,9 @@ class Youtube < ApplicationRecord
   # オリジナルの自動字幕の言語コードを取得する
   def self.auto_sub_lang_code(list_subs)
     # フォーマットを確認するために利用した
-    file = File.open("tmp/sample.txt", "w")
-    file.write(list_subs)
-    file.close
+    #file = File.open("tmp/sample.txt", "w")
+    #file.write(list_subs)
+    #file.close
     lines = list_subs.split("\n")
     # 自動字幕についての記載が始まる最初の行を調べる
     first_line_index = lines.index { |l| l.include?('Available automatic captions') }
@@ -425,7 +430,7 @@ class Youtube < ApplicationRecord
         #lang_codes << valid_lang_code
         lang_codes << code
         index += 1
-      elsif Lang.lang_code_supported?(code.match(/^[^-]+-[^-]+/)[0])
+      elsif Lang.lang_code_supported?(code.match(/^[^-]+-[^-]+/)&.first)
         # "zh-Hans-419" のような言語コードがあった場合に、zh-Hans として扱う。
         # code = code.match(/^[^-]+-[^-]+/)[0]
         #lang_number = Lang.convert_code_to_number(code)
